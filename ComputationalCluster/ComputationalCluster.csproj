@@ -59,6 +59,16 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shared\Connection\ICommunicationServer.cs" />
+    <Compile Include="Shared\Devide Problems\DevideProblem.cs" />
+    <Compile Include="Shared\Messages\NoOperation.cs" />
+    <Compile Include="Shared\Messages\Register.cs" />
+    <Compile Include="Shared\Messages\RegisterResponse.cs" />
+    <Compile Include="Shared\Messages\SolutionRequest.cs" />
+    <Compile Include="Shared\Messages\Solutions.cs" />
+    <Compile Include="Shared\Messages\SolvePartialProblems.cs" />
+    <Compile Include="Shared\Messages\SolveRequest.cs" />
+    <Compile Include="Shared\Messages\SolveRequestResponse.cs" />
+    <Compile Include="Shared\Messages\Status.cs" />
     <Compile Include="Shared\Misc\FinalSolution.cs" />
     <Compile Include="Shared\Misc\PartialProblem.cs" />
     <Compile Include="Shared\Misc\PartialSolution.cs" />
