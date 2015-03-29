@@ -13,6 +13,7 @@ namespace ComputationalClusterClient {
             // or if none provided, request config
             // via console
             // Test2 comment from Abramus
+            // Test3 from milkduds
             setConfigFileAtRuntime(args);
         }
 
