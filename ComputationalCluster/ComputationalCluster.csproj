@@ -85,10 +85,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Shared\Client\" />
-    <Folder Include="Shared\ComputationalNode\" />
-    <Folder Include="Shared\Server\" />
-    <Folder Include="Shared\TaskManager\" />
+    <Folder Include="Client\" />
+    <Folder Include="ComputationalNode\" />
+    <Folder Include="Server\" />
+    <Folder Include="TaskManager\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
