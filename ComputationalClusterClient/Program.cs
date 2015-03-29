@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace ComputationalClusterClient {
     class Program {
+
         static void Main(string[] args) 
         {
             // get config file from runtime args
@@ -15,6 +16,7 @@ namespace ComputationalClusterClient {
         }
 
         protected static void setConfigFileAtRuntime(string[] args) {
+
             string runtimeconfigfile;
 
             if (args.Length == 0) {

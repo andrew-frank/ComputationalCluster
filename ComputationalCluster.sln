@@ -3,9 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComputationalClusterClient", "ComputationalClusterClient\ComputationalClusterClient.csproj", "{CD39E59A-5A1A-4A80-BE99-C65AE027337D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComputationalCluster", "ComputationalCluster\ComputationalCluster.csproj", "{926CB462-9457-41A0-9D0C-93BAB2A2D336}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComputationalCluster", "ComputationalClusterClient\ComputationalCluster.csproj", "{CD39E59A-5A1A-4A80-BE99-C65AE027337D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComputationalClusterTests", "ComputationalClusterTests\ComputationalClusterTests.csproj", "{B34B6CE0-97B3-43E4-B277-0A03A7FCF32C}"
 EndProject
@@ -19,10 +17,6 @@ Global
 		{CD39E59A-5A1A-4A80-BE99-C65AE027337D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD39E59A-5A1A-4A80-BE99-C65AE027337D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD39E59A-5A1A-4A80-BE99-C65AE027337D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{926CB462-9457-41A0-9D0C-93BAB2A2D336}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{926CB462-9457-41A0-9D0C-93BAB2A2D336}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{926CB462-9457-41A0-9D0C-93BAB2A2D336}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{926CB462-9457-41A0-9D0C-93BAB2A2D336}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B34B6CE0-97B3-43E4-B277-0A03A7FCF32C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B34B6CE0-97B3-43E4-B277-0A03A7FCF32C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B34B6CE0-97B3-43E4-B277-0A03A7FCF32C}.Release|Any CPU.ActiveCfg = Release|Any CPU
