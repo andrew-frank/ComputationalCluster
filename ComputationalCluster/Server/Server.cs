@@ -6,13 +6,15 @@ using System.Threading.Tasks;
 
 namespace ComputationalCluster.Server
 {
-    
     public class Server
     {
-       
         public static void Main()
         {
             startInstance();
+        }
+
+        public static void Kupa() {
+            ;
         }
 
         static protected void startInstance()
@@ -26,8 +28,5 @@ namespace ComputationalCluster.Server
             Console.WriteLine("Press enter to close...");
             Console.ReadLine();
         }
-
-
     }
-    
 }
