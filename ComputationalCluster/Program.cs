@@ -5,18 +5,16 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ComputationalCluster {
-    public class Program {
-
+    public class Program 
+    {
         static void Main(string[] args) 
         {
             // get config file from runtime args
             // or if none provided, request config
             // via console
-            // Test2 comment from Abramus
-            // Test3 from milkduds
             setConfigFileAtRuntime(args);
         }
-        //here goes a comment to see if I COMMIT 
+
         protected static void setConfigFileAtRuntime(string[] args) {
 
             string componentToStart;
@@ -33,10 +31,6 @@ namespace ComputationalCluster {
                         break;
                     case "Server":                                                
                         Server.Server.Main();
-                        //Environment.Exit(0);
-                        break;          
-                    case "Backup Server":
-                        BackupServer.BackupServer.Main();
                         break;
                     case "Client":
                         Client.Client.Main();
@@ -49,12 +43,6 @@ namespace ComputationalCluster {
             } else {
                 componentToStart = args[0];
             }
-        
         }
-
-
     }
-
-
-
 }
