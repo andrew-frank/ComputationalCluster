@@ -19,18 +19,41 @@ namespace ComputationalClusterClient {
         //here goes a comment to see if I COMMIT 
         protected static void setConfigFileAtRuntime(string[] args) {
 
-            string runtimeconfigfile;
+            string componentToStart;
 
             if (args.Length == 0) {
-                Console.WriteLine("Please specify a config file:");
+                Console.WriteLine("Please specify a component that you want to start:");                
                 Console.Write("> "); // prompt
+<<<<<<< HEAD
                
                 runtimeconfigfile = Console.ReadLine();
-            } else {
-                runtimeconfigfile = args[0];
-            }
+=======
+                componentToStart = Console.ReadLine();
+                switch (componentToStart)
+                {
+                    case "Task Manager":
+                        TaskManager.TaskManager.Main();
+                        break;
+                    case "Server":                                                
+                        Server.Server.Main();
+                        //Environment.Exit(0);
+                        break;          
+                    case "Backup Server":
+                        BackupServer.BackupServer.Main();
+                        break;
+                    case "Client":
+                        Client.Client.Main();
+                        break;
+                    case "Computational Node":
+                        ComputationalNode.ComputationalNode.Main();
+                        break;
+                }
 
-            
+>>>>>>> origin/master
+            } else {
+                componentToStart = args[0];
+            }
+        
         }
 
 
