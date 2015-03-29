@@ -7,8 +7,8 @@
     <ProjectGuid>{CD39E59A-5A1A-4A80-BE99-C65AE027337D}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ComputationalClusterClient</RootNamespace>
-    <AssemblyName>ComputationalClusterClient</AssemblyName>
+    <RootNamespace>ComputationalCluster</RootNamespace>
+    <AssemblyName>ComputationalCluster</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <PublishUrl>publish\</PublishUrl>

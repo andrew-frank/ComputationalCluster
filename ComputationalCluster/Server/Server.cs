@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ComputationalClusterClient.Server
+namespace ComputationalCluster.Server
 {
     
     public class Server
-    {
-       
+    {       
         public static void Main()
         {
             startInstance();
