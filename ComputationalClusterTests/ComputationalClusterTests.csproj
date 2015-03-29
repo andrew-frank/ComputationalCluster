@@ -54,7 +54,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ComputationalClusterClient\ComputationalCluster.csproj">
+    <ProjectReference Include="..\ComputationalCluster\ComputationalCluster.csproj">
       <Project>{cd39e59a-5a1a-4a80-be99-c65ae027337d}</Project>
       <Name>ComputationalCluster</Name>
     </ProjectReference>
