@@ -24,6 +24,7 @@ namespace ComputationalClusterClient {
             if (args.Length == 0) {
                 Console.WriteLine("Please specify a config file:");
                 Console.Write("> "); // prompt
+               
                 runtimeconfigfile = Console.ReadLine();
             } else {
                 runtimeconfigfile = args[0];
