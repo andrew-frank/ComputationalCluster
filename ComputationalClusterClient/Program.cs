@@ -12,6 +12,7 @@ namespace ComputationalClusterClient {
             // get config file from runtime args
             // or if none provided, request config
             // via console
+            // Test comment from Abramus
             setConfigFileAtRuntime(args);
         }
 
