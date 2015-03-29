@@ -64,6 +64,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Server\Server.cs" />
+    <Compile Include="Shared\Connection\ConnectionService.cs" />
     <Compile Include="Shared\Connection\ICommunicationServer.cs" />
     <Compile Include="Shared\Messages\DevideProblem.cs" />
     <Compile Include="Shared\Messages\NoOperation.cs" />
@@ -79,6 +80,7 @@
     <Compile Include="Shared\Misc\PartialProblem.cs" />
     <Compile Include="Shared\Misc\PartialSolution.cs" />
     <Compile Include="Shared\Misc\Problem.cs" />
+    <Compile Include="Shared\Utilities\Utilities.cs" />
     <Compile Include="TaskManager\TaskManager.cs" />
   </ItemGroup>
   <ItemGroup>

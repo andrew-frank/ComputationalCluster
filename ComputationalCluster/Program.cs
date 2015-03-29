@@ -33,7 +33,9 @@ namespace ComputationalCluster {
                         Server.Server.Main();
                         break;
                     case "Client":
-                        Client.Client.Main();
+                        Client.Client client = new Client.Client();
+                        client.StartInstance();
+
                         break;
                     case "Computational Node":
                         ComputationalNode.ComputationalNode.Main();
