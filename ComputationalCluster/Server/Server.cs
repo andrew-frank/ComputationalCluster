@@ -71,7 +71,7 @@ namespace ComputationalCluster.Server
                         //// Send back a response.
                         //stream.Write(msg, 0, msg.Length);
                         //Console.WriteLine("Sent: {0}", data);
-                        response = "Spoko mordo, zarejestrowalem Cie ;) !!!";
+                        response = data.Replace("ZAREJESTRUJ", "DONE!");
                         byte[] msg = System.Text.Encoding.ASCII.GetBytes(response);
                         stream.Write(msg, 0, msg.Length);
                         Console.WriteLine("Sent: {0}", response);
