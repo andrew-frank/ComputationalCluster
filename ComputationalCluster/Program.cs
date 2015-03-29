@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ComputationalCluster {
-    public class Program {
-
+    public class Program
+    {
         static void Main(string[] args) 
         {
             // get config file from runtime args
@@ -23,25 +23,23 @@ namespace ComputationalCluster {
 
             if (args.Length == 0) {
                 Console.WriteLine("Please specify a component that you want to start:");                
-                Console.Write("> "); // prompt               
-                //runtimeconfigfile = Console.ReadLine();
+                Console.Write("> ");                     
                 componentToStart = Console.ReadLine();
+                componentToStart = componentToStart.ToLower();
+                componentToStart = componentToStart.Replace(" ", string.Empty);
                 switch (componentToStart)
                 {
-                    case "Task Manager":
+                    case "taskmanager":
                         TaskManager.TaskManager.Main();
                         break;
-                    case "Server":                                                
+                    case "server":                                                
                         Server.Server.Main();
                         //Environment.Exit(0);
                         break;          
-                    case "Backup Server":
-                        BackupServer.BackupServer.Main();
-                        break;
-                    case "Client":
+                    case "client":
                         Client.Client.Main();
                         break;
-                    case "Computational Node":
+                    case "computationalnode":
                         ComputationalNode.ComputationalNode.Main();
                         break;
                 }
