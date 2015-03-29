@@ -16,7 +16,7 @@ namespace ComputationalClusterClient {
             // Test3 from milkduds
             setConfigFileAtRuntime(args);
         }
-
+        //here goes a comment to see if I COMMIT 
         protected static void setConfigFileAtRuntime(string[] args) {
 
             string runtimeconfigfile;
