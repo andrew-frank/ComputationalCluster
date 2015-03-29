@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ComputationalClusterClient.ComputationalNode
+namespace ComputationalCluster.ComputationalNode
 {
     public class ComputationalNode
     {

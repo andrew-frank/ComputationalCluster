@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ComputationalClusterClient {
-    class Program {
+namespace ComputationalCluster {
+    public class Program {
 
         static void Main(string[] args) 
         {
@@ -23,11 +23,8 @@ namespace ComputationalClusterClient {
 
             if (args.Length == 0) {
                 Console.WriteLine("Please specify a component that you want to start:");                
-                Console.Write("> "); // prompt
-<<<<<<< HEAD
-               
-                runtimeconfigfile = Console.ReadLine();
-=======
+                Console.Write("> "); // prompt               
+                //runtimeconfigfile = Console.ReadLine();
                 componentToStart = Console.ReadLine();
                 switch (componentToStart)
                 {
@@ -49,7 +46,6 @@ namespace ComputationalClusterClient {
                         break;
                 }
 
->>>>>>> origin/master
             } else {
                 componentToStart = args[0];
             }
