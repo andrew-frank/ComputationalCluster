@@ -8,18 +8,18 @@ namespace ComputationalCluster.ComputationalNode
 {
     public class ComputationalNode
     {
-        public static void Main()
+        public void Main()
         {
             startInstance();
         }
 
-        static protected void startInstance()
+        protected void startInstance()
         {
             Console.WriteLine("Computational Node Started");
             waitUntilUserClose();
         }
 
-        private static void waitUntilUserClose()
+        private void waitUntilUserClose()
         {
             Console.WriteLine("Press enter to close...");
             Console.ReadLine();

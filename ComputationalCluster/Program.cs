@@ -11,12 +11,9 @@ namespace ComputationalCluster {
         {
             // get config file from runtime args
             // or if none provided, request config
-            // via console
-            // Test2 comment from Abramus
-            // Test3 from milkduds
+            // via console            
             setConfigFileAtRuntime(args);
-        }
-        //here goes a comment to see if I COMMIT 
+        }       
         protected static void setConfigFileAtRuntime(string[] args) {
 
             string componentToStart;
@@ -30,17 +27,21 @@ namespace ComputationalCluster {
                 switch (componentToStart)
                 {
                     case "taskmanager":
-                        TaskManager.TaskManager.Main();
+                        TaskManager.TaskManager newTaskManagerInstance = new TaskManager.TaskManager();
+                        newTaskManagerInstance.Main();
                         break;
-                    case "server":                                                
-                        Server.Server.Main();
+                    case "server":
+                        Server.Server newServerInstance = new Server.Server();
+                        newServerInstance.Main();
                         //Environment.Exit(0);
                         break;          
                     case "client":
-                        Client.Client.Main();
+                        Client.Client newClientInstance = new Client.Client();
+                        newClientInstance.Main();
                         break;
                     case "computationalnode":
-                        ComputationalNode.ComputationalNode.Main();
+                        ComputationalNode.ComputationalNode newComputationalNodeInstance = new ComputationalNode.ComputationalNode();
+                        newComputationalNodeInstance.Main();
                         break;
                 }
 
