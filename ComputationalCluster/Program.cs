@@ -5,46 +5,55 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ComputationalCluster {
-    public class Program 
+    public class Program
     {
         static void Main(string[] args) 
         {
             // get config file from runtime args
             // or if none provided, request config
-            // via console
+            // via console            
             setConfigFileAtRuntime(args);
-        }
-
+        }       
         protected static void setConfigFileAtRuntime(string[] args) {
 
             string componentToStart;
 
             if (args.Length == 0) {
                 Console.WriteLine("Please specify a component that you want to start:");                
-                Console.Write("> "); // prompt               
-                //runtimeconfigfile = Console.ReadLine();
+                Console.Write("> ");                     
                 componentToStart = Console.ReadLine();
+                componentToStart = componentToStart.ToLower();
+                componentToStart = componentToStart.Replace(" ", string.Empty);
                 switch (componentToStart)
                 {
-                    case "Task Manager":
-                        TaskManager.TaskManager.Main();
+                    case "taskmanager":
+                        TaskManager.TaskManager newTaskManagerInstance = new TaskManager.TaskManager();
+                        newTaskManagerInstance.Main();
                         break;
-                    case "Server":                                                
-                        Server.Server.Main();
+                    case "server":
+                        Server.Server newServerInstance = new Server.Server();
+                        newServerInstance.Main();
+                        //Environment.Exit(0);
+                        break;          
+                    case "client":
+                        Client.Client newClientInstance = new Client.Client();
+                        newClientInstance.Main();
                         break;
-                    case "Client":
-                        Client.Client client = new Client.Client();
-                        client.StartInstance();
-
-                        break;
-                    case "Computational Node":
-                        ComputationalNode.ComputationalNode.Main();
+                    case "computationalnode":
+                        ComputationalNode.ComputationalNode newComputationalNodeInstance = new ComputationalNode.ComputationalNode();
+                        newComputationalNodeInstance.Main();
                         break;
                 }
 
             } else {
                 componentToStart = args[0];
             }
+        
         }
+
+
     }
+
+
+
 }
