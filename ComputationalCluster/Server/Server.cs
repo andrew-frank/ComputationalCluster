@@ -5,49 +5,54 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using ComputationalCluster.Shared.Utilities;
+using ComputationalCluster.Shared.Messages.DivideProblemNamespace;
+using ComputationalCluster.Shared.Messages.NoOperationNamespace;
+using ComputationalCluster.Shared.Messages.RegisterNamespace;
+using ComputationalCluster.Shared.Messages.RegisterResponseNamespace;
+using ComputationalCluster.Shared.Messages.SolutionRequestNamespace;
+using ComputationalCluster.Shared.Messages.SolutionsNamespace;
+using ComputationalCluster.Shared.Messages.SolvePartialProblemsNamespace;
+using ComputationalCluster.Shared.Messages.SolveRequestNamespace;
+using ComputationalCluster.Shared.Messages.SolveRequestResponseNamespace;
+using ComputationalCluster.Shared.Messages.StatusNamespace;
+
 
 namespace ComputationalCluster.Server
 {
-    public class Server
+    public sealed class Server
     {
-        IPAddress localIPAddress;
-        
-        public void Main()
-        {
-            localIPAddress = Shared.Connection.ConnectionService.getIPAddressOfTheLocalMachine();            
-            startInstance(localIPAddress);
-            Shared.Utilities.Utilities.waitUntilUserClose();
-        }       
-
-        protected void startInstance(IPAddress localIPAddress)
+        public void startInstance(Int32 port, IPAddress localIPAddress)
         {
             Console.WriteLine("Server Started");
-            TcpListener server = null;
-            try
-            {
-                // Set the TcpListener on port 13000.
-                Int32 port = 13000;
-                IPAddress localAddr = localIPAddress;
 
+            Listen(port, localIPAddress);
+        }
+
+
+        private void Listen(Int32 port, IPAddress localAddr) 
+        {
+            TcpListener TCPServer = null;
+            try {
                 // TcpListener server = new TcpListener(port);
-                server = new TcpListener(localAddr, port);
+                TCPServer = new TcpListener(localAddr, port);
 
                 // Start listening for client requests.
-                server.Start();
+                TCPServer.Start();
 
                 // Buffer for reading data
                 Byte[] bytes = new Byte[256];
                 String data = null;
                 String response = null;
+
+
                 // Enter the listening loop. 
-                while (true)
-                {
+                while (true) {
                     Console.Write("Waiting for a connection... ");
 
                     // Perform a blocking call to accept requests. 
                     // You could also user server.AcceptSocket() here.
-                    TcpClient client = server.AcceptTcpClient();
-                    //Console.WriteLine("Connected!");
+                    TcpClient client = TCPServer.AcceptTcpClient();
 
                     data = null;
 
@@ -55,42 +60,64 @@ namespace ComputationalCluster.Server
                     NetworkStream stream = client.GetStream();
 
                     int i;
+                    response = "";
 
                     // Loop to receive all the data sent by the client. 
-                    while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
-                    {
+                    while ((i = stream.Read(bytes, 0, bytes.Length)) != 0) {
+
+                        Console.WriteLine("i="+i+"\n");
+                        
                         // Translate data bytes to a ASCII string.
                         data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
-                        Console.WriteLine("Received: {0}", data);
-
-                        // Process the data sent by the client.
-                        //data = data.ToUpper();
-
-                        //byte[] msg = System.Text.Encoding.ASCII.GetBytes(data);
-
-                        //// Send back a response.
-                        //stream.Write(msg, 0, msg.Length);
-                        //Console.WriteLine("Sent: {0}", data);
-                        response = data.Replace("ZAREJESTRUJ", "DONE!");
-                        byte[] msg = System.Text.Encoding.ASCII.GetBytes(response);
-                        stream.Write(msg, 0, msg.Length);
-                        Console.WriteLine("Sent: {0}", response);
-
+                        response += data;
                     }
+
+                    Console.WriteLine("Received: \n" + data + "\n");
+
+                    //parse/map object & react
+                    string xml = (string)response;
+                    this.ReceivedMessage(xml);
+
+                    //wysylanie powinno byc tu (odpowiedz odbywa sie po odebraniu i przeanalizowaniu wiadomosci), 
+                    //a w petli powyzej wywala exception
+                    byte[] msg = System.Text.Encoding.ASCII.GetBytes("hej, mam");
+                    stream.Write(msg, 0, msg.Length);
+                    Console.WriteLine("Sent: {0}", response);
 
                     // Shutdown and end connection
                     client.Close();
                 }
-            }
-            catch (SocketException e)
-            {
-                Console.WriteLine("SocketException: {0}", e);
-            }
-            finally
-            {
+
+
+            } catch (SocketException e) {
+                Console.WriteLine("Server SocketException: " + e.ToString());
+                System.Diagnostics.Debug.WriteLine("SocketException: " + e.ToString());
+
+            } catch (Exception e) {
+                Console.WriteLine("Server SocketException: " + e.ToString());
+                System.Diagnostics.Debug.WriteLine("SocketException: " + e.ToString());
+                throw e;
+
+            } finally {
                 // Stop listening for new clients.
-                server.Stop();
+                TCPServer.Stop();
             }
         }
+
+
+        private void ReceivedMessage(string xml) {
+
+            Object obj = xml.DeserializeXML();
+
+            //it should be (didn't test the try-catch trick) mapped runtime to a correct object, just check for it's type:
+            if (obj is DivideProblem) {
+
+            } else if (obj is NoOperation) {
+
+            }
+
+            //etc...
+        }
+
     }
 }

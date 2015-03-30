@@ -9,17 +9,10 @@ using System.Threading.Tasks;
 namespace ComputationalCluster.Shared.Connection {
     public static class ConnectionService 
     {
-        public static void SendXMLToAddress(this string xml, IPAddress address) 
-        {
-
-        }
-
-        public static void ConnectAndSendMessage(String server, String message)
+        public static void ConnectAndSendMessage(Int32 port , String server, String message)
         {
             try
             {
-
-                Int32 port = 13000;
                 TcpClient client = new TcpClient(server, port);
 
                 // Translate the passed message into ASCII and store it as a Byte array.
@@ -51,18 +44,17 @@ namespace ComputationalCluster.Shared.Connection {
                 // Close everything.
                 stream.Close();
                 client.Close();
-            }
-            catch (ArgumentNullException e)
-            {
+
+
+            } catch (ArgumentNullException e) {
                 Console.WriteLine("ArgumentNullException: {0}", e);
-            }
-            catch (SocketException e)
-            {
-                Console.WriteLine("SocketException: {0}", e);
+
+
+            } catch (SocketException e) {
+                Console.WriteLine("Util SocketException: " + e.ToString());
+                System.Diagnostics.Debug.WriteLine("SocketException: " + e.ToString());
             }
 
-            //Console.WriteLine("\n Press Enter to continue...");
-            //Console.Read();
         }
         
         public static IPAddress getIPAddressOfTheLocalMachine()
