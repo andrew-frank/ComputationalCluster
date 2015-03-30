@@ -12,33 +12,54 @@ namespace ComputationalCluster.Client
 {
     public class Client
     {
-        public void startInstance(Int32 port, String HostName) {
+        Int32 port=0;
+        String address;
+
+
+        public void Check(string parameters)
+        {
+            var count = parameters.Count(x => x == '-');
+            if (count == 2)
+            {
+                bool x;
+                string addressS = parameters.Substring(GetNthIndex(parameters, 's', 2) + 1, GetNthIndex(parameters, '-', 2) - GetNthIndex(parameters, 's', 2) - 1);
+                string PortS = parameters.Substring(GetNthIndex(parameters, '-', 2) + 5);
+                Console.WriteLine(PortS);
+                Console.WriteLine(addressS);
+
+                x = Int32.TryParse(PortS, out port);
+                if (x != true)
+                {
+                    Console.WriteLine("Wrong port number");
+                }
+                address = addressS;
+
+            }
+            else
+            {
+                Console.WriteLine("Incorrect Syntax");
+            }
+        }
+
+        public void startInstance( String HostName) {
           //  public void StarInstance(){
 
-            Console.WriteLine("Client Started");
-            Console.WriteLine(" Parameters Syntax: [-address [IPv4 address or IPv6 address or host name]] [-port[port number]]");
-            Console.Write("> ");
 
+
+
+            //Console.WriteLine("Client Started");
+            //while (port == 0)
+            //{ 
+            //Console.WriteLine(" Parameters Syntax: [-address [IPv4 address or IPv6 address or host name]] [-port[port number]]");
+            //Console.Write("> ");
+
+           
             //String parameters;
             //parameters = Console.ReadLine();
             //parameters = parameters.Replace(" ", string.Empty);
-            //int address;
-            //var count = parameters.Count(x => x == '-');
-            //if (count == 2) {
-            //    string addressS = parameters.Substring(GetNthIndex(parameters, 's', 2) + 1, GetNthIndex(parameters, '-', 2) - GetNthIndex(parameters, 's', 2) - 1);
-            //    string PortS = parameters.Substring(GetNthIndex(parameters, '-', 2) + 5);
-            //    Console.WriteLine(PortS);
-            //    Console.WriteLine(addressS);
-            //    bool x = Int32.TryParse(addressS, out address);
-
-            //    x = Int32.TryParse(PortS, out port);
-            //    if (x != true) {
-            //        Console.WriteLine("Wrong port number");
-            //    }
-
-            //} else {
-            //    Console.WriteLine("Incorrect Syntax");
+            //Check(parameters);
             //}
+           port = 13000;
 
             String message = "";
             for (int i = 0; i < 4; i++) {

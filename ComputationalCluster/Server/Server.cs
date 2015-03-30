@@ -20,44 +20,83 @@ using ComputationalCluster.Shared.Messages.StatusNamespace;
 
 namespace ComputationalCluster.Server
 {
+
     public sealed class Server
     {
-   
+        public Int32 port;
+        public int timeout;
+        public string backup;
+        public String[] Check(string parameters)
+        {
+            String[] Data = new String[3];
+            int t;
+            int port;
+            //wezmiemy tylko tylko cyfre między -port a -t
+            var count = parameters.Count(x => x == '-');
+            if (count == 3)
+            {
+                string PortS = parameters.Substring(GetNthIndex(parameters, 't', 1) + 1, GetNthIndex(parameters, '-', 2) - GetNthIndex(parameters, 't', 1) - 1);
+                string backup = parameters.Substring(GetNthIndex(parameters, '-', 2), GetNthIndex(parameters, '-', 3) - GetNthIndex(parameters, '-', 2));
+                string tS = parameters.Substring(GetNthIndex(parameters, '-', 3) + 2);
+                Console.WriteLine(PortS);
+                bool x = Int32.TryParse(tS, out t);
+                if (x = !true)
+                {
+                    Console.WriteLine(" Wrong timeout");
+                }
+                x = Int32.TryParse(PortS, out port);
+                if (x != true)
+                {
+                    Console.WriteLine("Wrong port number");
+                }
+
+                Data[0] = PortS;
+                Data[1] = backup;
+                Data[2] = tS;
+
+                return Data;
+
+            }
+            else
+            {
+                Console.WriteLine("Incorrect Syntax");
+            }
+            return Data;
+
+        }
+        public void GetParameters (string parameter1, string parameter2, string parameter3)
+    {
+        port = Int32.Parse(parameter1);
+        backup = parameter2;
+        timeout = Int32.Parse(parameter3);
+
+    }
+
+
+
         public void startInstance(IPAddress localIPAddress)
         {
             Console.WriteLine("Server Started, Specify Parameters");
-            Console.WriteLine("Parameters syntax: [-port [port number]] [-backup] [-t [time in seconds]]");
-            Console.Write("> ");   
-            Int32 port;
+            String[] Data = new String[3];
 
-            //String parameters;
-            //parameters = Console.ReadLine();
-            //parameters = parameters.Replace(" ", string.Empty);
-            //int t;
-            ////wezmiemy tylko tylko cyfre między -port a -t
-            //var count = parameters.Count(x => x == '-');
-            //if (count == 3) {
-            //    string PortS = parameters.Substring(GetNthIndex(parameters, 't', 1) + 1, GetNthIndex(parameters, '-', 2) - GetNthIndex(parameters, 't', 1) - 1);
-            //    string backup = parameters.Substring(GetNthIndex(parameters, '-', 2), GetNthIndex(parameters, '-', 3) - GetNthIndex(parameters, '-', 2));
-            //    string tS = parameters.Substring(GetNthIndex(parameters, '-', 3) + 2);
-            //    Console.WriteLine(PortS);
+            //zakomentowane żeby łatwiej sprawdzić
 
-            //    bool x = Int32.TryParse(tS, out t);
-            //    if (x = !true) {
-            //        Console.WriteLine(" Wrong timeout");
-            //    }
-            //    x = Int32.TryParse(PortS, out port);
-            //    if (x != true) {
-            //        Console.WriteLine("Wrong port number");
-            //    }
-            //    Listen(port, localIPAddress);
+        //    while (Data[0] == null) { 
+        //    Console.WriteLine("Parameters syntax: [-port [port number]] [-backup] [-t [time in seconds]]");
+        //    Console.Write("> ");   
+        ////    Int32 port;
+
+        //    String parameters;
+        //    parameters = Console.ReadLine();
+        //    parameters = parameters.Replace(" ", string.Empty);
+        //    Data = Check(parameters);
+        //    }
+        //    GetParameters(Data[0],Data[1],Data[2]);
+
+             port = 13000;
+            Listen(port, localIPAddress);
             
-            //} else {
-            //    Console.WriteLine("Incorrect Syntax");
-            //}
-
-              port = 13000;
-              Listen(port, localIPAddress);
+            //  Listen(port, localIPAddress);
         }
 
 

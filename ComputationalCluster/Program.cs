@@ -46,7 +46,7 @@ namespace ComputationalCluster {
       
                     case "CLIENT":
                         Client.Client newClientInstance = new Client.Client();
-                        newClientInstance.startInstance(port, hostName);
+                        newClientInstance.startInstance(hostName);
                         break;
 
                     case "COMPUTATIONALNODE":
