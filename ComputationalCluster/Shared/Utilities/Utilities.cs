@@ -35,5 +35,11 @@ namespace ComputationalCluster.Shared.Utilities {
             return YourClassObject;
         }
 
+        public static void waitUntilUserClose()
+        {
+            Console.WriteLine("Press enter to close...");
+            Console.ReadLine();
+        }
+
     }
 }

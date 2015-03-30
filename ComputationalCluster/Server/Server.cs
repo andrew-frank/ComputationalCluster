@@ -14,9 +14,9 @@ namespace ComputationalCluster.Server
         
         public void Main()
         {
-            localIPAddress = getIPAddressOfTheLocalMachine();            
+            localIPAddress = Shared.Connection.ConnectionService.getIPAddressOfTheLocalMachine();            
             startInstance(localIPAddress);
-            waitUntilUserClose();
+            Shared.Utilities.Utilities.waitUntilUserClose();
         }       
 
         protected void startInstance(IPAddress localIPAddress)
@@ -47,7 +47,7 @@ namespace ComputationalCluster.Server
                     // Perform a blocking call to accept requests. 
                     // You could also user server.AcceptSocket() here.
                     TcpClient client = server.AcceptTcpClient();
-                    Console.WriteLine("Connected!");
+                    //Console.WriteLine("Connected!");
 
                     data = null;
 
@@ -91,30 +91,6 @@ namespace ComputationalCluster.Server
                 // Stop listening for new clients.
                 server.Stop();
             }
-        }
-
-        protected IPAddress getIPAddressOfTheLocalMachine()
-        {
-            String strHostName = "";       
-            // Getting Ip address of local machine...
-            // First get the host name of local machine.
-            strHostName = Dns.GetHostName();            
-            Console.WriteLine("Local Machine's Host Name: " + strHostName);
-            IPHostEntry ipEntry = Dns.GetHostByName(strHostName); //Sugeruje użycie GetHostEntry, ale wtedy adres IP jest w innej formie
-            IPAddress[] addr = ipEntry.AddressList;
-            //for (int i = 0; i < addr.Length; i++)
-            //{
-            //    Console.WriteLine("IP Address {0}: {1} ", i, addr[i].ToString());
-            //}
-            Console.WriteLine("IP Address {0}: {1} ", 0, addr[0].ToString());
-            return addr[0];           
-            
-        }
-        
-        private void waitUntilUserClose()
-        {
-            Console.WriteLine("Press enter to close...");
-            Console.ReadLine();
         }
     }
 }

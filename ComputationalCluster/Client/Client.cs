@@ -8,11 +8,12 @@ using System.Threading.Tasks;
 
 namespace ComputationalCluster.Client
 {
-    public class Client : IDisposable
+    public class Client
     {
         public void Main()
         {
             startInstance();
+            Shared.Utilities.Utilities.waitUntilUserClose();
         }
 
         protected void startInstance()
@@ -23,21 +24,7 @@ namespace ComputationalCluster.Client
             for (int i = 0; i < 4; i++)
             {
                 Shared.Connection.ConnectionService.ConnectAndSendMessage(HostName, "Client [" + i + "] ZAREJESTRUJ");
-            }
-                //Shared.Connection.ConnectionService.ConnectAndSendMessage(HostName, "Siema server, zarejestrujesz mnie?");
-            waitUntilUserClose();
-        }
-        
-
-        private void waitUntilUserClose()
-        {
-            Console.WriteLine("Press enter to close...");
-            Console.ReadLine();
-        }
-
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
+            } 
+        }        
     }
 }

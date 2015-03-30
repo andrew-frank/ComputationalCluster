@@ -12,6 +12,7 @@ namespace ComputationalCluster.TaskManager
         public void Main()
         {
             startInstance();
+            Shared.Utilities.Utilities.waitUntilUserClose();
         }
 
         protected void startInstance()
@@ -22,14 +23,7 @@ namespace ComputationalCluster.TaskManager
             for (int i = 0; i < 1; i++)
             {
                 Shared.Connection.ConnectionService.ConnectAndSendMessage(HostName, "TaskManager [" + i + "] ZAREJESTRUJ");
-            }
-            waitUntilUserClose();
-        }
-
-        private void waitUntilUserClose()
-        {
-            Console.WriteLine("Press enter to close...");
-            Console.ReadLine();
+            }            
         }
     }
 }

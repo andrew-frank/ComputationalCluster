@@ -64,6 +64,23 @@ namespace ComputationalCluster.Shared.Connection {
             //Console.WriteLine("\n Press Enter to continue...");
             //Console.Read();
         }
+        
+        public static IPAddress getIPAddressOfTheLocalMachine()
+        {
+            String strHostName = "";
+            // Getting Ip address of local machine...
+            // First get the host name of local machine.
+            strHostName = Dns.GetHostName();
+            Console.WriteLine("Local Machine's Host Name: " + strHostName);
+            IPHostEntry ipEntry = Dns.GetHostByName(strHostName); //Sugeruje użycie GetHostEntry, ale wtedy adres IP jest w innej formie
+            IPAddress[] addr = ipEntry.AddressList;
+            //for (int i = 0; i < addr.Length; i++)
+            //{
+            //    Console.WriteLine("IP Address {0}: {1} ", i, addr[i].ToString());
+            //}
+            Console.WriteLine("IP Address {0}: {1} ", 0, addr[0].ToString());
+            return addr[0];
 
+        }
     }
 }
