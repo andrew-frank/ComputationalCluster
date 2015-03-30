@@ -44,12 +44,12 @@ namespace ComputationalCluster.Shared.Utilities {
             foreach(Type type in types) {
                 try {
                     oXmlSerializer = new System.Xml.Serialization.XmlSerializer(type);
-
-                    //The StringReader will be the stream holder for the existing XML file 
-                    Object YourClassObject = oXmlSerializer.Deserialize(new System.IO.StringReader(XMLString));
-
-                    //initially deserialized, the data is represented by an object without a defined type 
-                    return YourClassObject;
+            
+            //The StringReader will be the stream holder for the existing XML file 
+            Object YourClassObject = oXmlSerializer.Deserialize(new System.IO.StringReader(XMLString)); 
+            
+            //initially deserialized, the data is represented by an object without a defined type 
+            return YourClassObject;
 
                 } catch (Exception e) {
                     Console.WriteLine("XML parsing: Catching wrong type exception while searching for object. \n" + e.ToString());
@@ -59,6 +59,11 @@ namespace ComputationalCluster.Shared.Utilities {
             return null;
         }
 
-        
+        public static void waitUntilUserClose()
+        {
+            Console.WriteLine("Press enter to close...");
+            Console.ReadLine();
+        }
+
     }
 }
