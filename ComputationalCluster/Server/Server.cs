@@ -113,8 +113,7 @@ namespace ComputationalCluster.Server
                     string xml = (string)response;
                     this.ReceivedMessage(xml);
 
-                    //wysylanie powinno byc tu (odpowiedz odbywa sie po odebraniu i przeanalizowaniu wiadomosci), 
-                    //a w petli powyzej wywala exception
+                    
                     byte[] msg = System.Text.Encoding.ASCII.GetBytes("hej, mam");
                     stream.Write(msg, 0, msg.Length);
                     //Console.WriteLine("Sent: {0}", response);
@@ -123,7 +122,6 @@ namespace ComputationalCluster.Server
                     // Shutdown and end connection
                     client.Close();
                 }
-
 
             }
             catch (SocketException e) {
