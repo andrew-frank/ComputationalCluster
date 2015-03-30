@@ -12,8 +12,7 @@ namespace ComputationalCluster.Shared.Connection {
     {
         public static void ConnectAndSendMessage(Int32 port , String server, String message)
         {
-            try
-            {
+            try {
                 TcpClient client = new TcpClient(server, port);
 
                 // Translate the passed message into ASCII and store it as a Byte array.
@@ -49,7 +48,7 @@ namespace ComputationalCluster.Shared.Connection {
 
             } catch (ArgumentNullException e) {
                 Console.WriteLine("ArgumentNullException: {0}", e);
-
+                System.Diagnostics.Debug.WriteLine("ArgumentNullException: " + e.ToString());
 
             } catch (SocketException e) {
                 Console.WriteLine("Util SocketException: " + e.ToString());
@@ -57,23 +56,31 @@ namespace ComputationalCluster.Shared.Connection {
             }
 
         }
-        
-        public static IPAddress getIPAddressOfTheLocalMachine()
-        {
-            String strHostName = "";
-            // Getting Ip address of local machine...
-            // First get the host name of local machine.
-            strHostName = Dns.GetHostName();
-            Console.WriteLine("Local Machine's Host Name: " + strHostName);
-            IPHostEntry ipEntry = Dns.GetHostByName(strHostName); //Sugeruje użycie GetHostEntry, ale wtedy adres IP jest w innej formie
-            IPAddress[] addr = ipEntry.AddressList;
-            //for (int i = 0; i < addr.Length; i++)
-            //{
-            //    Console.WriteLine("IP Address {0}: {1} ", i, addr[i].ToString());
-            //}
-            Console.WriteLine("IP Address {0}: {1} ", 0, addr[0].ToString());
-            return addr[0];
 
+
+        public static IPAddress getIPAddressOfTheLocalMachine() 
+        {
+            String strHostName = Dns.GetHostName();
+            Console.WriteLine("Local Machine's Host Name: " + strHostName);
+
+            IPHostEntry ipEntry; //= Dns.GetHostByName(strHostName);
+            ipEntry = Dns.GetHostEntry(strHostName); //Sugeruje użycie GetHostEntry, ale wtedy adres IP jest w innej formie
+
+            IPAddress[] addr = ipEntry.AddressList;
+            IPAddress IPv4 = null;
+            for (int i = 0; i < addr.Length; i++) {
+                if (addr[i].IsIPv6LinkLocal == false && addr[i].AddressFamily == AddressFamily.InterNetwork ) {
+                    Console.WriteLine("Correct IP Address {0}: {1} ", i, addr[i].ToString());
+                    IPv4 = addr[i];
+                } else
+                    System.Diagnostics.Debug.WriteLine("Incorrect Address {0}: {1} ", i, addr[i].ToString());
+            }
+
+            if (IPv4 == null)
+                throw new Exception();
+            Console.WriteLine("IP Address: " + IPv4.ToString());
+
+            return addr[0];
         }
 
     }

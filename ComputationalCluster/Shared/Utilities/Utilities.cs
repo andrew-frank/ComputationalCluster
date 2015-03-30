@@ -49,20 +49,21 @@ namespace ComputationalCluster.Shared.Utilities {
             types.Add(typeof(SolveRequestResponse));
             types.Add(typeof(Status));
 
-            System.Xml.Serialization.XmlSerializer oXmlSerializer;
+            System.Xml.Serialization.XmlSerializer xmlSerializer;
 
             foreach(Type type in types) {
+                
                 try {
-                    oXmlSerializer = new System.Xml.Serialization.XmlSerializer(type);
+                    xmlSerializer = new System.Xml.Serialization.XmlSerializer(type);
             
-            //The StringReader will be the stream holder for the existing XML file 
-            Object YourClassObject = oXmlSerializer.Deserialize(new System.IO.StringReader(XMLString)); 
-            
-            //initially deserialized, the data is represented by an object without a defined type 
-            return YourClassObject;
+                    //The StringReader will be the stream holder for the existing XML file 
+                    Object YourClassObject = xmlSerializer.Deserialize(new System.IO.StringReader(XMLString)); 
 
-                } catch (Exception e) {
-                    Console.WriteLine("XML parsing: Catching wrong type exception while searching for object. \n" + e.ToString());
+                    //initially deserialized, the data is represented by an object without a defined type 
+                    return YourClassObject;
+
+                } catch (System.InvalidOperationException e) {
+                    System.Diagnostics.Debug.WriteLine("***\nThis is normal. Error in XML parsing: Catching wrong type exception while searching for object. \n" + e.ToString());
                 }
             }
 

@@ -30,46 +30,41 @@ namespace ComputationalCluster.Server
             Console.Write("> ");   
             Int32 port;
 
-            String parameters;
-            parameters = Console.ReadLine();
-            parameters = parameters.Replace(" ", string.Empty);
-            int t;
-            //wezmiemy tylko tylko cyfre między -port a -t
-            var count = parameters.Count(x => x == '-');
-            if (count == 3)
-            {
-                string PortS = parameters.Substring(GetNthIndex(parameters, 't', 1) + 1, GetNthIndex(parameters, '-', 2) - GetNthIndex(parameters, 't', 1)-1);
-                string backup = parameters.Substring(GetNthIndex(parameters, '-', 2), GetNthIndex(parameters, '-', 3) - GetNthIndex(parameters, '-', 2));
-                string tS = parameters.Substring(GetNthIndex(parameters, '-', 3) + 2);
-                Console.WriteLine(PortS);
+            //String parameters;
+            //parameters = Console.ReadLine();
+            //parameters = parameters.Replace(" ", string.Empty);
+            //int t;
+            ////wezmiemy tylko tylko cyfre między -port a -t
+            //var count = parameters.Count(x => x == '-');
+            //if (count == 3) {
+            //    string PortS = parameters.Substring(GetNthIndex(parameters, 't', 1) + 1, GetNthIndex(parameters, '-', 2) - GetNthIndex(parameters, 't', 1) - 1);
+            //    string backup = parameters.Substring(GetNthIndex(parameters, '-', 2), GetNthIndex(parameters, '-', 3) - GetNthIndex(parameters, '-', 2));
+            //    string tS = parameters.Substring(GetNthIndex(parameters, '-', 3) + 2);
+            //    Console.WriteLine(PortS);
 
-                bool x= Int32.TryParse(tS, out t);
-                if(x=!true)
-                {
-                    Console.WriteLine(" Wrong timeout");
-                }
-                x = Int32.TryParse(PortS, out port);
-                if(x!=true)
-                {
-                    Console.WriteLine("Wrong port number");
-                }
-                Listen(port, localIPAddress);
-            }
-            else
-                Console.WriteLine("Incorrect Syntax");
+            //    bool x = Int32.TryParse(tS, out t);
+            //    if (x = !true) {
+            //        Console.WriteLine(" Wrong timeout");
+            //    }
+            //    x = Int32.TryParse(PortS, out port);
+            //    if (x != true) {
+            //        Console.WriteLine("Wrong port number");
+            //    }
+            //    Listen(port, localIPAddress);
+            
+            //} else {
+            //    Console.WriteLine("Incorrect Syntax");
+            //}
 
-
-
-          port = 13000;
-          Listen(port, localIPAddress);
+              port = 13000;
+              Listen(port, localIPAddress);
         }
 
 
         private void Listen(Int32 port, IPAddress localAddr) 
         {
             TcpListener TCPServer = null;
-            try
-            {
+            try {
                 // TcpListener server = new TcpListener(port);
                 TCPServer = new TcpListener(localAddr, port);
 
@@ -83,8 +78,8 @@ namespace ComputationalCluster.Server
 
 
                 // Enter the listening loop. 
-                while (true)
-                {
+                while (true) {
+
                     Console.Write("Waiting for a connection... ");
 
                     // Perform a blocking call to accept requests. 
@@ -100,8 +95,7 @@ namespace ComputationalCluster.Server
                     int temp;
 
                     // Loop to receive all the data sent by the client.
-                    do
-                    {                        
+                    do {                        
                         temp = stream.Read(bytes, 0, bytes.Length);
                         
                         Console.WriteLine("Rozmiar byte array=" + temp + "\n");
@@ -111,8 +105,8 @@ namespace ComputationalCluster.Server
                         response += data;
 
                         Console.WriteLine("Received: \n" + data + "\n");
-                    }
-                    while (stream.DataAvailable);
+
+                    }  while (stream.DataAvailable);
                     
                     Console.WriteLine("Received: {0}", response);
                     //parse/map object & react
@@ -132,27 +126,26 @@ namespace ComputationalCluster.Server
 
 
             }
-            catch (SocketException e)
-            {
+            catch (SocketException e) {
                 Console.WriteLine("Server SocketException: " + e.ToString());
                 System.Diagnostics.Debug.WriteLine("SocketException: " + e.ToString());
-
             }
-            catch (Exception e)
-            {
+
+            catch (Exception e) {
                 Console.WriteLine("Server SocketException: " + e.ToString());
                 System.Diagnostics.Debug.WriteLine("SocketException: " + e.ToString());
                 throw e;
             }            
-            finally
-            {
+
+            finally {
                 // Stop listening for new clients.
                 TCPServer.Stop();
             }
         }
 
 
-        private void ReceivedMessage(string xml) {
+        private void ReceivedMessage(string xml) 
+        {
 
             Object obj = xml.DeserializeXML();
 
@@ -161,10 +154,12 @@ namespace ComputationalCluster.Server
 
             } else if (obj is NoOperation) {
 
-            }
+            } 
 
             //etc...
         }
+
+
         public int GetNthIndex(string s, char t, int n)
         {
             int count = 0;
