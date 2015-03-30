@@ -14,6 +14,7 @@ namespace ComputationalCluster.Client
     {
         public void startInstance(Int32 port, String HostName) {
           //  public void StarInstance(){
+
             Console.WriteLine("Client Started");
             Console.WriteLine(" Parameters Syntax: [-address [IPv4 address or IPv6 address or host name]] [-port[port number]]");
             Console.Write("> ");
@@ -48,8 +49,13 @@ namespace ComputationalCluster.Client
                 //SolveRequest _solveRequest = new SolveRequest();
                 DivideProblem devide = new DivideProblem();
                 message = devide.SerializeToXML();
-
-                Shared.Connection.ConnectionService.ConnectAndSendMessage(port, HostName, message);                
+                try { 
+                Shared.Connection.ConnectionService.ConnectAndSendMessage(port, HostName, message);    
+                    }
+                catch(Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                }
             }
             Shared.Utilities.Utilities.waitUntilUserClose();
         }
