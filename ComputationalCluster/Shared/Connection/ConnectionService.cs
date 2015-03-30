@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -25,9 +26,9 @@ namespace ComputationalCluster.Shared.Connection {
 
                 // Send the message to the connected TcpServer. 
                 stream.Write(data, 0, data.Length);
-
+               
                 Console.WriteLine("Sent: {0}", message);
-
+                
                 // Receive the TcpServer.response. 
 
                 // Buffer to store the response bytes.
@@ -74,5 +75,6 @@ namespace ComputationalCluster.Shared.Connection {
             return addr[0];
 
         }
+
     }
 }
