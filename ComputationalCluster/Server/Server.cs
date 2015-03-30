@@ -22,11 +22,46 @@ namespace ComputationalCluster.Server
 {
     public sealed class Server
     {
-        public void startInstance(Int32 port, IPAddress localIPAddress)
+   
+        public void startInstance(IPAddress localIPAddress)
         {
-            Console.WriteLine("Server Started");
+            Console.WriteLine("Server Started, Specify Parameters");
+            Console.WriteLine("Parameters syntax: [-port [port number]] [-backup] [-t [time in seconds]]");
+            Console.Write("> ");   
+            Int32 port;
 
-            Listen(port, localIPAddress);
+            String parameters;
+            parameters = Console.ReadLine();
+            parameters = parameters.Replace(" ", string.Empty);
+            int t;
+            //wezmiemy tylko tylko cyfre między -port a -t
+            var count = parameters.Count(x => x == '-');
+            if (count == 3)
+            {
+                string PortS = parameters.Substring(GetNthIndex(parameters, 't', 1) + 1, GetNthIndex(parameters, '-', 2) - GetNthIndex(parameters, 't', 1)-1);
+                string backup = parameters.Substring(GetNthIndex(parameters, '-', 2), GetNthIndex(parameters, '-', 3) - GetNthIndex(parameters, '-', 2));
+                string tS = parameters.Substring(GetNthIndex(parameters, '-', 3) + 2);
+                Console.WriteLine(PortS);
+
+                bool x= Int32.TryParse(tS, out t);
+                if(x=!true)
+                {
+                    Console.WriteLine(" Wrong timeout");
+                }
+                x = Int32.TryParse(PortS, out port);
+                if(x!=true)
+                {
+                    Console.WriteLine("Wrong port number");
+                }
+                Listen(port, localIPAddress);
+            }
+            else
+                Console.WriteLine("Incorrect Syntax");
+
+
+
+          port = 13000;
+          Listen(port, localIPAddress);
         }
 
 
@@ -129,6 +164,22 @@ namespace ComputationalCluster.Server
             }
 
             //etc...
+        }
+        public int GetNthIndex(string s, char t, int n)
+        {
+            int count = 0;
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (s[i] == t)
+                {
+                    count++;
+                    if (count == n)
+                    {
+                        return i;
+                    }
+                }
+            }
+            return -1;
         }
 
     }

@@ -17,7 +17,9 @@ namespace ComputationalCluster.ComputationalNode
             for (int i = 0; i < 8; i++)
             {
                 Status _status = new Status();
-                message = _status.SerializeToXML();
+             
+                message = _status.Id.SerializeToXML();
+            //    message = _status.SerializeToXML();
 
                 Shared.Connection.ConnectionService.ConnectAndSendMessage(port, HostName, message);
             }
