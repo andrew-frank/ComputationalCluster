@@ -7,6 +7,7 @@ using ComputationalCluster.Shared.Messages.DivideProblemNamespace;
 using ComputationalCluster.Shared.Messages.NoOperationNamespace;
 using ComputationalCluster.Shared.Messages.RegisterNamespace;
 using ComputationalCluster.Shared.Messages.RegisterResponseNamespace;
+using ComputationalCluster.Shared.Messages.SolutionRequestNamespace;
 using ComputationalCluster.Shared.Messages.SolutionsNamespace;
 using ComputationalCluster.Shared.Messages.SolvePartialProblemsNamespace;
 using ComputationalCluster.Shared.Messages.SolveRequestNamespace;
@@ -38,6 +39,15 @@ namespace ComputationalCluster.Shared.Utilities {
         {
             List<Type> types = new List<Type>();
             types.Add(typeof(DivideProblem));
+            types.Add(typeof(NoOperation));
+            types.Add(typeof(Register));
+            types.Add(typeof(RegisterResponse));
+            types.Add(typeof(SolutionRequest));
+            types.Add(typeof(Solutions));
+            types.Add(typeof(SolvePartialProblems));
+            types.Add(typeof(SolveRequest));
+            types.Add(typeof(SolveRequestResponse));
+            types.Add(typeof(Status));
 
             System.Xml.Serialization.XmlSerializer oXmlSerializer;
 

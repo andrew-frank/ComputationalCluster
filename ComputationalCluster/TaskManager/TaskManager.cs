@@ -10,21 +10,15 @@ namespace ComputationalCluster.TaskManager
 {
     public class TaskManager
     {
-        public void Main()
-        {
-            startInstance();
-            Shared.Utilities.Utilities.waitUntilUserClose();
-        }
-
-        protected void startInstance()
+        public void startInstance(Int32 port, String HostName)
         {
             Console.WriteLine("Task Manager Started");
-            String HostName = "";
-            HostName = Dns.GetHostName();
-            for (int i = 0; i < 1; i++)
-            {
-                Shared.Connection.ConnectionService.ConnectAndSendMessage(HostName, "TaskManager [" + i + "] ZAREJESTRUJ");
-            }            
+
+            for (int i = 0; i < 1; i++) {
+                Shared.Connection.ConnectionService.ConnectAndSendMessage(port, HostName, "TaskManager [" + i + "] ZAREJESTRUJ");
+            }   
+
+            Shared.Utilities.Utilities.waitUntilUserClose();
         }
     }
 }
