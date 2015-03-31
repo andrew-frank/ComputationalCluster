@@ -23,7 +23,7 @@ namespace ComputationalCluster.Server
 
     public sealed class Server
     {
-        public Int32 port;
+        public Int32 _port;
         public int timeout;
         public string backup;
         public String[] Check(string parameters)
@@ -64,14 +64,14 @@ namespace ComputationalCluster.Server
 
         public void GetParameters (string parameter1, string parameter2, string parameter3)
         {
-            port = Int32.Parse(parameter1);
+            _port = Int32.Parse(parameter1);
             backup = parameter2;
             timeout = Int32.Parse(parameter3);
         }
 
 
 
-        public void startInstance(IPAddress localIPAddress)
+        public void startInstance(Int32 port, IPAddress localIPAddress)
         {
             Console.WriteLine("Server Started, Specify Parameters");
             String[] Data = new String[3];
@@ -90,8 +90,8 @@ namespace ComputationalCluster.Server
         //    }
         //    GetParameters(Data[0],Data[1],Data[2]);
 
-             port = 13000;
-             Listen(port, localIPAddress);
+             _port = port;
+             Listen(_port, localIPAddress);
             
             //  Listen(port, localIPAddress);
         }
