@@ -41,7 +41,7 @@ namespace ComputationalCluster {
 
                     case "SERVER":
                         Server.Server newServerInstance = new Server.Server();
-                        newServerInstance.startInstance(ip);
+                        newServerInstance.startInstance(port, ip);
                         break;    
 
                     case "CLIENT":
