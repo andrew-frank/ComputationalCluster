@@ -38,7 +38,7 @@
 
         private bool idFieldSpecified;
 
-        private RegisterSolvableProblemsProblemName[][] solvableProblemsField;
+        private RegisterSolvableProblemsProblemName[] solvableProblemsField;
 
         /// <remarks/>
         public string Type {
@@ -104,7 +104,7 @@
 
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayItemAttribute("ProblemName", typeof(RegisterSolvableProblemsProblemName))]
-        public RegisterSolvableProblemsProblemName[][] SolvableProblems {
+        public RegisterSolvableProblemsProblemName[] SolvableProblems {
             get {
                 return this.solvableProblemsField;
             }

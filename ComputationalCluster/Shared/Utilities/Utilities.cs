@@ -29,6 +29,7 @@ namespace ComputationalCluster.Shared.Utilities {
                     xmlserializer.Serialize(writer, value);
                     return stringWriter.ToString();
                 }
+
             } catch (Exception ex) {
                 throw new Exception("An error occurred", ex);
             }

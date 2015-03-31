@@ -190,8 +190,8 @@ namespace ComputationalCluster.Server
             } 
             else if (obj is NoOperation) {//Sent in response to status messge
 
-            }
-            else if (obj is Register)
+            } 
+            else if (obj is Register)//Register message is sent by TM, CN and Backup CS to the CS after they are activated.
             {
 
             }
