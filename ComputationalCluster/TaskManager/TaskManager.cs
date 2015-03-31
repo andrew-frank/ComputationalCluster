@@ -7,9 +7,10 @@ using System.Text;
 using System.Threading.Tasks;
 using ComputationalCluster.Shared.Utilities;
 
+
 namespace ComputationalCluster.TaskManager
 {
-    public class TaskManager
+    public sealed class TaskManager : Node
     {
         public void startInstance(Int32 port, String HostName, Int32 timeout)
         {

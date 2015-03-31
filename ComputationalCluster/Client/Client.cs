@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 using ComputationalCluster.Shared.Utilities;
 using ComputationalCluster.Shared.Messages.SolveRequestNamespace;
 using ComputationalCluster.Shared.Messages.DivideProblemNamespace;
+
 namespace ComputationalCluster.Client
 {
-    public class Client
+    public sealed class Client : Node
     {
         Int32 _port=0;
-        String address;        
 
         public void startInstance(Int32 port, String HostName, Int32 timeout) {
 

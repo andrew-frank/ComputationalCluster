@@ -9,9 +9,7 @@ using ComputationalCluster.Shared.Utilities;
 
 namespace ComputationalCluster.ComputationalNode
 {
-
-
-    public class ComputationalNode
+    public class ComputationalNode : Node
     {
         public void startInstance(Int32 port, String HostName, Int32 timeout) {
             Console.WriteLine("Computational Node Started");

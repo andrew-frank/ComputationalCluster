@@ -17,11 +17,10 @@ using ComputationalCluster.Shared.Messages.SolveRequestNamespace;
 using ComputationalCluster.Shared.Messages.SolveRequestResponseNamespace;
 using ComputationalCluster.Shared.Messages.StatusNamespace;
 
-
 namespace ComputationalCluster.Server
 {
 
-    public sealed class Server
+    public sealed class Server : Node
     {
         public Int32 _port;
         public int timeout;
@@ -62,13 +61,13 @@ namespace ComputationalCluster.Server
             return Data;
         }
 
+
         public void GetParameters (string parameter1, string parameter2, string parameter3)
         {
             _port = Int32.Parse(parameter1);
             backup = parameter2;
             timeout = Int32.Parse(parameter3);
         }
-
 
 
         public void startInstance(Int32 port, IPAddress localIPAddress, Int32 timeout)
