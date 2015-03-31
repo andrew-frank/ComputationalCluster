@@ -123,6 +123,8 @@ namespace ComputationalCluster.Server
 
                     // Perform a blocking call to accept requests. 
                     // You could also user server.AcceptSocket() here.
+
+                    //TcpClient client = TCPServer.AcceptTcpClient();
                     TcpClient client = TCPServer.AcceptTcpClient();
 
                     data = null;

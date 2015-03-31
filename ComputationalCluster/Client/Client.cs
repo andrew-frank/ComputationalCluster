@@ -14,13 +14,11 @@ namespace ComputationalCluster.Client
     {
         Int32 port=0;
         String address;
+        
 
-
-        public void Check(string parameters)
-        {
+        public void Check(string parameters) {
             var count = parameters.Count(x => x == '-');
-            if (count == 2)
-            {
+            if (count == 2) {
                 bool x;
                 string addressS = parameters.Substring(GetNthIndex(parameters, 's', 2) + 1, GetNthIndex(parameters, '-', 2) - GetNthIndex(parameters, 's', 2) - 1);
                 string PortS = parameters.Substring(GetNthIndex(parameters, '-', 2) + 5);
@@ -28,15 +26,12 @@ namespace ComputationalCluster.Client
                 Console.WriteLine(addressS);
 
                 x = Int32.TryParse(PortS, out port);
-                if (x != true)
-                {
+                if (x != true) {
                     Console.WriteLine("Wrong port number");
                 }
                 address = addressS;
 
-            }
-            else
-            {
+            } else {
                 Console.WriteLine("Incorrect Syntax");
             }
         }
