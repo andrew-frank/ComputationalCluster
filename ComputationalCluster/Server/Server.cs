@@ -226,7 +226,8 @@ namespace ComputationalCluster.Nodes
         {
 
             Object obj = xml.DeserializeXML();
-            string message = "hey man ************";
+            
+            string message=""; //= "hey man ************";           
             //it should be (didn't test the try-catch trick) mapped runtime to a correct object, just check for it's type:
             if (obj is DivideProblem) {//Message to task Manager
 
@@ -257,7 +258,8 @@ namespace ComputationalCluster.Nodes
             }
             else if (obj is Status)
             {
-
+                NoOperation noOperationResponse = new NoOperation();
+                message = noOperationResponse.SerializeToXML();
             }
             return message;
 

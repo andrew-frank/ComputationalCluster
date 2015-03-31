@@ -18,12 +18,104 @@ namespace ComputationalClusterTests.XMLSerialization {
         [TestMethod]
         public void TestMethod1() {}
 
+
+        [TestMethod]
+        public void DeserializeDivideProblem()
+        {
+            DivideProblem d = new DivideProblem();
+            string xml = d.SerializeToXML();
+            d = (DivideProblem)xml.DeserializeXML();
+            Assert.IsNotNull(d);
+        }
+
+        [TestMethod]
+        public void DeserializeNoOperation()
+        {
+            NoOperation d = new NoOperation();
+            string xml = d.SerializeToXML();
+            d = (NoOperation)xml.DeserializeXML();
+            Assert.IsNotNull(d);
+        }
+
+        [TestMethod]
+        public void DeserializeRegister()
+        {
+            Register d = new Register();
+            string xml = d.SerializeToXML();
+            d = (Register)xml.DeserializeXML();
+            Assert.IsNotNull(d);
+        }
+
+        [TestMethod]
+        public void DeserializeRegisterResponse()
+        {
+            RegisterResponse d = new RegisterResponse();
+            string xml = d.SerializeToXML();
+            d = (RegisterResponse)xml.DeserializeXML();
+            Assert.IsNotNull(d);
+        }
+
+        [TestMethod]
+        public void DeserializeSolutionRequest()
+        {
+            SolutionRequest d = new SolutionRequest();
+            string xml = d.SerializeToXML();
+            d = (SolutionRequest)xml.DeserializeXML();
+            Assert.IsNotNull(d);
+        }
+
+        [TestMethod]
+        public void DeserializeSolutions()
+        {
+            Solutions d = new Solutions();
+            string xml = d.SerializeToXML();
+            d = (Solutions)xml.DeserializeXML();
+            Assert.IsNotNull(d);
+        }
+
+        [TestMethod]
+        public void DeserializeSolvePartialProblems()
+        {
+            SolvePartialProblems d = new SolvePartialProblems();
+            string xml = d.SerializeToXML();
+            d = (SolvePartialProblems)xml.DeserializeXML();
+            Assert.IsNotNull(d);
+        }
+
+        [TestMethod]
+        public void DeserializeSolveRequest()
+        {
+            SolveRequest d = new SolveRequest();
+            string xml = d.SerializeToXML();
+            d = (SolveRequest)xml.DeserializeXML();
+            Assert.IsNotNull(d);
+        }
+
+        [TestMethod]
+        public void DeserializeSolveRequestResponse()
+        {
+            SolveRequestResponse d = new SolveRequestResponse();
+            string xml = d.SerializeToXML();
+            d = (SolveRequestResponse)xml.DeserializeXML();
+            Assert.IsNotNull(d);
+        }
+
+        [TestMethod]
+        public void DeserializeStatus()
+        {
+            Status d = new Status();
+            string xml = d.SerializeToXML();
+            d = (Status)xml.DeserializeXML();
+            Assert.IsNotNull(d);
+        }
+
+
+
         [TestMethod]
         public void SerializeDivideProblem() {
             DivideProblem d = new DivideProblem();
             string xml = d.SerializeToXML();
-            Assert.IsNotNull(xml);
-            DeserializeDivideProblem(xml);
+            Assert.IsNotNull(xml);            
         }
 
         [TestMethod]
@@ -31,7 +123,7 @@ namespace ComputationalClusterTests.XMLSerialization {
             NoOperation d = new NoOperation();
             string xml = d.SerializeToXML();
             Assert.IsNotNull(xml);
-            DeserializeNoOperation(xml);
+            
         }
 
         [TestMethod]
@@ -39,7 +131,7 @@ namespace ComputationalClusterTests.XMLSerialization {
             Register d = new Register();
             string xml = d.SerializeToXML();
             Assert.IsNotNull(xml);
-            DeserializeRegister(xml);
+            
         }
 
         [TestMethod]
@@ -47,7 +139,7 @@ namespace ComputationalClusterTests.XMLSerialization {
             RegisterResponse d = new RegisterResponse();
             string xml = d.SerializeToXML();
             Assert.IsNotNull(xml);
-            DeserializeRegisterResponse(xml);
+            
         }
 
         [TestMethod]
@@ -55,7 +147,6 @@ namespace ComputationalClusterTests.XMLSerialization {
             SolutionRequest d = new SolutionRequest();
             string xml = d.SerializeToXML();
             Assert.IsNotNull(xml);
-            DeserializeSolutionRequest(xml);
         }
 
         [TestMethod]
@@ -63,7 +154,6 @@ namespace ComputationalClusterTests.XMLSerialization {
             Solutions d = new Solutions();
             string xml = d.SerializeToXML();
             Assert.IsNotNull(xml);
-            DeserializeSolutions(xml);
         }
 
         [TestMethod]
@@ -71,7 +161,6 @@ namespace ComputationalClusterTests.XMLSerialization {
             SolvePartialProblems d = new SolvePartialProblems();
             string xml = d.SerializeToXML();
             Assert.IsNotNull(xml);
-            DeserializeSolvePartialProblems(xml);
         }
 
         [TestMethod]
@@ -79,7 +168,6 @@ namespace ComputationalClusterTests.XMLSerialization {
             SolveRequest d = new SolveRequest();
             string xml = d.SerializeToXML();
             Assert.IsNotNull(xml);
-            DeserializeSolveRequest(xml);
         }
 
         [TestMethod]
@@ -87,7 +175,6 @@ namespace ComputationalClusterTests.XMLSerialization {
             SolveRequestResponse d = new SolveRequestResponse();
             string xml = d.SerializeToXML();
             Assert.IsNotNull(xml);
-            DeserializeSolveRequestResponse(xml);
         }
 
         [TestMethod]
@@ -95,78 +182,9 @@ namespace ComputationalClusterTests.XMLSerialization {
             Status d = new Status();
             string xml = d.SerializeToXML();
             Assert.IsNotNull(xml);
-            DeserializeStatus(xml);
         }
 
 
-        [TestMethod]
-        public void DeserializeDivideProblem(string xml) {
-            DivideProblem d = new DivideProblem();
-            d = (DivideProblem)xml.DeserializeXML();
-            Assert.IsNotNull(d);
-        }
-
-        [TestMethod]
-        public void DeserializeNoOperation(string xml) {
-            NoOperation d = new NoOperation();
-            d = (NoOperation)xml.DeserializeXML();
-            Assert.IsNotNull(d);
-        }
-
-        [TestMethod]
-        public void DeserializeRegister(string xml) {
-            Register d = new Register();
-            d = (Register)xml.DeserializeXML();
-            Assert.IsNotNull(d);
-        }
-
-        [TestMethod]
-        public void DeserializeRegisterResponse(string xml) {
-            RegisterResponse d = new RegisterResponse();
-            d = (RegisterResponse)xml.DeserializeXML();
-            Assert.IsNotNull(d);
-        }
-
-        [TestMethod]
-        public void DeserializeSolutionRequest(string xml) {
-            SolutionRequest d = new SolutionRequest();
-            d = (SolutionRequest)xml.DeserializeXML();
-            Assert.IsNotNull(d);
-        }
-
-        [TestMethod]
-        public void DeserializeSolutions(string xml) {
-            Solutions d = new Solutions();
-            d = (Solutions)xml.DeserializeXML();
-            Assert.IsNotNull(d);
-        }
-
-        [TestMethod]
-        public void DeserializeSolvePartialProblems(string xml) {
-            SolvePartialProblems d = new SolvePartialProblems();
-            d = (SolvePartialProblems)xml.DeserializeXML();
-            Assert.IsNotNull(d);
-        }
-
-        [TestMethod]
-        public void DeserializeSolveRequest(string xml) {
-            SolveRequest d = new SolveRequest();
-            d = (SolveRequest)xml.DeserializeXML();
-            Assert.IsNotNull(d);
-        }
-
-        [TestMethod]
-        public void DeserializeSolveRequestResponse(string xml) {
-            SolveRequestResponse d = new SolveRequestResponse();
-            d = (SolveRequestResponse)xml.DeserializeXML();
-            Assert.IsNotNull(d);
-        }
-
-        [TestMethod]
-        public void DeserializeStatus(string xml) {
-            Status d = new Status();
-            d = (Status)xml.DeserializeXML();
-            Assert.IsNotNull(d);
-        }
+        
     }
 }

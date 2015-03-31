@@ -6,6 +6,8 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using ComputationalCluster.Shared.Utilities;
+using ComputationalCluster.Shared.Messages.RegisterNamespace;
+using System.Threading;
 
 namespace ComputationalCluster.Nodes
 {
@@ -17,19 +19,38 @@ namespace ComputationalCluster.Nodes
         }
 
 
-        public void startInstance(Int32 port, String HostName, Int32 timeout) {
+        public void startInstance(Int32 _port, String _HostName, Int32 _timeout) {
+            Timeout = _timeout;
+            Port = _port;
+            HostName = _HostName;
+            
             Console.WriteLine("Computational Node Started");
             String message = "";
-            for (int i = 0; i < 8; i++)
+
+            Register register = new Register();
+            message = register.SerializeToXML();
+
+            try
             {
+                Shared.Connection.ConnectionService.ConnectAndSendMessage(_port, HostName, message);
 
-                Status _status = new Status();             
-                message = _status.Id.SerializeToXML();            
-
-                Shared.Connection.ConnectionService.ConnectAndSendMessage(port, HostName, message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
             }
 
-            Shared.Utilities.Utilities.waitUntilUserClose();
+            while (true)
+            {
+                Thread.Sleep(Timeout);
+                Status _status = new Status();
+                message = _status.SerializeToXML();
+
+                Shared.Connection.ConnectionService.ConnectAndSendMessage(_port, HostName, message);
+
+            } 
+            
+            //Shared.Utilities.Utilities.waitUntilUserClose();
         }   
     }
 }

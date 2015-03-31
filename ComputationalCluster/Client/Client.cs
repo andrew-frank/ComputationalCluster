@@ -23,7 +23,7 @@ namespace ComputationalCluster.Nodes
 
         public void startInstance(Int32 _port, String _HostName, Int32 _timeout) {
 
-            //Console.WriteLine("Client Started");
+            Console.WriteLine("Client Started");
             //while (port == 0)
             //{ 
             //Console.WriteLine(" Parameters Syntax: [-address [IPv4 address or IPv6 address or host name]] [-port[port number]]");
@@ -36,7 +36,7 @@ namespace ComputationalCluster.Nodes
             //Check(parameters, port, address);
             //}
 
-            Timeout = _timeout * 1000;
+            Timeout = _timeout;
             Port = _port;
             HostName = _HostName;
 

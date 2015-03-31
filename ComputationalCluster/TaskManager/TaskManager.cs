@@ -22,12 +22,12 @@ namespace ComputationalCluster.Nodes
         }
 
 
-        public void startInstance(Int32 port, String HostName, Int32 timeout)
+        public void startInstance(Int32 _port, String _HostName, Int32 _timeout)
         {
                  
-            Timeout = timeout * 1000;
-            Port = port;           
-            Timeout = timeout;
+            Timeout = _timeout;
+            Port = _port;
+            HostName = _HostName;           
             
 
             Console.WriteLine("Task Manager Started");
