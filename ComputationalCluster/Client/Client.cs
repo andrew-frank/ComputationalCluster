@@ -16,7 +16,11 @@ namespace ComputationalCluster.Nodes
 {
     public sealed class Client : Node
     {
-       
+        public Client()
+        {
+            nodeType = NodeType.Client;
+        }
+
         public void startInstance(Int32 _port, String _HostName, Int32 _timeout) {
 
             //Console.WriteLine("Client Started");

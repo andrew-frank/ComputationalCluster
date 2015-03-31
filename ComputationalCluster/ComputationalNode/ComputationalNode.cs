@@ -11,6 +11,12 @@ namespace ComputationalCluster.Nodes
 {
     public class ComputationalNode : Node
     {
+        public ComputationalNode()
+        {
+            nodeType = NodeType.ComputationalNode;
+        }
+
+
         public void startInstance(Int32 port, String HostName, Int32 timeout) {
             Console.WriteLine("Computational Node Started");
             String message = "";

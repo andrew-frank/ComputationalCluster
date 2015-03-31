@@ -16,6 +16,11 @@ namespace ComputationalCluster.Nodes
 {
     public sealed class TaskManager : Node
     {
+        public TaskManager()
+        {
+            nodeType = NodeType.TaskManager;
+        }
+
 
         public void startInstance(Int32 port, String HostName, Int32 timeout)
         {

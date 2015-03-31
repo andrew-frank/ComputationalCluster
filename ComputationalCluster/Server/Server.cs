@@ -56,13 +56,19 @@ namespace ComputationalCluster.Nodes
 
     public sealed class Server : Node
     {
-
         private RegisteredNodes _registeredComponents = new RegisteredNodes();
         public RegisteredNodes RegisteredComponents { get { return _registeredComponents; } }
 
         public Int32 _port;
         public int timeout;
         public string backup;
+
+        public Server() 
+        {
+            nodeType = NodeType.Server;
+        }
+
+
         public String[] Check(string parameters)
         {
             String[] Data = new String[3];
