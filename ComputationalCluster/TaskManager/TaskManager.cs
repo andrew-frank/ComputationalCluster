@@ -6,23 +6,28 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using ComputationalCluster.Shared.Utilities;
-using ComputationalCluster.Shared.Messages.RegisterNamespace;
 using System.Threading;
+using ComputationalCluster.Shared.Messages.SolveRequestNamespace;
+using ComputationalCluster.Shared.Messages.RegisterNamespace;
+
 
 
 namespace ComputationalCluster.TaskManager
 {
     public sealed class TaskManager : Node
     {
-        public void startInstance(Int32 _port, String _HostName, Int32 _timeout)
-        {
-            Timeout = _timeout * 1000;
-            Port = _port;
-            HostName = _HostName;
 
+        public void startInstance(Int32 port, String HostName, Int32 timeout)
+        {
+                 
+            Timeout = timeout;
+            Port = port;           
+            Timeout = timeout;
+            
 
             Console.WriteLine("Task Manager Started");
             String message = "";
+
 
             
             //for (int i = 0; i < 1; i++)
@@ -61,7 +66,7 @@ namespace ComputationalCluster.TaskManager
                 }
             }
 
-            Shared.Utilities.Utilities.waitUntilUserClose();
+            Shared.Utilities.Utilities.waitUntilUserClose();         
         }
     }
 }
