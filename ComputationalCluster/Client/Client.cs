@@ -9,7 +9,7 @@ using ComputationalCluster.Shared.Utilities;
 using ComputationalCluster.Shared.Messages.SolveRequestNamespace;
 using ComputationalCluster.Shared.Messages.DivideProblemNamespace;
 
-namespace ComputationalCluster.Client
+namespace ComputationalCluster.Nodes
 {
     public sealed class Client : Node
     {

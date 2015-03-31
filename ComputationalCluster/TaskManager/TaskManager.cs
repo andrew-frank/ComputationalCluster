@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using ComputationalCluster.Shared.Utilities;
 
 
-namespace ComputationalCluster.TaskManager
+namespace ComputationalCluster.Nodes
 {
     public sealed class TaskManager : Node
     {

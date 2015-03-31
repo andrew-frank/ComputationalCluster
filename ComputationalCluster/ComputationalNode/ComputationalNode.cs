@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ComputationalCluster.Shared.Utilities;
 
-namespace ComputationalCluster.ComputationalNode
+namespace ComputationalCluster.Nodes
 {
     public class ComputationalNode : Node
     {
