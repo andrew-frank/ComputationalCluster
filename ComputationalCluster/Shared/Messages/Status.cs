@@ -28,7 +28,7 @@
 
         private ulong idField;
 
-        private StatusThreadsThread[][] threadsField;
+        private StatusThreadsThread[] threadsField;
 
         /// <remarks/>
         public ulong Id {
@@ -42,7 +42,7 @@
 
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayItemAttribute("Thread", typeof(StatusThreadsThread), IsNullable = false)]
-        public StatusThreadsThread[][] Threads {
+        public StatusThreadsThread[] Threads {
             get {
                 return this.threadsField;
             }
@@ -140,7 +140,8 @@
 
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool TaskIdSpecified {
+        public bool TaskIdSpecified
+        {
             get {
                 return this.taskIdFieldSpecified;
             }

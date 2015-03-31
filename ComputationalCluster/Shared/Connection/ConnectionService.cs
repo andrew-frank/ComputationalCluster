@@ -8,6 +8,71 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ComputationalCluster.Shared.Connection {
+
+    public class Socket {
+        private static Socket instance;
+        private TcpClient client;
+
+        private Socket() { } //hidden initializer - use Instance()
+
+        public static Socket Instance {
+            get {
+                if (instance == null) {
+                    instance = new Socket();
+                }
+                return instance;
+            }
+        }
+
+        public string SendMessage(Int32 port, String server, String message) {
+
+            // String to store the response ASCII representation.
+            String responseData = String.Empty;
+
+            try {
+
+                this.client = new TcpClient(server, port);
+
+                // Translate the passed message into ASCII and store it as a Byte array.
+                Byte[] data = System.Text.Encoding.ASCII.GetBytes(message);
+
+                // Get a client stream for reading and writing. 
+                //  Stream stream = client.GetStream();
+                NetworkStream stream = client.GetStream();
+
+                // Send the message to the connected TcpServer. 
+                stream.Write(data, 0, data.Length);
+
+                Console.WriteLine("Sent: {0}", message);
+
+                // Receive the TcpServer.response. 
+
+                // Buffer to store the response bytes.
+                data = new Byte[256];
+
+                // Read the first batch of the TcpServer response bytes.
+                Int32 bytes = stream.Read(data, 0, data.Length);
+                responseData = System.Text.Encoding.ASCII.GetString(data, 0, bytes);
+
+                // Close everything.
+                stream.Close();
+                client.Close();
+
+            } catch (ArgumentNullException e) {
+                Console.WriteLine("ArgumentNullException: {0}", e);
+                System.Diagnostics.Debug.WriteLine("ArgumentNullException: " + e.ToString());
+
+            } catch (SocketException e) {
+                Console.WriteLine("Util SocketException: " + e.ToString());
+                System.Diagnostics.Debug.WriteLine("SocketException: " + e.ToString());
+            }
+
+            return responseData;
+        }
+
+    }
+
+
     public static class ConnectionService 
     {
         public static void ConnectAndSendMessage(Int32 port , String server, String message)
@@ -44,7 +109,6 @@ namespace ComputationalCluster.Shared.Connection {
                 // Close everything.
                 stream.Close();
                 client.Close();
-
 
             } catch (ArgumentNullException e) {
                 Console.WriteLine("ArgumentNullException: {0}", e);

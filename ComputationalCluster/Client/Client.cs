@@ -12,12 +12,11 @@ namespace ComputationalCluster.Client
 {
     public class Client
     {
-        Int32 port=0;
+        Int32 _port=0;
         String address;
 
-        public void startInstance(String HostName) {
-          //  public void StarInstance(){
-            
+        public void startInstance(Int32 port, String HostName) {
+
             //Console.WriteLine("Client Started");
             //while (port == 0)
             //{ 
@@ -30,7 +29,8 @@ namespace ComputationalCluster.Client
             //parameters = parameters.Replace(" ", string.Empty);
             //Check(parameters, port, address);
             //}
-            port = 13000;
+
+           _port = port;
 
             String message = "";
             for (int i = 0; i < 4; i++) {
@@ -39,7 +39,7 @@ namespace ComputationalCluster.Client
                 message = solveRequest.SerializeToXML();
 
                 try { 
-                    Shared.Connection.ConnectionService.ConnectAndSendMessage(port, HostName, message);   
+                    Shared.Connection.ConnectionService.ConnectAndSendMessage(_port, HostName, message);    
                 
                 } catch(Exception ex) {
                     Console.WriteLine(ex.ToString());
@@ -48,7 +48,7 @@ namespace ComputationalCluster.Client
 
             Shared.Utilities.Utilities.waitUntilUserClose();
         }
-                
+
     }
 
 }
