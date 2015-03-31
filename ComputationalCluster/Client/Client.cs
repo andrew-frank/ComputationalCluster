@@ -26,8 +26,7 @@ namespace ComputationalCluster.Nodes
 
             //Timeout = _timeout;
             //Port = _port;
-            //HostName = _HostName;
-            HostName = "192.168.143.130";
+            HostName = "P21911";
             Port = 13000;
 
             Console.WriteLine("Client Started");
@@ -36,14 +35,11 @@ namespace ComputationalCluster.Nodes
                 Console.WriteLine(" Parameters Syntax: [-address [IPv4 address or IPv6 address or host name]] [-port[port number]]");
                 Console.Write("> ");
 
-
                 String parameters;
                 parameters = Console.ReadLine();
                 parameters = parameters.Replace(" ", string.Empty);
                 Shared.Connection.ConnectionService.CheckInputSyntax(parameters, Port, HostName);
             }
-
-           
 
             String message = "";
             Register registerRequest = new Register();

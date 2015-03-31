@@ -143,7 +143,7 @@ namespace ComputationalCluster.Shared.Connection {
                 throw new Exception();
             Console.WriteLine("IP Address: " + IPv4.ToString());
 
-            return addr[0];
+            return addr[4];
         }
 
         public static void CheckInputSyntax(string parameters, Int32 port, String address)
