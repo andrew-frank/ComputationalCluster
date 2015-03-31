@@ -12,7 +12,7 @@ using ComputationalCluster.Shared.Messages.RegisterNamespace;
 using System.Threading;
 using ComputationalCluster.Shared.Messages.StatusNamespace;
 
-namespace ComputationalCluster.Client
+namespace ComputationalCluster.Nodes
 {
     public sealed class Client : Node
     {
@@ -77,7 +77,7 @@ namespace ComputationalCluster.Client
             }
 
 
-            Shared.Utilities.Utilities.waitUntilUserClose();
+            //Shared.Utilities.Utilities.waitUntilUserClose();
         }
 
     }

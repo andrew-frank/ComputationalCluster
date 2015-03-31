@@ -9,7 +9,7 @@ using ComputationalCluster.Shared.Utilities;
 using ComputationalCluster.Shared.Messages.RegisterNamespace;
 using System.Threading;
 
-namespace ComputationalCluster.ComputationalNode
+namespace ComputationalCluster.Nodes
 {
     public class ComputationalNode : Node
     {

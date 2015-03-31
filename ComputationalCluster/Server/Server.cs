@@ -16,12 +16,50 @@ using ComputationalCluster.Shared.Messages.SolvePartialProblemsNamespace;
 using ComputationalCluster.Shared.Messages.SolveRequestNamespace;
 using ComputationalCluster.Shared.Messages.SolveRequestResponseNamespace;
 using ComputationalCluster.Shared.Messages.StatusNamespace;
+using ComputationalCluster.Nodes;
 
-namespace ComputationalCluster.Server
+namespace ComputationalCluster.Nodes
 {
+    public class RegisteredNodes
+    {
+        private List<Node> _clients = new List<Node>();
+        private List<Node> _taskManagers = new List<Node>();
+        private List<Node> _computationalNodes = new List<Node>();
+        private List<Node> _backupServers = new List<Node>();
+
+        public List<Node> Clients { get { return _clients; } }
+        public List<Node> TaskManagers { get { return _taskManagers; } }
+        public List<Node> ComputationalNodes { get { return _computationalNodes; } }
+        public List<Node> BackupServers { get { return _backupServers; } }
+
+        public void RegisterClient()
+        {
+
+        }
+
+        public void RegisterTaskManager()
+        {
+
+        }
+
+        public void RegisterComputationalNode()
+        {
+
+        }
+
+        public void RegisterBackupServer()
+        {
+
+        }
+    }
+
 
     public sealed class Server : Node
     {
+
+        private RegisteredNodes _registeredComponents = new RegisteredNodes();
+        public RegisteredNodes RegisteredComponents { get { return _registeredComponents; } }
+
         public Int32 _port;
         public int timeout;
         public string backup;

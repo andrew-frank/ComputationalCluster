@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using ComputationalCluster.Nodes;
 
 namespace ComputationalCluster {
 
@@ -37,22 +38,22 @@ namespace ComputationalCluster {
                 switch (componentToStart.ToUpper()) {
 
                     case "TASKMANAGER":
-                        TaskManager.TaskManager newTaskManagerInstance = new TaskManager.TaskManager();
+                        TaskManager newTaskManagerInstance = new TaskManager();
                         newTaskManagerInstance.startInstance(port, hostName, timeoutForTaskManager);
                         break;
 
                     case "SERVER":
-                        Server.Server newServerInstance = new Server.Server();
+                        Server newServerInstance = new Server();
                         newServerInstance.startInstance(port, ip, timeoutForServer);
                         break;    
 
                     case "CLIENT":
-                        Client.Client newClientInstance = new Client.Client();
+                        Client newClientInstance = new Client();
                         newClientInstance.startInstance(port, hostName, timeoutForClient);
                         break;
 
                     case "COMPUTATIONALNODE":
-                        ComputationalNode.ComputationalNode newComputationalNodeInstance = new ComputationalNode.ComputationalNode();
+                        ComputationalNode newComputationalNodeInstance = new ComputationalNode();
                         newComputationalNodeInstance.startInstance(port, hostName, timeoutForComputationalNode);
                         break;
                 }

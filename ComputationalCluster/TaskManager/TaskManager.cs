@@ -12,7 +12,7 @@ using ComputationalCluster.Shared.Messages.RegisterNamespace;
 
 
 
-namespace ComputationalCluster.TaskManager
+namespace ComputationalCluster.Nodes
 {
     public sealed class TaskManager : Node
     {
@@ -64,7 +64,7 @@ namespace ComputationalCluster.TaskManager
                 }
             }
 
-            Shared.Utilities.Utilities.waitUntilUserClose();         
+            //Shared.Utilities.Utilities.waitUntilUserClose();         
         }
     }
 }
