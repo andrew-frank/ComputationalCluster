@@ -6,6 +6,9 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using ComputationalCluster.Shared.Utilities;
+using ComputationalCluster.Shared.Messages.SolveRequestNamespace;
+using ComputationalCluster.Shared.Messages.RegisterNamespace;
+using System.Threading;
 
 
 namespace ComputationalCluster.TaskManager
@@ -23,15 +26,32 @@ namespace ComputationalCluster.TaskManager
 
             Console.WriteLine("Task Manager Started");
             String message = "";
-            for (int i = 0; i < 1; i++)
+
+            Register register = new Register();
+            message = register.SerializeToXML();
+
+            try
             {
+                Shared.Connection.ConnectionService.ConnectAndSendMessage(port, HostName, message);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+
+
+          while(true)
+            {
+                Thread.Sleep(Timeout);
                 Status _status = new Status();
                 message = _status.SerializeToXML();
 
                 Shared.Connection.ConnectionService.ConnectAndSendMessage(port, HostName, message);
-            }
 
-            Shared.Utilities.Utilities.waitUntilUserClose();
+            } Shared.Utilities.Utilities.waitUntilUserClose();
+
+         
         }
     }
 }
