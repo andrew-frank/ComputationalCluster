@@ -147,10 +147,10 @@ namespace ComputationalCluster.Server
                     Console.WriteLine("Received: {0}", response);
                     //parse/map object & react
                     string xml = (string)response;
-                    this.ReceivedMessage(xml);
-
+                    string m=this.ReceivedMessage(xml);
                     
-                    byte[] msg = System.Text.Encoding.ASCII.GetBytes("hej, mam");
+                    
+                    byte[] msg = System.Text.Encoding.ASCII.GetBytes(m);
                     stream.Write(msg, 0, msg.Length);
                     //Console.WriteLine("Sent: {0}", response);
                    
@@ -177,12 +177,12 @@ namespace ComputationalCluster.Server
             }
         }
 
-
-        private void ReceivedMessage(string xml) 
+        
+        private string ReceivedMessage(string xml) 
         {
 
             Object obj = xml.DeserializeXML();
-
+            string message = "hey man ************";
             //it should be (didn't test the try-catch trick) mapped runtime to a correct object, just check for it's type:
             if (obj is DivideProblem) {//Message to task Manager
 
@@ -192,11 +192,12 @@ namespace ComputationalCluster.Server
             } 
             else if (obj is Register)//Register message is sent by TM, CN and Backup CS to the CS after they are activated.
             {
-
+                RegisterResponse response = new RegisterResponse();
+                message = response.SerializeToXML();
             }
             else if (obj is RegisterResponse)
             {
-
+               
             }
             else if (obj is SolutionRequest)
             {
@@ -214,7 +215,7 @@ namespace ComputationalCluster.Server
             {
 
             }
-           
+            return message;
 
             //etc...
         }
