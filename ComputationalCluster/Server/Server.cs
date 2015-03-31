@@ -285,40 +285,32 @@ namespace ComputationalCluster.Nodes
 
             Object obj = xml.DeserializeXML();
             
-            string message=""; //= "hey man ************";           
-            //it should be (didn't test the try-catch trick) mapped runtime to a correct object, just check for it's type:
-            if (obj is DivideProblem) {//Message to task Manager
+            string message="";
+      
+            if (obj is DivideProblem) { //Message to task Manager
 
-            } 
-            else if (obj is NoOperation) {//Sent in response to status messge
 
-            } 
-            else if (obj is Register)//Register message is sent by TM, CN and Backup CS to the CS after they are activated.
-            {
+            }  else if (obj is NoOperation) {//Sent in response to status messge
+
+
+            } else if (obj is Register) { //Register message is sent by TM, CN and Backup CS to the CS after they are activated.
                 RegisterResponse response = new RegisterResponse();
                 message = response.SerializeToXML();
-            }
-            else if (obj is RegisterResponse)
-            {
+            
+            } else if (obj is RegisterResponse) {
                
-            }
-            else if (obj is SolutionRequest)
-            {
+            } else if (obj is SolutionRequest) {
 
-            }
-            else if (obj is SolvePartialProblems)
-            {
 
-            }
-            else if (obj is SolveRequest)
-            {
+            } else if (obj is SolvePartialProblems) {
 
-            }
-            else if (obj is Status)
-            {
+            } else if (obj is SolveRequest) {
+
+            } else if (obj is Status) {
                 NoOperation noOperationResponse = new NoOperation();
                 message = noOperationResponse.SerializeToXML();
             }
+
             return message;
 
             //etc...

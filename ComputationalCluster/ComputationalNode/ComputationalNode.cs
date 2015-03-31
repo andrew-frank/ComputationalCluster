@@ -30,24 +30,13 @@ namespace ComputationalCluster.Nodes
             Register register = new Register();
             message = register.SerializeToXML();
 
-            try
-            {
-                Shared.Connection.ConnectionService.ConnectAndSendMessage(_port, HostName, message);
+            Shared.Connection.ConnectionService.ConnectAndSendMessage(_port, HostName, message);
 
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-            }
-
-            while (true)
-            {
+            while (true) {
                 Thread.Sleep(Timeout);
                 Status _status = new Status();
                 message = _status.SerializeToXML();
-
                 Shared.Connection.ConnectionService.ConnectAndSendMessage(_port, HostName, message);
-
             } 
             
             //Shared.Utilities.Utilities.waitUntilUserClose();

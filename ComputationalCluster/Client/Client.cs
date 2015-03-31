@@ -21,49 +21,35 @@ namespace ComputationalCluster.Nodes
             nodeType = NodeType.Client;
         }
 
-        public void startInstance(Int32 _port, String _HostName, Int32 _timeout) {
+        public void startInstance(Int32 Port, String HostName, Int32 Timeout) {
+
+
+            //Timeout = _timeout;
+            //Port = _port;
+            //HostName = _HostName;
+            HostName = "192.168.143.130";
+            Port = 13000;
 
             Console.WriteLine("Client Started");
-            //while (port == 0)
-            //{ 
-            //Console.WriteLine(" Parameters Syntax: [-address [IPv4 address or IPv6 address or host name]] [-port[port number]]");
-            //Console.Write("> ");
+            while (Port == 0)
+            {
+                Console.WriteLine(" Parameters Syntax: [-address [IPv4 address or IPv6 address or host name]] [-port[port number]]");
+                Console.Write("> ");
+
+
+                String parameters;
+                parameters = Console.ReadLine();
+                parameters = parameters.Replace(" ", string.Empty);
+                Shared.Connection.ConnectionService.CheckInputSyntax(parameters, Port, HostName);
+            }
 
            
-            //String parameters;
-            //parameters = Console.ReadLine();
-            //parameters = parameters.Replace(" ", string.Empty);
-            //Check(parameters, port, address);
-            //}
-
-            Timeout = _timeout;
-            Port = _port;
-            HostName = _HostName;
-
 
             String message = "";
-            //for (int i = 0; i < 4; i++) {
-
-            //    SolveRequest solveRequest = new SolveRequest();
-            //    message = solveRequest.SerializeToXML();
-
-            //    try {
-            //        Shared.Connection.ConnectionService.ConnectAndSendMessage(Port, HostName, message);    
-                
-            //    } catch(Exception ex) {
-            //        Console.WriteLine(ex.ToString());
-            //    }
-            //}
             Register registerRequest = new Register();
             message = registerRequest.SerializeToXML();
-            try {
-                Shared.Connection.ConnectionService.ConnectAndSendMessage(Port, HostName, message);
 
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-            }
+            Shared.Connection.ConnectionService.ConnectAndSendMessage(Port, HostName, message);
 
             Status statusRequest = new Status();
             message = statusRequest.SerializeToXML();
