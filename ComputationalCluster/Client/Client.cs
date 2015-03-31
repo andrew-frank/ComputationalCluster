@@ -15,32 +15,6 @@ namespace ComputationalCluster.Client
         Int32 _port=0;
         String address;
 
-
-        public void Check(string parameters)
-        {
-            var count = parameters.Count(x => x == '-');
-            if (count == 2)
-            {
-                bool x;
-                string addressS = parameters.Substring(GetNthIndex(parameters, 's', 2) + 1, GetNthIndex(parameters, '-', 2) - GetNthIndex(parameters, 's', 2) - 1);
-                string PortS = parameters.Substring(GetNthIndex(parameters, '-', 2) + 5);
-                Console.WriteLine(PortS);
-                Console.WriteLine(addressS);
-
-                x = Int32.TryParse(PortS, out _port);
-                if (x != true)
-                {
-                    Console.WriteLine("Wrong _port number");
-                }
-                address = addressS;
-
-            }
-            else
-            {
-                Console.WriteLine("Incorrect Syntax");
-            }
-        }
-
         public void startInstance(Int32 port, String HostName) {
 
             //Console.WriteLine("Client Started");
@@ -53,7 +27,7 @@ namespace ComputationalCluster.Client
             //String parameters;
             //parameters = Console.ReadLine();
             //parameters = parameters.Replace(" ", string.Empty);
-            //Check(parameters);
+            //Check(parameters, port, address);
             //}
 
            _port = port;
@@ -63,9 +37,6 @@ namespace ComputationalCluster.Client
 
                 SolveRequest solveRequest = new SolveRequest();
                 message = solveRequest.SerializeToXML();
-
-                //DivideProblem devide = new DivideProblem();
-                //message = devide.SerializeToXML();
 
                 try { 
                     Shared.Connection.ConnectionService.ConnectAndSendMessage(_port, HostName, message);    
@@ -78,23 +49,6 @@ namespace ComputationalCluster.Client
             Shared.Utilities.Utilities.waitUntilUserClose();
         }
 
-
-        public int GetNthIndex(string s, char t, int n)
-        {
-            int count = 0;
-            for (int i = 0; i < s.Length; i++)
-            {
-                if (s[i] == t)
-                {
-                    count++;
-                    if (count == n)
-                    {
-                        return i;
-                    }
-                }
-            }
-            return -1;
-        }
     }
 
 }
