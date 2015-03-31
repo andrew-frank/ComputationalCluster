@@ -12,8 +12,15 @@ namespace ComputationalCluster.TaskManager
 {
     public sealed class TaskManager : Node
     {
-        public void startInstance(Int32 port, String HostName, Int32 timeout)
+
+        public void startInstance(Int32 port, String Hostname, Int32 timeout)
         {
+            Timeout = timeout;
+            Port = port;
+            HostName = Hostname;
+            Timeout = timeout;
+
+
             Console.WriteLine("Task Manager Started");
             String message = "";
             for (int i = 0; i < 1; i++)
