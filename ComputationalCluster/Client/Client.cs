@@ -8,14 +8,16 @@ using System.Threading.Tasks;
 using ComputationalCluster.Shared.Utilities;
 using ComputationalCluster.Shared.Messages.SolveRequestNamespace;
 using ComputationalCluster.Shared.Messages.DivideProblemNamespace;
+using ComputationalCluster.Shared.Messages.RegisterNamespace;
+using System.Threading;
+using ComputationalCluster.Shared.Messages.StatusNamespace;
 
 namespace ComputationalCluster.Nodes
 {
     public sealed class Client : Node
     {
-        Int32 _port=0;
-
-        public void startInstance(Int32 port, String HostName, Int32 timeout) {
+       
+        public void startInstance(Int32 _port, String _HostName, Int32 _timeout) {
 
             //Console.WriteLine("Client Started");
             //while (port == 0)
@@ -30,23 +32,52 @@ namespace ComputationalCluster.Nodes
             //Check(parameters, port, address);
             //}
 
-           _port = port;
+            Timeout = _timeout * 1000;
+            Port = _port;
+            HostName = _HostName;
+
 
             String message = "";
-            for (int i = 0; i < 4; i++) {
+            //for (int i = 0; i < 4; i++) {
 
-                SolveRequest solveRequest = new SolveRequest();
-                message = solveRequest.SerializeToXML();
+            //    SolveRequest solveRequest = new SolveRequest();
+            //    message = solveRequest.SerializeToXML();
 
-                try { 
-                    Shared.Connection.ConnectionService.ConnectAndSendMessage(_port, HostName, message);    
+            //    try {
+            //        Shared.Connection.ConnectionService.ConnectAndSendMessage(Port, HostName, message);    
                 
-                } catch(Exception ex) {
-                    Console.WriteLine(ex.ToString());
-                }
+            //    } catch(Exception ex) {
+            //        Console.WriteLine(ex.ToString());
+            //    }
+            //}
+            Register registerRequest = new Register();
+            message = registerRequest.SerializeToXML();
+            try {
+                Shared.Connection.ConnectionService.ConnectAndSendMessage(Port, HostName, message);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
             }
 
-            Shared.Utilities.Utilities.waitUntilUserClose();
+            Status statusRequest = new Status();
+            message = statusRequest.SerializeToXML();
+
+            while(true)
+            {
+                Thread.Sleep(Timeout);
+                try {
+                    Shared.Connection.ConnectionService.ConnectAndSendMessage(Port, HostName, message);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                }                
+            }
+
+
+            //Shared.Utilities.Utilities.waitUntilUserClose();
         }
 
     }

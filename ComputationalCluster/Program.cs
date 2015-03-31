@@ -33,7 +33,7 @@ namespace ComputationalCluster {
                 string hostName = Dns.GetHostName();
                 IPAddress ip = Shared.Connection.ConnectionService.getIPAddressOfTheLocalMachine();
 
-                Int32 timeoutForServer = 0, timeoutForTaskManager = 0, timeoutForClient = 0, timeoutForComputationalNode = 0;
+                Int32 timeoutForServer = 10, timeoutForTaskManager = 7, timeoutForClient = 5, timeoutForComputationalNode = 3;
 
                 switch (componentToStart.ToUpper()) {
 

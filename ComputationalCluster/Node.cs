@@ -12,6 +12,7 @@ namespace ComputationalCluster.Nodes
         public int ID { get; set; }
         public System.Net.IPAddress IP {get; set;}
         public string HostName { get; set; }
+        public int Port { get; set; }
 
         public override string ToString()
         {
