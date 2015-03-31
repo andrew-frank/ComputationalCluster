@@ -187,11 +187,37 @@ namespace ComputationalCluster.Server
             Object obj = xml.DeserializeXML();
 
             //it should be (didn't test the try-catch trick) mapped runtime to a correct object, just check for it's type:
-            if (obj is DivideProblem) {
-
-            } else if (obj is NoOperation) {
+            if (obj is DivideProblem) {//Message to task Manager
 
             } 
+            else if (obj is NoOperation) {//Sent in response to status messge
+
+            }
+            else if (obj is Register)
+            {
+
+            }
+            else if (obj is RegisterResponse)
+            {
+
+            }
+            else if (obj is SolutionRequest)
+            {
+
+            }
+            else if (obj is SolvePartialProblems)
+            {
+
+            }
+            else if (obj is SolveRequest)
+            {
+
+            }
+            else if (obj is Status)
+            {
+
+            }
+           
 
             //etc...
         }
