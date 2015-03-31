@@ -9,17 +9,18 @@ using ComputationalCluster.Shared.Utilities;
 
 namespace ComputationalCluster.ComputationalNode
 {
+
+
     public class ComputationalNode
     {
-        public void startInstance(Int32 port, String HostName) {
+        public void startInstance(Int32 port, String HostName, Int32 timeout) {
             Console.WriteLine("Computational Node Started");
             String message = "";
             for (int i = 0; i < 8; i++)
             {
-                Status _status = new Status();
-             
-                message = _status.Id.SerializeToXML();
-            //    message = _status.SerializeToXML();
+
+                Status _status = new Status();             
+                message = _status.Id.SerializeToXML();            
 
                 Shared.Connection.ConnectionService.ConnectAndSendMessage(port, HostName, message);
             }

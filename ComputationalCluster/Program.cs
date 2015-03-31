@@ -32,26 +32,28 @@ namespace ComputationalCluster {
                 string hostName = Dns.GetHostName();
                 IPAddress ip = Shared.Connection.ConnectionService.getIPAddressOfTheLocalMachine();
 
+                Int32 timeoutForServer = 0, timeoutForTaskManager = 0, timeoutForClient = 0, timeoutForComputationalNode = 0;
+
                 switch (componentToStart.ToUpper()) {
 
                     case "TASKMANAGER":
                         TaskManager.TaskManager newTaskManagerInstance = new TaskManager.TaskManager();
-                        newTaskManagerInstance.startInstance(port, hostName);
+                        newTaskManagerInstance.startInstance(port, hostName, timeoutForTaskManager);
                         break;
 
                     case "SERVER":
                         Server.Server newServerInstance = new Server.Server();
-                        newServerInstance.startInstance(port, ip);
+                        newServerInstance.startInstance(port, ip, timeoutForServer);
                         break;    
 
                     case "CLIENT":
                         Client.Client newClientInstance = new Client.Client();
-                        newClientInstance.startInstance(port, hostName);
+                        newClientInstance.startInstance(port, hostName, timeoutForClient);
                         break;
 
                     case "COMPUTATIONALNODE":
                         ComputationalNode.ComputationalNode newComputationalNodeInstance = new ComputationalNode.ComputationalNode();
-                        newComputationalNodeInstance.startInstance(port, hostName);
+                        newComputationalNodeInstance.startInstance(port, hostName, timeoutForComputationalNode);
                         break;
                 }
 
