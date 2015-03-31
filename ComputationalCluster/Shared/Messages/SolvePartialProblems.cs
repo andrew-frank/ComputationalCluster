@@ -37,7 +37,7 @@
 
         private bool solvingTimeoutFieldSpecified;
 
-        private SolvePartialProblemsPartialProblemsPartialProblem[][] partialProblemsField;
+        private SolvePartialProblemsPartialProblemsPartialProblem[] partialProblemsField;
 
         /// <remarks/>
         public string ProblemType {
@@ -93,7 +93,7 @@
 
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayItemAttribute("PartialProblem", typeof(SolvePartialProblemsPartialProblemsPartialProblem), IsNullable = false)]
-        public SolvePartialProblemsPartialProblemsPartialProblem[][] PartialProblems {
+        public SolvePartialProblemsPartialProblemsPartialProblem[] PartialProblems {
             get {
                 return this.partialProblemsField;
             }

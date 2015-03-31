@@ -30,7 +30,7 @@
 
         private uint timeoutField;
 
-        private RegisterResponseBackupCommunicationServersBackupCommunicationServer[][] backupCommunicationServersField;
+        private RegisterResponseBackupCommunicationServersBackupCommunicationServer[] backupCommunicationServersField;
 
         /// <remarks/>
         public ulong Id {
@@ -54,7 +54,7 @@
 
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayItemAttribute("BackupCommunicationServer", typeof(RegisterResponseBackupCommunicationServersBackupCommunicationServer), IsNullable = false)]
-        public RegisterResponseBackupCommunicationServersBackupCommunicationServer[][] BackupCommunicationServers {
+        public RegisterResponseBackupCommunicationServersBackupCommunicationServer[] BackupCommunicationServers {
             get {
                 return this.backupCommunicationServersField;
             }
