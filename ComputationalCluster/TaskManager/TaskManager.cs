@@ -20,15 +20,13 @@ namespace ComputationalCluster.TaskManager
         public void startInstance(Int32 port, String HostName, Int32 timeout)
         {
                  
-            Timeout = timeout;
+            Timeout = timeout * 1000;
             Port = port;           
             Timeout = timeout;
             
 
             Console.WriteLine("Task Manager Started");
             String message = "";
-
-
             
             //for (int i = 0; i < 1; i++)
             //{
