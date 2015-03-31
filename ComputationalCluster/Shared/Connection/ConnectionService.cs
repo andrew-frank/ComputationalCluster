@@ -57,7 +57,6 @@ namespace ComputationalCluster.Shared.Connection {
 
         }
 
-
         public static IPAddress getIPAddressOfTheLocalMachine() 
         {
             String strHostName = Dns.GetHostName();
@@ -81,6 +80,48 @@ namespace ComputationalCluster.Shared.Connection {
             Console.WriteLine("IP Address: " + IPv4.ToString());
 
             return addr[0];
+        }
+
+        public static void CheckInputSyntax(string parameters, Int32 port, String address)
+        {
+            var count = parameters.Count(x => x == '-');
+            if (count == 2)
+            {
+                bool x;
+                string addressS = parameters.Substring(GetNthIndex(parameters, 's', 2) + 1, GetNthIndex(parameters, '-', 2) - GetNthIndex(parameters, 's', 2) - 1);
+                string PortS = parameters.Substring(GetNthIndex(parameters, '-', 2) + 5);
+                Console.WriteLine(PortS);
+                Console.WriteLine(addressS);
+
+                x = Int32.TryParse(PortS, out port);
+                if (x != true)
+                {
+                    Console.WriteLine("Wrong port number");
+                }
+                address = addressS;
+
+            }
+            else
+            {
+                Console.WriteLine("Incorrect Syntax");
+            }
+        }
+        
+        public static int GetNthIndex(string s, char t, int n)
+        {
+            int count = 0;
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (s[i] == t)
+                {
+                    count++;
+                    if (count == n)
+                    {
+                        return i;
+                    }
+                }
+            }
+            return -1;
         }
 
     }
