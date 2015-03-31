@@ -13,9 +13,9 @@ namespace ComputationalCluster.Client
     public class Client
     {
         Int32 _port=0;
-        String address;
+        String address;        
 
-        public void startInstance(Int32 port, String HostName) {
+        public void startInstance(Int32 port, String HostName, Int32 timeout) {
 
             //Console.WriteLine("Client Started");
             //while (port == 0)

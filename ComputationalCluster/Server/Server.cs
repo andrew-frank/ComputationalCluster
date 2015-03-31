@@ -71,7 +71,7 @@ namespace ComputationalCluster.Server
 
 
 
-        public void startInstance(Int32 port, IPAddress localIPAddress)
+        public void startInstance(Int32 port, IPAddress localIPAddress, Int32 timeout)
         {
             Console.WriteLine("Server Started, Specify Parameters");
             String[] Data = new String[3];

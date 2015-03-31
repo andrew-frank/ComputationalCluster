@@ -11,7 +11,7 @@ namespace ComputationalCluster.TaskManager
 {
     public class TaskManager
     {
-        public void startInstance(Int32 port, String HostName)
+        public void startInstance(Int32 port, String HostName, Int32 timeout)
         {
             Console.WriteLine("Task Manager Started");
             String message = "";
