@@ -14,11 +14,11 @@ namespace ComputationalCluster.Nodes
     public class ComputationalNode : Node
     {
       
-        public void startInstance(Int32 port, String Hostname, Int32 timeout) {
-            Timeout = timeout;
-            Port = port;
-            HostName = Hostname;
-            Timeout = timeout;
+        public void startInstance(Int32 _port, String _HostName, Int32 _timeout) {
+            Timeout = _timeout;
+            Port = _port;
+            HostName = _HostName;
+            
             
             Console.WriteLine("Computational Node Started");
             String message = "";
@@ -28,7 +28,7 @@ namespace ComputationalCluster.Nodes
 
             try
             {
-                Shared.Connection.ConnectionService.ConnectAndSendMessage(port, HostName, message);
+                Shared.Connection.ConnectionService.ConnectAndSendMessage(_port, HostName, message);
 
             }
             catch (Exception ex)
@@ -42,7 +42,7 @@ namespace ComputationalCluster.Nodes
                 Status _status = new Status();
                 message = _status.SerializeToXML();
 
-                Shared.Connection.ConnectionService.ConnectAndSendMessage(port, HostName, message);
+                Shared.Connection.ConnectionService.ConnectAndSendMessage(_port, HostName, message);
 
             } Shared.Utilities.Utilities.waitUntilUserClose();
         }   
