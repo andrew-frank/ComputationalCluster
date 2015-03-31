@@ -40,14 +40,12 @@ namespace ComputationalCluster.Server
                 string tS = parameters.Substring(GetNthIndex(parameters, '-', 3) + 2);
                 Console.WriteLine(PortS);
                 bool x = Int32.TryParse(tS, out t);
-                if (x = !true)
-                {
+                if (x = !true) {
                     Console.WriteLine(" Wrong timeout");
                 }
                 x = Int32.TryParse(PortS, out port);
-                if (x != true)
-                {
-                    Console.WriteLine("Wrong port number");
+                if (x != true) {
+                    Console.WriteLine("Wrong _port number");
                 }
 
                 Data[0] = PortS;
@@ -56,21 +54,20 @@ namespace ComputationalCluster.Server
 
                 return Data;
 
-            }
-            else
-            {
+            } else {
                 Console.WriteLine("Incorrect Syntax");
             }
+
+
             return Data;
-
         }
-        public void GetParameters (string parameter1, string parameter2, string parameter3)
-    {
-        port = Int32.Parse(parameter1);
-        backup = parameter2;
-        timeout = Int32.Parse(parameter3);
 
-    }
+        public void GetParameters (string parameter1, string parameter2, string parameter3)
+        {
+            port = Int32.Parse(parameter1);
+            backup = parameter2;
+            timeout = Int32.Parse(parameter3);
+        }
 
 
 
@@ -94,7 +91,7 @@ namespace ComputationalCluster.Server
         //    GetParameters(Data[0],Data[1],Data[2]);
 
              port = 13000;
-            Listen(port, localIPAddress);
+             Listen(port, localIPAddress);
             
             //  Listen(port, localIPAddress);
         }
@@ -114,7 +111,6 @@ namespace ComputationalCluster.Server
                 Byte[] bytes = new Byte[256];
                 String data = null;
                 String response = null;
-
 
                 // Enter the listening loop. 
                 while (true) {

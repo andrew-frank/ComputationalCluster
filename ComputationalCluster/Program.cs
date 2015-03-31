@@ -20,9 +20,9 @@ namespace ComputationalCluster {
 
             string componentToStart;
 
-            if (args.Length == 0) {
+            //if (args.Length == 0) {
 
-                Console.WriteLine("Please specify a component that you want to start:");                
+                Console.WriteLine("Please specify a component that you want to start (Server | TaskManager | Client | ComputationalNode):");                
                 Console.Write("> ");       
               
                 componentToStart = Console.ReadLine();
@@ -43,10 +43,10 @@ namespace ComputationalCluster {
                         Server.Server newServerInstance = new Server.Server();
                         newServerInstance.startInstance(ip);
                         break;    
-      
+
                     case "CLIENT":
                         Client.Client newClientInstance = new Client.Client();
-                        newClientInstance.startInstance(hostName);
+                        newClientInstance.startInstance(port, hostName);
                         break;
 
                     case "COMPUTATIONALNODE":
@@ -55,9 +55,9 @@ namespace ComputationalCluster {
                         break;
                 }
 
-            } else {
-                componentToStart = args[0];
-            }
+            //} else {
+            //    componentToStart = args[0];
+            //}
 
 
         }

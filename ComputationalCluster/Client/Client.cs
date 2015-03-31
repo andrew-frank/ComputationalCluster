@@ -12,7 +12,7 @@ namespace ComputationalCluster.Client
 {
     public class Client
     {
-        Int32 port=0;
+        Int32 _port=0;
         String address;
 
 
@@ -27,10 +27,10 @@ namespace ComputationalCluster.Client
                 Console.WriteLine(PortS);
                 Console.WriteLine(addressS);
 
-                x = Int32.TryParse(PortS, out port);
+                x = Int32.TryParse(PortS, out _port);
                 if (x != true)
                 {
-                    Console.WriteLine("Wrong port number");
+                    Console.WriteLine("Wrong _port number");
                 }
                 address = addressS;
 
@@ -41,11 +41,7 @@ namespace ComputationalCluster.Client
             }
         }
 
-        public void startInstance( String HostName) {
-          //  public void StarInstance(){
-
-
-
+        public void startInstance(Int32 port, String HostName) {
 
             //Console.WriteLine("Client Started");
             //while (port == 0)
@@ -59,7 +55,8 @@ namespace ComputationalCluster.Client
             //parameters = parameters.Replace(" ", string.Empty);
             //Check(parameters);
             //}
-           port = 13000;
+
+           _port = port;
 
             String message = "";
             for (int i = 0; i < 4; i++) {
@@ -71,7 +68,7 @@ namespace ComputationalCluster.Client
                 //message = devide.SerializeToXML();
 
                 try { 
-                    Shared.Connection.ConnectionService.ConnectAndSendMessage(port, HostName, message);    
+                    Shared.Connection.ConnectionService.ConnectAndSendMessage(_port, HostName, message);    
                 
                 } catch(Exception ex) {
                     Console.WriteLine(ex.ToString());
