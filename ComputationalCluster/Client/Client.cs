@@ -40,6 +40,9 @@ namespace ComputationalCluster.Nodes
             Port = _port;
             HostName = _HostName;
 
+            HostName = "P21911";
+
+
 
             String message = "";
             //for (int i = 0; i < 4; i++) {
