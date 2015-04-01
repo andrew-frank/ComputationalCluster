@@ -43,15 +43,8 @@ namespace ComputationalCluster.Nodes
 
             Register registerRequest = new Register();
             message = registerRequest.SerializeToXML();
-            try
-            {
-                Shared.Connection.ConnectionService.ConnectAndSendMessage(Port, HostName, message);
 
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-            }
+            Shared.Connection.ConnectionService.ConnectAndSendMessage(Port, HostName, message);
 
             Status statusRequest = new Status();
             message = statusRequest.SerializeToXML();

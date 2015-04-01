@@ -32,25 +32,83 @@ namespace ComputationalCluster.Nodes
         public List<Node> ComputationalNodes { get { return _computationalNodes; } }
         public List<Node> BackupServers { get { return _backupServers; } }
 
-        public void RegisterClient()
-        {
 
+        public void RegisterClient(Node node)
+        {
+            this.Clients.Add(node);
         }
 
-        public void RegisterTaskManager()
+        public void RegisterTaskManager(Node node)
         {
-
+            this.TaskManagers.Add(node);
         }
 
-        public void RegisterComputationalNode()
+        public void RegisterComputationalNode(Node node)
         {
-
+            this.ComputationalNodes.Add(node);
         }
 
-        public void RegisterBackupServer()
+        public void RegisterBackupServer(Node node)
         {
-
+            this.BackupServers.Add(node);
         }
+
+        public bool DeregisterClient(Node node) 
+        {
+            int i = 0;
+            foreach (Node n in Clients) {
+                if (n.ID == node.ID) {
+                    Clients.RemoveAt(i);
+                    return true;
+                }
+
+                i++;
+            }
+            return false;
+        }
+        
+        public bool DeregisterBackupServer(Node node)
+        {
+            int i = 0;
+            foreach (Node n in BackupServers) {
+                if (n.ID == node.ID) {
+                    Clients.RemoveAt(i);
+                    return true;
+                }
+
+                i++;
+            }
+            return false;
+        }
+
+        public bool DeregisterComputationalNode(Node node)
+        {
+            int i = 0;
+            foreach (Node n in ComputationalNodes) {
+                if (n.ID == node.ID) {
+                    Clients.RemoveAt(i);
+                    return true;
+                }
+
+                i++;
+            }
+            return false;
+        }
+
+        public bool DeregisterTaskManagers(Node node)
+        {
+            int i = 0;
+            foreach (Node n in TaskManagers) {
+                if (n.ID == node.ID) {
+                    Clients.RemoveAt(i);
+                    return true;
+                }
+
+                i++;
+            }
+            return false;
+        }
+
     }
 
 
@@ -227,40 +285,32 @@ namespace ComputationalCluster.Nodes
 
             Object obj = xml.DeserializeXML();
             
-            string message=""; //= "hey man ************";           
-            //it should be (didn't test the try-catch trick) mapped runtime to a correct object, just check for it's type:
-            if (obj is DivideProblem) {//Message to task Manager
+            string message="";
+      
+            if (obj is DivideProblem) { //Message to task Manager
 
-            } 
-            else if (obj is NoOperation) {//Sent in response to status messge
 
-            } 
-            else if (obj is Register)//Register message is sent by TM, CN and Backup CS to the CS after they are activated.
-            {
+            }  else if (obj is NoOperation) {//Sent in response to status messge
+
+
+            } else if (obj is Register) { //Register message is sent by TM, CN and Backup CS to the CS after they are activated.
                 RegisterResponse response = new RegisterResponse();
                 message = response.SerializeToXML();
-            }
-            else if (obj is RegisterResponse)
-            {
+            
+            } else if (obj is RegisterResponse) {
                
-            }
-            else if (obj is SolutionRequest)
-            {
+            } else if (obj is SolutionRequest) {
 
-            }
-            else if (obj is SolvePartialProblems)
-            {
 
-            }
-            else if (obj is SolveRequest)
-            {
+            } else if (obj is SolvePartialProblems) {
 
-            }
-            else if (obj is Status)
-            {
+            } else if (obj is SolveRequest) {
+
+            } else if (obj is Status) {
                 NoOperation noOperationResponse = new NoOperation();
                 message = noOperationResponse.SerializeToXML();
             }
+
             return message;
 
             //etc...

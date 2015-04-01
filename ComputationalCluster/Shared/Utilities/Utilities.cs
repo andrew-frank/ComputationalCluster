@@ -13,9 +13,11 @@ using ComputationalCluster.Shared.Messages.SolvePartialProblemsNamespace;
 using ComputationalCluster.Shared.Messages.SolveRequestNamespace;
 using ComputationalCluster.Shared.Messages.SolveRequestResponseNamespace;
 using ComputationalCluster.Shared.Messages.StatusNamespace;
+using ComputationalCluster.Nodes;
 
 
 namespace ComputationalCluster.Shared.Utilities {
+
     public static class Utilities 
     {
         public static string SerializeToXML<T>(this T value) {
@@ -77,5 +79,23 @@ namespace ComputationalCluster.Shared.Utilities {
             Console.ReadLine();
         }
 
+
+        public static Node PromptUserForNodeAddress()
+        {
+            Server node = new Server();
+
+            while (node.Port == 0)
+            {
+                Console.WriteLine(" Parameters Syntax: [-address [IPv4 address or IPv6 address or host name]] [-port[port number]]");
+                Console.Write("> ");
+
+                String parameters;
+                parameters = Console.ReadLine();
+                parameters = parameters.Replace(" ", string.Empty);
+                //Shared.Connection.ConnectionService.CheckInputSyntax(parameters, Port, HostName);
+            }
+
+            return node;
+        }
     }
 }

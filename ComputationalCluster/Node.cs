@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ComputationalCluster.Shared.Messages.RegisterNamespace;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace ComputationalCluster.Nodes
 {
     public abstract class Node : Object
     {
-        public int Timeout { get; set; }
+        public Int32 Timeout { get; set; }
         public int ID { get; set; }
         public string TypeName {
             get {  return NameForType(nodeType); }
@@ -39,6 +40,13 @@ namespace ComputationalCluster.Nodes
                 case NodeType.TaskManager: return "TaskManager";
                 default: return null;
             }
+        }
+
+        public Register GenerateRegisterMessage()
+        {
+            Register register = new Register();
+
+            return register;
         }
     }
 
