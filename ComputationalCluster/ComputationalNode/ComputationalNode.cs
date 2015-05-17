@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using ComputationalCluster.Shared.Utilities;
 using ComputationalCluster.Shared.Messages.RegisterNamespace;
 using System.Threading;
+using ComputationalCluster.Shared.Connection;
 
 namespace ComputationalCluster.Nodes
 {
@@ -30,16 +31,14 @@ namespace ComputationalCluster.Nodes
             Register register = new Register();
             message = register.SerializeToXML();
 
-            Shared.Connection.ConnectionService.ConnectAndSendMessage(_port, HostName, message);
+            CMSocket.Instance.SendMessage(_port, HostName, message);
 
             while (true) {
                 Thread.Sleep(Timeout);
                 Status _status = new Status();
                 message = _status.SerializeToXML();
-                Shared.Connection.ConnectionService.ConnectAndSendMessage(_port, HostName, message);
+                CMSocket.Instance.SendMessage(_port, HostName, message);
             } 
-            
-            //Shared.Utilities.Utilities.waitUntilUserClose();
         }   
     }
 }

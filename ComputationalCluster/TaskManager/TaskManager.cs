@@ -9,6 +9,7 @@ using ComputationalCluster.Shared.Utilities;
 using System.Threading;
 using ComputationalCluster.Shared.Messages.SolveRequestNamespace;
 using ComputationalCluster.Shared.Messages.RegisterNamespace;
+using ComputationalCluster.Shared.Connection;
 
 
 
@@ -24,27 +25,17 @@ namespace ComputationalCluster.Nodes
 
         public void startInstance(Int32 _port, String _HostName, Int32 _timeout)
         {
-
             Timeout = _timeout;
             Port = _port;
             HostName = _HostName;
 
-
             Console.WriteLine("Task Manager Started");
             String message = "";
-
-            //for (int i = 0; i < 1; i++)
-            //{
-            //    Status _status = new Status();
-            //    message = _status.SerializeToXML();
-
-            //    Shared.Connection.ConnectionService.ConnectAndSendMessage(port, HostName, message);
-            //}
 
             Register registerRequest = new Register();
             message = registerRequest.SerializeToXML();
 
-            Shared.Connection.ConnectionService.ConnectAndSendMessage(Port, HostName, message);
+            CMSocket.Instance.SendMessage(Port, HostName, message);
 
             Status statusRequest = new Status();
             message = statusRequest.SerializeToXML();
@@ -52,13 +43,11 @@ namespace ComputationalCluster.Nodes
             while (true) {
                 Thread.Sleep(Timeout);
                 try {
-                    Shared.Connection.ConnectionService.ConnectAndSendMessage(Port, HostName, message);
+                    CMSocket.Instance.SendMessage(Port, HostName, message);
                 } catch (Exception ex) {
                     Console.WriteLine(ex.ToString());
                 }
             }
-
-            //Shared.Utilities.Utilities.waitUntilUserClose();         
         }
     }
 }

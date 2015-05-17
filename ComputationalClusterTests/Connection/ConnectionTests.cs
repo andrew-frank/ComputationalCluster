@@ -10,7 +10,7 @@ namespace ComputationalClusterTests.Connection {
         [TestMethod]
         public void TestLocalIpAddress() 
         {
-            IPAddress ip = ComputationalCluster.Shared.Connection.ConnectionService.getIPAddressOfTheLocalMachine();
+            IPAddress ip = ComputationalCluster.Shared.Connection.ConnectionHelpers.getIPAddressOfTheLocalMachine();
             Assert.IsNotNull(ip);
             //Assert.IsTrue(ip.IsIPv6LinkLocal == false);
             //Assert.IsTrue(ip.AddressFamily == AddressFamily.InterNetwork);

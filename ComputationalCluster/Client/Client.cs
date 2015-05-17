@@ -11,6 +11,7 @@ using ComputationalCluster.Shared.Messages.DivideProblemNamespace;
 using ComputationalCluster.Shared.Messages.RegisterNamespace;
 using System.Threading;
 using ComputationalCluster.Shared.Messages.StatusNamespace;
+using ComputationalCluster.Shared.Connection;
 
 namespace ComputationalCluster.Nodes
 {
@@ -38,14 +39,14 @@ namespace ComputationalCluster.Nodes
                 String parameters;
                 parameters = Console.ReadLine();
                 parameters = parameters.Replace(" ", string.Empty);
-                Shared.Connection.ConnectionService.CheckInputSyntax(parameters, Port, HostName);
+                Shared.Connection.ConnectionHelpers.CheckInputSyntax(parameters, Port, HostName);
             }
 
             String message = "";
             Register registerRequest = new Register();
             message = registerRequest.SerializeToXML();
 
-            Shared.Connection.ConnectionService.ConnectAndSendMessage(Port, HostName, message);
+            CMSocket.Instance.SendMessage(Port, HostName, message);
 
             Status statusRequest = new Status();
             message = statusRequest.SerializeToXML();
@@ -54,7 +55,7 @@ namespace ComputationalCluster.Nodes
             {
                 Thread.Sleep(Timeout);
                 try {
-                    Shared.Connection.ConnectionService.ConnectAndSendMessage(Port, HostName, message);
+                    CMSocket.Instance.SendMessage(Port, HostName, message);
                 }
                 catch (Exception ex)
                 {

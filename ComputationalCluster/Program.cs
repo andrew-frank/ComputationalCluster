@@ -36,7 +36,7 @@ namespace ComputationalCluster
 
             Int32 port = 13000;
             string hostName = Dns.GetHostName();
-            IPAddress ip = Shared.Connection.ConnectionService.getIPAddressOfTheLocalMachine();
+            IPAddress ip = Shared.Connection.ConnectionHelpers.getIPAddressOfTheLocalMachine();
 
             Int32 timeoutForServer = 10000, timeoutForTaskManager = 7000, timeoutForClient = 5000, timeoutForComputationalNode = 3000;
 
