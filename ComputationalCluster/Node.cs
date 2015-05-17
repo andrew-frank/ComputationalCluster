@@ -26,7 +26,7 @@ namespace ComputationalCluster.Nodes
             //set { }
         }
         public NodeType NodeType { get; set; }
-        public System.Net.IPAddress LocalIP { get; set; } //?
+        public System.Net.IPAddress LocalIP { get; set; } 
         public System.Net.IPAddress IP {get; set;}
         public string HostName { get; set; }
         public int Port { get; set; }
