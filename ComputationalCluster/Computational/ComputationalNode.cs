@@ -16,17 +16,18 @@ namespace ComputationalCluster.Nodes
     {
         public ComputationalNode()
         {
-            this.Init();
+            this.CommonInit();
         }
 
-        private void Init()
+        private void CommonInit()
         {
             this.NodeType = NodeType.ComputationalNode;
-            this.ID = Guid.NewGuid();
         }
 
 
-        public void startInstance(Int32 port, String hostName, Int32 timeout) {
+        public void startInstance(Int32 port, String hostName, Int32 timeout, ulong id)
+        {
+            this.ID = id;
             this.Timeout = timeout;
             this.Port = port;
             this.HostName = hostName;
@@ -41,8 +42,8 @@ namespace ComputationalCluster.Nodes
 
             while (true) {
                 Thread.Sleep(Timeout);
-                Status _status = new Status();
-                message = _status.SerializeToXML();
+                Status status = new Status();
+                message = status.SerializeToXML();
                 CMSocket.Instance.SendMessage(port, HostName, message);
             } 
         }   

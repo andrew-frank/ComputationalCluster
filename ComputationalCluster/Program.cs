@@ -21,8 +21,6 @@ namespace ComputationalCluster
 
             string componentToStart;
 
-            //if (args.Length == 0) {
-
             Console.WriteLine("Please specify a component that you want to start:");
             Console.WriteLine("1. Server");
             Console.WriteLine("2. Task manager");
@@ -58,26 +56,31 @@ namespace ComputationalCluster
                 }
             }
 
+            Console.Write("Provide ID of the node:\n>");
+            string idStr = Console.ReadLine();
+            ulong id = 0;
+            while (!UInt64.TryParse(idStr, out id)) ;
+
             switch (componentToStart.ToUpper()) {
 
                 case "TASKMANAGER":
                     TaskManager newTaskManagerInstance = new TaskManager();
-                    newTaskManagerInstance.startInstance(port, hostName, timeoutForTaskManager);
+                    newTaskManagerInstance.startInstance(port, hostName, timeoutForTaskManager, id);
                     break;
 
                 case "SERVER":
                     Server newServerInstance = new Server();
-                    newServerInstance.startInstance(port, ip, timeoutForServer);
+                    newServerInstance.startInstance(port, ip, timeoutForServer, id);
                     break;
 
                 case "CLIENT":
                     Client newClientInstance = new Client();
-                    newClientInstance.startInstance(port, hostName, timeoutForClient);
+                    newClientInstance.startInstance(port, hostName, timeoutForClient, id);
                     break;
 
                 case "COMPUTATIONALNODE":
                     ComputationalNode newComputationalNodeInstance = new ComputationalNode();
-                    newComputationalNodeInstance.startInstance(port, hostName, timeoutForComputationalNode);
+                    newComputationalNodeInstance.startInstance(port, hostName, timeoutForComputationalNode, id);
                     break;
             }
         }
