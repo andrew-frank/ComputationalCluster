@@ -29,13 +29,8 @@ namespace ComputationalCluster.Nodes
         }
 
 
-        public void startInstance(Int32 port, String hostName, Int32 timeout, ulong id)
+        public void startInstance(Int32 port, String hostName)
         {
-            this.ID = id;
-            //HostName = "P21911";
-            //Port = 13000;
-
-            this.Timeout = timeout;
             this.Port = port;
             this.HostName = hostName;
 
@@ -50,44 +45,17 @@ namespace ComputationalCluster.Nodes
                 parameters = parameters.Replace(" ", string.Empty);
                 Shared.Connection.ConnectionHelpers.CheckInputSyntax(parameters, port, hostName);
             }
-
-            String message = "";
-            Register registerRequest = new Register();
-            message = registerRequest.SerializeToXML();
-
-            CMSocket.Instance.SendMessage(port, hostName, message);
-
-            Status statusRequest = new Status();
-            message = statusRequest.SerializeToXML();
-
-            while(true) {
-                Thread.Sleep(timeout);
-                try {
-                    CMSocket.Instance.SendMessage(port, hostName, message);
-                } catch (Exception ex) {
-                    Console.WriteLine(ex.ToString());
-                }                
-            }
         }
 
-
+        //Invalid:
         protected override Status CurrentStatus()
         {
-            throw new Exception("Client does not implement Status");
+            throw new Exception("Client does not implement CurrentStatus()");
         }
 
-        protected override void RegisterComponent()
+        protected override Register GenerateRegister()
         {
-            throw new Exception("Client does not implement Status");
-
-            Register register = new Register();
-            String message = register.SerializeToXML();
-
-            Debug.Assert(message != null);
-            if (message == null)
-                return;
-
-            CMSocket.Instance.SendMessage(this.Port, this.HostName, message);
+            throw new Exception("Client does not implement GenerateRegister()");
         }
 
     }

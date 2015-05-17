@@ -1,9 +1,11 @@
 ﻿using ComputationalCluster.Shared.Connection;
 using ComputationalCluster.Shared.Messages.RegisterNamespace;
+using ComputationalCluster.Shared.Messages.RegisterResponseNamespace;
 using ComputationalCluster.Shared.Messages.StatusNamespace;
 using ComputationalCluster.Shared.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Timers;
@@ -17,7 +19,7 @@ namespace ComputationalCluster.Nodes
         protected Timer TimeoutTimer { get; private set; }
 
 
-        public Int32 Timeout { get; set; }
+        public uint Timeout { get; set; }
         public ulong ID { get; set; }
         public string TypeName {
             get {  return  Utilities.NodeNameForType(NodeType); }
@@ -29,7 +31,13 @@ namespace ComputationalCluster.Nodes
         public string HostName { get; set; }
         public int Port { get; set; }
 
+
+        //the number of threads that could be efficiently run in parallel
+        private int _parallelThreads = 1;
+        public int ParallelThreads { get { return Convert.ToByte(_parallelThreads); } }
+
         #endregion
+
 
         #region Public
 
@@ -46,14 +54,39 @@ namespace ComputationalCluster.Nodes
 
         #endregion
 
-        #region Cluster
 
-        #region Overrides
+        #region Overrides/Cluster
 
-        protected abstract void RegisterComponent();
         protected abstract Status CurrentStatus();
+        protected abstract Register GenerateRegister();
 
         #endregion
+
+
+        #region Common/Cluster
+
+        /// GenerateRegister() needs to be overriden at this point.
+        protected void RegisterComponent()
+        {
+            Register register = this.GenerateRegister();
+
+            String message = register.SerializeToXML();
+
+            Debug.Assert(message != null);
+            if (message == null)
+                return;
+
+            string response = CMSocket.Instance.SendMessage(this.Port, this.HostName, message);
+            Object obj = response.DeserializeXML();
+
+            if (!(obj is RegisterResponse))
+                throw new Exception("Invalid response");
+
+            RegisterResponse registerResponse = (RegisterResponse)obj;
+            this.ID = registerResponse.Id;
+            this.Timeout = registerResponse.Timeout;
+            this.StartTimeoutTimer();
+        }
 
 
         /// CurrentStatus() needs to be overriden at this point.
@@ -65,9 +98,8 @@ namespace ComputationalCluster.Nodes
             CMSocket.Instance.SendMessage(this.Port, this.HostName, message);
         }
 
-        /// <summary>
+
         /// Starts timer using Timeout value as interval.
-        /// </summary>
         protected void StartTimeoutTimer()
         {
             if (this.Timeout <= 0)
@@ -80,6 +112,7 @@ namespace ComputationalCluster.Nodes
         }
 
         #endregion
+
     }
 
     public enum NodeType

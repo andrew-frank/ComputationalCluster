@@ -36,8 +36,6 @@ namespace ComputationalCluster
             string hostName = Dns.GetHostName();
             IPAddress ip = Shared.Connection.ConnectionHelpers.getIPAddressOfTheLocalMachine();
 
-            Int32 timeoutForServer = 10000, timeoutForTaskManager = 7000, timeoutForClient = 5000, timeoutForComputationalNode = 3000;
-
             int result = 0;
             if (Int32.TryParse(componentToStart, out result)) {
                 switch (result) {
@@ -61,26 +59,27 @@ namespace ComputationalCluster
             ulong id = 0;
             while (!UInt64.TryParse(idStr, out id)) ;
 
+
             switch (componentToStart.ToUpper()) {
 
                 case "TASKMANAGER":
                     TaskManager newTaskManagerInstance = new TaskManager();
-                    newTaskManagerInstance.startInstance(port, hostName, timeoutForTaskManager, id);
+                    newTaskManagerInstance.startInstance(port, hostName);
                     break;
 
                 case "SERVER":
                     Server newServerInstance = new Server();
-                    newServerInstance.startInstance(port, ip, timeoutForServer, id);
+                    newServerInstance.startInstance(port, ip);
                     break;
 
                 case "CLIENT":
                     Client newClientInstance = new Client();
-                    newClientInstance.startInstance(port, hostName, timeoutForClient, id);
+                    newClientInstance.startInstance(port, hostName);
                     break;
 
                 case "COMPUTATIONALNODE":
                     ComputationalNode newComputationalNodeInstance = new ComputationalNode();
-                    newComputationalNodeInstance.startInstance(port, hostName, timeoutForComputationalNode, id);
+                    newComputationalNodeInstance.startInstance(port, hostName);
                     break;
             }
         }

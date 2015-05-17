@@ -27,9 +27,8 @@ namespace ComputationalCluster.Nodes
         }
 
 
-        public void startInstance(Int32 port, String hostName, Int32 timeout, ulong id)
+        public void startInstance(Int32 port, String hostName)
         {
-            this.Timeout = timeout;
             this.Port = port;
             this.HostName = hostName;
             Console.WriteLine("Task Manager Started");
@@ -45,16 +44,20 @@ namespace ComputationalCluster.Nodes
             return status;
         }
 
-        protected override void RegisterComponent()
+        protected override Register GenerateRegister()
         {
             Register register = new Register();
-            String message = register.SerializeToXML();
+            register.Type = this.TypeName;
 
-            Debug.Assert(message != null);
-            if (message == null)
-                return;
+            //List<RegisterSolvableProblemsProblemName> solvableProblems = new List<RegisterSolvableProblemsProblemName>();
+            //foreach (ProblemType type in this.SolvableProblems) {
+            //    RegisterSolvableProblemsProblemName solvProb = new RegisterSolvableProblemsProblemName();
+            //    solvProb.Value = Utilities.ProblemNameForType(type);
+            //    solvableProblems.Add(solvProb);
+            //}
+            //register.SolvableProblems = solvableProblems.ToArray();
 
-            CMSocket.Instance.SendMessage(this.Port, this.HostName, message);
+            return register;
         }
     }
 }

@@ -10,11 +10,17 @@ using ComputationalCluster.Shared.Messages.RegisterNamespace;
 using System.Threading;
 using ComputationalCluster.Shared.Connection;
 using System.Diagnostics;
+using ComputationalCluster.Misc;
+using ComputationalCluster.Shared.Messages.RegisterResponseNamespace;
 
 namespace ComputationalCluster.Nodes
 {
     public class ComputationalNode : Node
     {
+        private ProblemType[] _solvableProblems;
+        public ProblemType[] SolvableProblems { get { return _solvableProblems; } }
+
+
         public ComputationalNode()
         {
             this.CommonInit();
@@ -23,13 +29,13 @@ namespace ComputationalCluster.Nodes
         private void CommonInit()
         {
             this.NodeType = NodeType.ComputationalNode;
+            _solvableProblems = new ProblemType[1];
+            _solvableProblems[0] = ProblemType.DVRP;
         }
 
 
-        public void startInstance(Int32 port, String hostName, Int32 timeout, ulong id)
+        public void startInstance(Int32 port, String hostName)
         {
-            this.ID = id;
-            this.Timeout = timeout;
             this.Port = port;
             this.HostName = hostName;
             Console.WriteLine("Computational Node Started");
@@ -45,16 +51,21 @@ namespace ComputationalCluster.Nodes
             return status;
         }
 
-        protected override void RegisterComponent()
+        protected override Register GenerateRegister()
         {
             Register register = new Register();
-            String message = register.SerializeToXML();
+            register.Type = this.TypeName;
 
-            Debug.Assert(message != null);
-            if (message == null)
-                return;
+            List<RegisterSolvableProblemsProblemName> solvableProblems = new List<RegisterSolvableProblemsProblemName>();
+            foreach (ProblemType type in this.SolvableProblems) {
+                RegisterSolvableProblemsProblemName solvProb = new RegisterSolvableProblemsProblemName();
+                solvProb.Value = Utilities.ProblemNameForType(type);
+                solvableProblems.Add(solvProb);
+            }
 
-            CMSocket.Instance.SendMessage(this.Port, this.HostName, message);
+            register.SolvableProblems = solvableProblems.ToArray();
+
+            return register;
         }
     }
 }

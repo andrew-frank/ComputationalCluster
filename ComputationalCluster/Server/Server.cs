@@ -116,6 +116,8 @@ namespace ComputationalCluster.Nodes
 
     public sealed class Server : Node
     {
+        #region Properties/ivars
+
         private RegisteredNodes _registeredComponents = new RegisteredNodes();
         public RegisteredNodes RegisteredComponents { get { return _registeredComponents; } }
 
@@ -124,6 +126,9 @@ namespace ComputationalCluster.Nodes
 
         public bool BackupMode { get; private set; }
 
+        #endregion
+
+        #region Public
 
         public Server()
         {
@@ -136,9 +141,9 @@ namespace ComputationalCluster.Nodes
         }
 
 
-        public void startInstance(Int32 port, IPAddress localIPAddress, Int32 timeout, ulong id)
+        public void startInstance(Int32 port, IPAddress localIPAddress)
         {
-            this.ID = id;
+            this.ID = 0;
             Console.WriteLine("Server Started, Specify Parameters");
             String[] Data = new String[3];
 
@@ -151,7 +156,7 @@ namespace ComputationalCluster.Nodes
                 return;
             }
 
-            while (Data[0] == null) {
+            while (Data == null) {
                 Console.WriteLine("Parameters syntax: [-port [port number]] [-backup] [-t [time in seconds]]");
                 Console.Write("> ");
 
@@ -163,17 +168,18 @@ namespace ComputationalCluster.Nodes
 
             this.Port = Int32.Parse(Data[0]);
             this.backupAddr = Data[1];
-            this.Timeout = Int32.Parse(Data[2]);
+            this.Timeout = UInt32.Parse(Data[2]);
 
             this.LocalIP = localIPAddress;
             Listen(this.Port, this.LocalIP);
-
 
             if (this.BackupMode) {
                 this.RegisterComponent();
                 this.StartTimeoutTimer();
             }
         }
+
+        #endregion
 
         #region Overrides
 
@@ -183,20 +189,17 @@ namespace ComputationalCluster.Nodes
             return status;
         }
 
-        protected override void RegisterComponent()
+        protected override Register GenerateRegister()
         {
             Register register = new Register();
-            String message = register.SerializeToXML();
-
-            Debug.Assert(message != null);
-            if (message == null)
-                return;
-
-            CMSocket.Instance.SendMessage(this.Port, this.HostName, message);
+            register.Type = this.TypeName;
+            return register;
         }
 
         #endregion
 
+
+        #region Private
 
         private string ReceivedMessage(string xml)
         {
@@ -204,13 +207,14 @@ namespace ComputationalCluster.Nodes
 
             string message = "";
 
-            if (obj is DivideProblem) { //Message to task Manager
+            if (obj is DivideProblem) {  //Message to task Manager
 
 
-            } else if (obj is NoOperation) {//Sent in response to status messge
+            } else if (obj is NoOperation) {  //Sent in response to status messge
 
 
-            } else if (obj is Register) { //Register message is sent by TM, CN and Backup CS to the CS after they are activated.
+            } else if (obj is Register) { 
+                //Register message is sent by TM, CN and Backup CS to the CS after they are activated.
                 RegisterResponse response = new RegisterResponse();
                 message = response.SerializeToXML();
 
@@ -235,6 +239,8 @@ namespace ComputationalCluster.Nodes
 
 
         #region Connection/Private
+
+
         private void Listen(Int32 port, IPAddress localAddr)
         {
             TcpListener TCPServer = null;
@@ -365,6 +371,8 @@ namespace ComputationalCluster.Nodes
             }
             return -1;
         }
+
+        #endregion
 
         #endregion
 
