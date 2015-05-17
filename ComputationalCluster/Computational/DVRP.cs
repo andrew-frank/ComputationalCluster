@@ -44,7 +44,7 @@ namespace ComputationalCluster.Computational
             Point F = new Point(87, -66);
             Point G = new Point(-55, 86);
             Point H = new Point(-93, -3);
-            Locations.Add(A); Locations.Add(B); Locations.Add(C); Locations.Add(D); Locations.Add(E), Locations.Add(F), Locations.Add(G), Locations.Add(H);
+            Locations.Add(A); Locations.Add(B); Locations.Add(C); Locations.Add(D); Locations.Add(E); Locations.Add(F); Locations.Add(G); Locations.Add(H);
 
             for(int i=0; i<8; i++)
             {
