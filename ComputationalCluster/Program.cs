@@ -44,10 +44,10 @@ namespace ComputationalCluster
             if (Int32.TryParse(componentToStart, out result)) {
                 switch (result) {
                     case 1:
-                        componentToStart = "TASKMANAGER";
+                        componentToStart = "SERVER";
                         break;
                     case 2:
-                        componentToStart = "SERVER";
+                        componentToStart = "TASKMANAGER";
                         break;
                     case 3:
                         componentToStart = "CLIENT";

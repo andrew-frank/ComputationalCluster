@@ -24,15 +24,15 @@ namespace ComputationalCluster.Nodes
 
         public void startInstance(Int32 _port, String _HostName, Int32 _timeout)
         {
-                 
+
             Timeout = _timeout;
             Port = _port;
-            HostName = _HostName;           
-            
+            HostName = _HostName;
+
 
             Console.WriteLine("Task Manager Started");
             String message = "";
-            
+
             //for (int i = 0; i < 1; i++)
             //{
             //    Status _status = new Status();
@@ -49,15 +49,11 @@ namespace ComputationalCluster.Nodes
             Status statusRequest = new Status();
             message = statusRequest.SerializeToXML();
 
-            while (true)
-            {
+            while (true) {
                 Thread.Sleep(Timeout);
-                try
-                {
+                try {
                     Shared.Connection.ConnectionService.ConnectAndSendMessage(Port, HostName, message);
-                }
-                catch (Exception ex)
-                {
+                } catch (Exception ex) {
                     Console.WriteLine(ex.ToString());
                 }
             }

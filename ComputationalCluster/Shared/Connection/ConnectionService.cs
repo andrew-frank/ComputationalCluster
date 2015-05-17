@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -139,11 +140,12 @@ namespace ComputationalCluster.Shared.Connection {
                     System.Diagnostics.Debug.WriteLine("Incorrect Address {0}: {1} ", i, addr[i].ToString());
             }
 
-            if (IPv4 == null)
-                throw new Exception();
+            Debug.Assert(IPv4 != null, "No ip4 addresses found");
             Console.WriteLine("IP Address: " + IPv4.ToString());
 
-            return addr[4];
+            if (IPv4 != null)
+                return IPv4;
+            return addr[addr.GetLength(0)-1];
         }
 
         public static void CheckInputSyntax(string parameters, Int32 port, String address)
