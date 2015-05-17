@@ -117,22 +117,26 @@ namespace ComputationalCluster.Nodes
         private RegisteredNodes _registeredComponents = new RegisteredNodes();
         public RegisteredNodes RegisteredComponents { get { return _registeredComponents; } }
 
-        public string backup;
+        [Obsolete] //po co nam to tu? patrz 'Registered Nodes'
+        public string backupAddr;
+
+        public bool BackupMode { get; private set; }
+
 
         public Server()
         {
-            this.Init();
+            this.CommonInit();
         }
 
-        private void Init()
+        private void CommonInit()
         {
             this.NodeType = NodeType.Server;
-            this.ID = Guid.NewGuid();
         }
 
 
-        public void startInstance(Int32 port, IPAddress localIPAddress, Int32 timeout)
+        public void startInstance(Int32 port, IPAddress localIPAddress, Int32 timeout, ulong id)
         {
+            this.ID = id;
             Console.WriteLine("Server Started, Specify Parameters");
             String[] Data = new String[3];
 
@@ -156,7 +160,7 @@ namespace ComputationalCluster.Nodes
             }
 
             this.Port = Int32.Parse(Data[0]);
-            this.backup = Data[1];
+            this.backupAddr = Data[1];
             this.Timeout = Int32.Parse(Data[2]);
 
             this.LocalIP = localIPAddress;

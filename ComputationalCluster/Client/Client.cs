@@ -19,18 +19,18 @@ namespace ComputationalCluster.Nodes
     {
         public Client()
         {
-            this.Init();
+            this.CommonInit();
         }
 
-        private void Init()
+        private void CommonInit()
         {
             this.NodeType = NodeType.Client;
-            this.ID = Guid.NewGuid();
         }
 
 
-        public void startInstance(Int32 port, String hostName, Int32 timeout) 
+        public void startInstance(Int32 port, String hostName, Int32 timeout, ulong id)
         {
+            this.ID = id;
             //HostName = "P21911";
             //Port = 13000;
 

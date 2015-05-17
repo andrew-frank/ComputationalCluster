@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ComputationalCluster.Nodes
@@ -10,7 +11,7 @@ namespace ComputationalCluster.Nodes
     public abstract class Node : Object
     {
         public Int32 Timeout { get; set; }
-        public Guid ID { get; set; }
+        public ulong ID { get; set; }
         public string TypeName {
             get {  return NameForType(NodeType); }
             //set { }
@@ -24,30 +25,36 @@ namespace ComputationalCluster.Nodes
         public override string ToString() {
             string msg;
             if (IP == null)
-                msg = TypeName + ": " + ID.ToString();
+                msg = TypeName + ": " + ID;
             else
-                msg = TypeName + ": " + ID.ToString() + ", IP: " + IP.ToString();
+                msg = TypeName + ": " + ID + ", IP: " + IP.ToString();
             return msg;
         }
 
 
-        //util
-        public string NameForType(NodeType t) {
+        public Register GenerateRegisterMessage()
+        {
+            Register register = new Register();
+            register.Id = this.ID;
+
+            return register;
+        }
+
+
+        protected Timer TimeoutTimer;
+
+        #region util
+        public string NameForType(NodeType t)
+        {
             switch (t) {
-                case NodeType.Server: return "Server";
+                case NodeType.Server: return "CommunicationServer";
                 case NodeType.Client: return "Client";
                 case NodeType.ComputationalNode: return "ComputationalNode";
                 case NodeType.TaskManager: return "TaskManager";
                 default: return null;
             }
         }
-
-        public Register GenerateRegisterMessage()
-        {
-            Register register = new Register();
-
-            return register;
-        }
+        #endregion
     }
 
     public enum NodeType

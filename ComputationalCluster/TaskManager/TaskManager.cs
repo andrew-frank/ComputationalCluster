@@ -19,18 +19,16 @@ namespace ComputationalCluster.Nodes
     {
         public TaskManager()
         {
-            this.Init();
+            this.CommonInit();
         }
 
-        private void Init()
+        private void CommonInit()
         {
             this.NodeType = NodeType.TaskManager;
-            this.ID = Guid.NewGuid();
         }
 
 
-
-        public void startInstance(Int32 port, String hostName, Int32 timeout)
+        public void startInstance(Int32 port, String hostName, Int32 timeout, ulong id)
         {
             this.Timeout = timeout;
             this.Port = port;
