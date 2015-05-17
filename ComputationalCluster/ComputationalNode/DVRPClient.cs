@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using System.Windows;
 namespace ComputationalCluster.ComputationalNode
 {
-  public class Client
+  public class DVRPClient
     {
-      public Client(Point _location, double _time, double _unloadTime, int _size)
+      public DVRPClient(Point _location, double _time, double _unloadTime, int _size)
       {
           Location = _location;
           Time = _time;

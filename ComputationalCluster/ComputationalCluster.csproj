@@ -62,7 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Client\Client.cs" />
-    <Compile Include="ComputationalNode\Client.cs" />
+    <Compile Include="ComputationalNode\DVRPClient.cs" />
     <Compile Include="ComputationalNode\ComputationalNode.cs" />
     <Compile Include="ComputationalNode\Depot.cs" />
     <Compile Include="ComputationalNode\Vehicle.cs" />
