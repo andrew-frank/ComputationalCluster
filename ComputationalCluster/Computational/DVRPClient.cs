@@ -16,6 +16,17 @@ namespace ComputationalCluster.Computational
           this.Size = size;
       }
 
+      public DVRPClient(Point location)
+      {
+          this.Location = location;
+      }
+      public DVRPClient(Point location, int size)
+      {
+          this.Location = location;
+          this.Size = size;
+
+      }
+
 
       public Point Location { get; protected set; }
       public double Time { get; protected set; }
