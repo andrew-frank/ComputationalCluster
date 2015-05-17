@@ -8,16 +8,20 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ComputationalCluster.Shared.Connection {
+namespace ComputationalCluster.Shared.Connection
+{
 
-    public class Socket {
+    public class Socket
+    {
         private static Socket instance;
         private TcpClient client;
 
         private Socket() { } //hidden initializer - use Instance()
 
-        public static Socket Instance {
-            get {
+        public static Socket Instance
+        {
+            get
+            {
                 if (instance == null) {
                     instance = new Socket();
                 }
@@ -25,7 +29,8 @@ namespace ComputationalCluster.Shared.Connection {
             }
         }
 
-        public string SendMessage(Int32 port, String server, String message) {
+        public string SendMessage(Int32 port, String server, String message)
+        {
 
             // String to store the response ASCII representation.
             String responseData = String.Empty;
@@ -74,9 +79,9 @@ namespace ComputationalCluster.Shared.Connection {
     }
 
 
-    public static class ConnectionService 
+    public static class ConnectionService
     {
-        public static void ConnectAndSendMessage(Int32 port , String server, String message)
+        public static void ConnectAndSendMessage(Int32 port, String server, String message)
         {
             try {
                 TcpClient client = new TcpClient(server, port);
@@ -91,9 +96,9 @@ namespace ComputationalCluster.Shared.Connection {
 
                 // Send the message to the connected TcpServer. 
                 stream.Write(data, 0, data.Length);
-               
+
                 Console.WriteLine("Sent: {0}", message);
-                
+
                 // Receive the TcpServer.response. 
 
                 // Buffer to store the response bytes.
@@ -122,18 +127,18 @@ namespace ComputationalCluster.Shared.Connection {
 
         }
 
-        public static IPAddress getIPAddressOfTheLocalMachine() 
+        public static IPAddress getIPAddressOfTheLocalMachine()
         {
             String strHostName = Dns.GetHostName();
             Console.WriteLine("Local Machine's Host Name: " + strHostName);
 
-            IPHostEntry ipEntry; //= Dns.GetHostByName(strHostName);
-            ipEntry = Dns.GetHostEntry(strHostName); //Sugeruje użycie GetHostEntry, ale wtedy adres IP jest w innej formie
+            IPHostEntry ipEntry;
+            ipEntry = Dns.GetHostEntry(strHostName);
 
             IPAddress[] addr = ipEntry.AddressList;
             IPAddress IPv4 = null;
             for (int i = 0; i < addr.Length; i++) {
-                if (addr[i].IsIPv6LinkLocal == false && addr[i].AddressFamily == AddressFamily.InterNetwork ) {
+                if (addr[i].IsIPv6LinkLocal == false && addr[i].AddressFamily == AddressFamily.InterNetwork) {
                     Console.WriteLine("Correct IP Address {0}: {1} ", i, addr[i].ToString());
                     IPv4 = addr[i];
                 } else
@@ -145,14 +150,13 @@ namespace ComputationalCluster.Shared.Connection {
 
             if (IPv4 != null)
                 return IPv4;
-            return addr[addr.GetLength(0)-1];
+            return addr[addr.GetLength(0) - 1];
         }
 
         public static void CheckInputSyntax(string parameters, Int32 port, String address)
         {
             var count = parameters.Count(x => x == '-');
-            if (count == 2)
-            {
+            if (count == 2) {
                 bool x;
                 string addressS = parameters.Substring(GetNthIndex(parameters, 's', 2) + 1, GetNthIndex(parameters, '-', 2) - GetNthIndex(parameters, 's', 2) - 1);
                 string PortS = parameters.Substring(GetNthIndex(parameters, '-', 2) + 5);
@@ -160,29 +164,23 @@ namespace ComputationalCluster.Shared.Connection {
                 Console.WriteLine(addressS);
 
                 x = Int32.TryParse(PortS, out port);
-                if (x != true)
-                {
+                if (x != true) {
                     Console.WriteLine("Wrong port number");
                 }
                 address = addressS;
 
-            }
-            else
-            {
+            } else {
                 Console.WriteLine("Incorrect Syntax");
             }
         }
-        
+
         public static int GetNthIndex(string s, char t, int n)
         {
             int count = 0;
-            for (int i = 0; i < s.Length; i++)
-            {
-                if (s[i] == t)
-                {
+            for (int i = 0; i < s.Length; i++) {
+                if (s[i] == t) {
                     count++;
-                    if (count == n)
-                    {
+                    if (count == n) {
                         return i;
                     }
                 }
