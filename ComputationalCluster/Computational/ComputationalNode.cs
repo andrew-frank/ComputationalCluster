@@ -9,6 +9,7 @@ using ComputationalCluster.Shared.Utilities;
 using ComputationalCluster.Shared.Messages.RegisterNamespace;
 using System.Threading;
 using ComputationalCluster.Shared.Connection;
+using System.Diagnostics;
 
 namespace ComputationalCluster.Nodes
 {
@@ -31,21 +32,29 @@ namespace ComputationalCluster.Nodes
             this.Timeout = timeout;
             this.Port = port;
             this.HostName = hostName;
-            
             Console.WriteLine("Computational Node Started");
-            String message = "";
 
+            this.RegisterComponent();
+            this.StartTimeoutTimer();
+        }
+
+
+        protected override Status CurrentStatus()
+        {
+            Status status = new Status();
+            return status;
+        }
+
+        protected override void RegisterComponent()
+        {
             Register register = new Register();
-            message = register.SerializeToXML();
+            String message = register.SerializeToXML();
 
-            CMSocket.Instance.SendMessage(port, HostName, message);
+            Debug.Assert(message != null);
+            if (message == null)
+                return;
 
-            while (true) {
-                Thread.Sleep(Timeout);
-                Status status = new Status();
-                message = status.SerializeToXML();
-                CMSocket.Instance.SendMessage(port, HostName, message);
-            } 
-        }   
+            CMSocket.Instance.SendMessage(this.Port, this.HostName, message);
+        }
     }
 }

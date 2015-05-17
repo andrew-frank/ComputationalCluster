@@ -17,6 +17,8 @@ using ComputationalCluster.Shared.Messages.SolveRequestNamespace;
 using ComputationalCluster.Shared.Messages.SolveRequestResponseNamespace;
 using ComputationalCluster.Shared.Messages.StatusNamespace;
 using ComputationalCluster.Nodes;
+using System.Diagnostics;
+using ComputationalCluster.Shared.Connection;
 
 namespace ComputationalCluster.Nodes
 {
@@ -165,9 +167,74 @@ namespace ComputationalCluster.Nodes
 
             this.LocalIP = localIPAddress;
             Listen(this.Port, this.LocalIP);
+
+
+            if (this.BackupMode) {
+                this.RegisterComponent();
+                this.StartTimeoutTimer();
+            }
+        }
+
+        #region Overrides
+
+        protected override Status CurrentStatus()
+        {
+            Status status = new Status();
+            return status;
+        }
+
+        protected override void RegisterComponent()
+        {
+            Register register = new Register();
+            String message = register.SerializeToXML();
+
+            Debug.Assert(message != null);
+            if (message == null)
+                return;
+
+            CMSocket.Instance.SendMessage(this.Port, this.HostName, message);
+        }
+
+        #endregion
+
+
+        private string ReceivedMessage(string xml)
+        {
+            Object obj = xml.DeserializeXML();
+
+            string message = "";
+
+            if (obj is DivideProblem) { //Message to task Manager
+
+
+            } else if (obj is NoOperation) {//Sent in response to status messge
+
+
+            } else if (obj is Register) { //Register message is sent by TM, CN and Backup CS to the CS after they are activated.
+                RegisterResponse response = new RegisterResponse();
+                message = response.SerializeToXML();
+
+            } else if (obj is RegisterResponse) {
+
+            } else if (obj is SolutionRequest) {
+
+
+            } else if (obj is SolvePartialProblems) {
+
+            } else if (obj is SolveRequest) {
+
+            } else if (obj is Status) {
+                NoOperation noOperationResponse = new NoOperation();
+                message = noOperationResponse.SerializeToXML();
+            }
+
+            return message;
+
+            //etc...
         }
 
 
+        #region Connection/Private
         private void Listen(Int32 port, IPAddress localAddr)
         {
             TcpListener TCPServer = null;
@@ -242,47 +309,10 @@ namespace ComputationalCluster.Nodes
                 TCPServer.Stop();
             }
         }
+        #endregion
 
 
-        private string ReceivedMessage(string xml)
-        {
-
-            Object obj = xml.DeserializeXML();
-
-            string message = "";
-
-            if (obj is DivideProblem) { //Message to task Manager
-
-
-            } else if (obj is NoOperation) {//Sent in response to status messge
-
-
-            } else if (obj is Register) { //Register message is sent by TM, CN and Backup CS to the CS after they are activated.
-                RegisterResponse response = new RegisterResponse();
-                message = response.SerializeToXML();
-
-            } else if (obj is RegisterResponse) {
-
-            } else if (obj is SolutionRequest) {
-
-
-            } else if (obj is SolvePartialProblems) {
-
-            } else if (obj is SolveRequest) {
-
-            } else if (obj is Status) {
-                NoOperation noOperationResponse = new NoOperation();
-                message = noOperationResponse.SerializeToXML();
-            }
-
-            return message;
-
-            //etc...
-        }
-
-
-
-        #region Private
+        #region Misc/Private
 
         private String[] ParseParameters(string parameters)
         {

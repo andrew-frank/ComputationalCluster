@@ -12,6 +12,7 @@ using ComputationalCluster.Shared.Messages.RegisterNamespace;
 using System.Threading;
 using ComputationalCluster.Shared.Messages.StatusNamespace;
 using ComputationalCluster.Shared.Connection;
+using System.Diagnostics;
 
 namespace ComputationalCluster.Nodes
 {
@@ -67,6 +68,26 @@ namespace ComputationalCluster.Nodes
                     Console.WriteLine(ex.ToString());
                 }                
             }
+        }
+
+
+        protected override Status CurrentStatus()
+        {
+            throw new Exception("Client does not implement Status");
+        }
+
+        protected override void RegisterComponent()
+        {
+            throw new Exception("Client does not implement Status");
+
+            Register register = new Register();
+            String message = register.SerializeToXML();
+
+            Debug.Assert(message != null);
+            if (message == null)
+                return;
+
+            CMSocket.Instance.SendMessage(this.Port, this.HostName, message);
         }
 
     }

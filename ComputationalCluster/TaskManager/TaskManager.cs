@@ -4,12 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 using ComputationalCluster.Shared.Utilities;
-using System.Threading;
 using ComputationalCluster.Shared.Messages.SolveRequestNamespace;
 using ComputationalCluster.Shared.Messages.RegisterNamespace;
 using ComputationalCluster.Shared.Connection;
+using System.Diagnostics;
 
 
 
@@ -33,26 +32,29 @@ namespace ComputationalCluster.Nodes
             this.Timeout = timeout;
             this.Port = port;
             this.HostName = hostName;
-
             Console.WriteLine("Task Manager Started");
-            String message = "";
 
-            Register registerRequest = new Register();
-            message = registerRequest.SerializeToXML();
+            this.RegisterComponent();
+            this.StartTimeoutTimer();
+        }
 
-            CMSocket.Instance.SendMessage(Port, HostName, message);
 
-            Status statusRequest = new Status();
-            message = statusRequest.SerializeToXML();
+        protected override Status CurrentStatus()
+        {
+            Status status = new Status();
+            return status;
+        }
 
-            while (true) {
-                Thread.Sleep(Timeout);
-                try {
-                    CMSocket.Instance.SendMessage(Port, HostName, message);
-                } catch (Exception ex) {
-                    Console.WriteLine(ex.ToString());
-                }
-            }
+        protected override void RegisterComponent()
+        {
+            Register register = new Register();
+            String message = register.SerializeToXML();
+
+            Debug.Assert(message != null);
+            if (message == null)
+                return;
+
+            CMSocket.Instance.SendMessage(this.Port, this.HostName, message);
         }
     }
 }
