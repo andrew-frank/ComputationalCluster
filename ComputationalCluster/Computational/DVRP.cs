@@ -27,8 +27,6 @@ namespace ComputationalCluster.Computational
             return Distance;
         }
 
-
-
         public void Example()
         {
           Depots.Clear();
@@ -46,6 +44,8 @@ namespace ComputationalCluster.Computational
             Point F = new Point(87, -66);
             Point G = new Point(-55, 86);
             Point H = new Point(-93, -3);
+
+
         }
 
 
