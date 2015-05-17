@@ -19,8 +19,15 @@ namespace ComputationalCluster.Nodes
     {
         public Client()
         {
-            nodeType = NodeType.Client;
+            this.Init();
         }
+
+        private void Init()
+        {
+            this.NodeType = NodeType.Client;
+            this.ID = Guid.NewGuid();
+        }
+
 
         public void startInstance(Int32 port, String hostName, Int32 timeout) 
         {

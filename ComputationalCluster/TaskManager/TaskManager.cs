@@ -19,8 +19,15 @@ namespace ComputationalCluster.Nodes
     {
         public TaskManager()
         {
-            nodeType = NodeType.TaskManager;
+            this.Init();
         }
+
+        private void Init()
+        {
+            this.NodeType = NodeType.TaskManager;
+            this.ID = Guid.NewGuid();
+        }
+
 
 
         public void startInstance(Int32 port, String hostName, Int32 timeout)

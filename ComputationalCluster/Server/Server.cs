@@ -121,9 +121,14 @@ namespace ComputationalCluster.Nodes
 
         public Server()
         {
-            nodeType = NodeType.Server;
+            this.Init();
         }
 
+        private void Init()
+        {
+            this.NodeType = NodeType.Server;
+            this.ID = Guid.NewGuid();
+        }
 
 
         public void startInstance(Int32 port, IPAddress localIPAddress, Int32 timeout)
@@ -154,8 +159,8 @@ namespace ComputationalCluster.Nodes
             this.backup = Data[1];
             this.Timeout = Int32.Parse(Data[2]);
 
-            this.localIP = localIPAddress;
-            Listen(this.Port, this.localIP);
+            this.LocalIP = localIPAddress;
+            Listen(this.Port, this.LocalIP);
         }
 
 

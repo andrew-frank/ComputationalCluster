@@ -16,6 +16,7 @@ namespace ComputationalCluster.Computational
           this.Size = size;
       }
 
+
       public Point Location { get; protected set; }
       public double Time { get; protected set; }
       public double UnloadTime { get; protected set; }

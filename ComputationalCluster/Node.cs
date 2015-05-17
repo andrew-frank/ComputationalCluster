@@ -10,13 +10,13 @@ namespace ComputationalCluster.Nodes
     public abstract class Node : Object
     {
         public Int32 Timeout { get; set; }
-        public int ID { get; set; }
+        public Guid ID { get; set; }
         public string TypeName {
-            get {  return NameForType(nodeType); }
+            get {  return NameForType(NodeType); }
             //set { }
         }
-        public NodeType nodeType { get; set; }
-        public System.Net.IPAddress localIP { get; set; } //?
+        public NodeType NodeType { get; set; }
+        public System.Net.IPAddress LocalIP { get; set; } //?
         public System.Net.IPAddress IP {get; set;}
         public string HostName { get; set; }
         public int Port { get; set; }
@@ -24,9 +24,9 @@ namespace ComputationalCluster.Nodes
         public override string ToString() {
             string msg;
             if (IP == null)
-                msg = TypeName + ": " + ID;
+                msg = TypeName + ": " + ID.ToString();
             else
-                msg = TypeName + ": " + ID + ", IP: " + IP;
+                msg = TypeName + ": " + ID.ToString() + ", IP: " + IP.ToString();
             return msg;
         }
 

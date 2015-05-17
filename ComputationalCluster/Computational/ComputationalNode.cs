@@ -16,8 +16,15 @@ namespace ComputationalCluster.Nodes
     {
         public ComputationalNode()
         {
-            nodeType = NodeType.ComputationalNode;
+            this.Init();
         }
+
+        private void Init()
+        {
+            this.NodeType = NodeType.ComputationalNode;
+            this.ID = Guid.NewGuid();
+        }
+
 
         public void startInstance(Int32 port, String hostName, Int32 timeout) {
             this.Timeout = timeout;
