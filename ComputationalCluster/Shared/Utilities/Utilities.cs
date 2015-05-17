@@ -14,12 +14,39 @@ using ComputationalCluster.Shared.Messages.SolveRequestNamespace;
 using ComputationalCluster.Shared.Messages.SolveRequestResponseNamespace;
 using ComputationalCluster.Shared.Messages.StatusNamespace;
 using ComputationalCluster.Nodes;
+using ComputationalCluster.Misc;
 
 
 namespace ComputationalCluster.Shared.Utilities {
 
     public static class Utilities 
     {
+        #region Misc
+
+        public static string ProblemNameForType(ProblemType t)
+        {
+            switch (t) {
+                case ProblemType.DVRP: return "DVRP";
+                default: return null;
+            }
+        }
+
+        public static string NodeNameForType(NodeType t)
+        {
+            switch (t) {
+                case NodeType.Server: return "CommunicationServer";
+                case NodeType.Client: return "Client";
+                case NodeType.ComputationalNode: return "ComputationalNode";
+                case NodeType.TaskManager: return "TaskManager";
+                default: return null;
+            }
+        }
+
+        #endregion
+
+        #region Serialization
+
+
         public static string SerializeToXML<T>(this T value) {
             if (value == null) {
                 return string.Empty;
@@ -73,12 +100,7 @@ namespace ComputationalCluster.Shared.Utilities {
             return null;
         }
 
-        public static void waitUntilUserClose()
-        {
-            Console.WriteLine("Press enter to close...");
-            Console.ReadLine();
-        }
-
+        #endregion
 
         public static Node PromptUserForNodeAddress()
         {

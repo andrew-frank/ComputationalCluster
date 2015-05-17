@@ -21,8 +21,6 @@ namespace ComputationalCluster
 
             string componentToStart;
 
-            //if (args.Length == 0) {
-
             Console.WriteLine("Please specify a component that you want to start:");
             Console.WriteLine("1. Server");
             Console.WriteLine("2. Task manager");

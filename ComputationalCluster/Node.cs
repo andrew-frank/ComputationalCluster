@@ -1,4 +1,5 @@
 ﻿using ComputationalCluster.Shared.Messages.RegisterNamespace;
+using ComputationalCluster.Shared.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace ComputationalCluster.Nodes
         public Int32 Timeout { get; set; }
         public ulong ID { get; set; }
         public string TypeName {
-            get {  return NameForType(NodeType); }
+            get {  return  Utilities.NodeNameForType(NodeType); }
             //set { }
         }
         public NodeType NodeType { get; set; }
@@ -42,19 +43,6 @@ namespace ComputationalCluster.Nodes
 
 
         protected Timer TimeoutTimer;
-
-        #region util
-        public string NameForType(NodeType t)
-        {
-            switch (t) {
-                case NodeType.Server: return "CommunicationServer";
-                case NodeType.Client: return "Client";
-                case NodeType.ComputationalNode: return "ComputationalNode";
-                case NodeType.TaskManager: return "TaskManager";
-                default: return null;
-            }
-        }
-        #endregion
     }
 
     public enum NodeType
