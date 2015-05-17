@@ -20,6 +20,7 @@ using ComputationalCluster.Nodes;
 
 namespace ComputationalCluster.Nodes
 {
+
     public class RegisteredNodes
     {
         private List<Node> _clients = new List<Node>();
@@ -53,7 +54,7 @@ namespace ComputationalCluster.Nodes
             this.BackupServers.Add(node);
         }
 
-        public bool DeregisterClient(Node node) 
+        public bool DeregisterClient(Node node)
         {
             int i = 0;
             foreach (Node n in Clients) {
@@ -66,7 +67,7 @@ namespace ComputationalCluster.Nodes
             }
             return false;
         }
-        
+
         public bool DeregisterBackupServer(Node node)
         {
             int i = 0;
@@ -108,7 +109,6 @@ namespace ComputationalCluster.Nodes
             }
             return false;
         }
-
     }
 
 
@@ -117,59 +117,13 @@ namespace ComputationalCluster.Nodes
         private RegisteredNodes _registeredComponents = new RegisteredNodes();
         public RegisteredNodes RegisteredComponents { get { return _registeredComponents; } }
 
-        public Int32 _port;
-        public int timeout;
         public string backup;
 
-        public Server() 
+        public Server()
         {
             nodeType = NodeType.Server;
         }
 
-
-        public String[] Check(string parameters)
-        {
-            String[] Data = new String[3];
-            int t;
-            int port;
-            //wezmiemy tylko tylko cyfre między -port a -t
-            var count = parameters.Count(x => x == '-');
-            if (count == 3)
-            {
-                string PortS = parameters.Substring(GetNthIndex(parameters, 't', 1) + 1, GetNthIndex(parameters, '-', 2) - GetNthIndex(parameters, 't', 1) - 1);
-                string backup = parameters.Substring(GetNthIndex(parameters, '-', 2), GetNthIndex(parameters, '-', 3) - GetNthIndex(parameters, '-', 2));
-                string tS = parameters.Substring(GetNthIndex(parameters, '-', 3) + 2);
-                Console.WriteLine(PortS);
-                bool x = Int32.TryParse(tS, out t);
-                if (x = !true) {
-                    Console.WriteLine(" Wrong timeout");
-                }
-                x = Int32.TryParse(PortS, out port);
-                if (x != true) {
-                    Console.WriteLine("Wrong _port number");
-                }
-
-                Data[0] = PortS;
-                Data[1] = backup;
-                Data[2] = tS;
-
-                return Data;
-
-            } else {
-                Console.WriteLine("Incorrect Syntax");
-            }
-
-
-            return Data;
-        }
-
-
-        public void GetParameters (string parameter1, string parameter2, string parameter3)
-        {
-            _port = Int32.Parse(parameter1);
-            backup = parameter2;
-            timeout = Int32.Parse(parameter3);
-        }
 
 
         public void startInstance(Int32 port, IPAddress localIPAddress, Int32 timeout)
@@ -177,28 +131,35 @@ namespace ComputationalCluster.Nodes
             Console.WriteLine("Server Started, Specify Parameters");
             String[] Data = new String[3];
 
-            //zakomentowane żeby łatwiej sprawdzić
+            Console.Write("Debug? [y/n] \n>");
+            string debug = Console.ReadLine();
+            if (debug == "y") {
+                Console.WriteLine("");
+                this.Port = port;
+                this.Listen(this.Port, localIPAddress);
+                return;
+            }
 
-        //    while (Data[0] == null) { 
-        //    Console.WriteLine("Parameters syntax: [-port [port number]] [-backup] [-t [time in seconds]]");
-        //    Console.Write("> ");   
-        ////    Int32 port;
+            while (Data[0] == null) {
+                Console.WriteLine("Parameters syntax: [-port [port number]] [-backup] [-t [time in seconds]]");
+                Console.Write("> ");
 
-        //    String parameters;
-        //    parameters = Console.ReadLine();
-        //    parameters = parameters.Replace(" ", string.Empty);
-        //    Data = Check(parameters);
-        //    }
-        //    GetParameters(Data[0],Data[1],Data[2]);
+                String parameters;
+                parameters = Console.ReadLine();
+                parameters = parameters.Replace(" ", string.Empty);
+                Data = this.ParseParameters(parameters);
+            }
 
-             _port = port;
-             Listen(_port, localIPAddress);
-            
-            //  Listen(port, localIPAddress);
+            this.Port = Int32.Parse(Data[0]);
+            this.backup = Data[1];
+            this.Timeout = Int32.Parse(Data[2]);
+
+            this.localIP = localIPAddress;
+            Listen(this.Port, this.localIP);
         }
 
 
-        private void Listen(Int32 port, IPAddress localAddr) 
+        private void Listen(Int32 port, IPAddress localAddr)
         {
             TcpListener TCPServer = null;
             try {
@@ -228,14 +189,14 @@ namespace ComputationalCluster.Nodes
 
                     // Get a stream object for reading and writing
                     NetworkStream stream = client.GetStream();
-                    
+
                     response = "";
                     int temp;
 
                     // Loop to receive all the data sent by the client.
-                    do {                        
+                    do {
                         temp = stream.Read(bytes, 0, bytes.Length);
-                        
+
                         Console.WriteLine("Rozmiar byte array=" + temp + "\n");
 
                         // Translate data bytes to a ASCII string.
@@ -244,61 +205,55 @@ namespace ComputationalCluster.Nodes
 
                         Console.WriteLine("Received: \n" + data + "\n");
 
-                    }  while (stream.DataAvailable);
-                    
+                    } while (stream.DataAvailable);
+
                     Console.WriteLine("Received: {0}", response);
                     //parse/map object & react
                     string xml = (string)response;
-                    string m=this.ReceivedMessage(xml);
-                    
-                    
+                    string m = this.ReceivedMessage(xml);
+
+
                     byte[] msg = System.Text.Encoding.ASCII.GetBytes(m);
                     stream.Write(msg, 0, msg.Length);
                     //Console.WriteLine("Sent: {0}", response);
-                   
 
                     // Shutdown and end connection
                     client.Close();
                 }
 
-            }
-            catch (SocketException e) {
+            } catch (SocketException e) {
                 Console.WriteLine("Server SocketException: " + e.ToString());
                 System.Diagnostics.Debug.WriteLine("SocketException: " + e.ToString());
-            }
-
-            catch (Exception e) {
+            } catch (Exception e) {
                 Console.WriteLine("Server SocketException: " + e.ToString());
                 System.Diagnostics.Debug.WriteLine("SocketException: " + e.ToString());
                 throw e;
-            }            
-
-            finally {
+            } finally {
                 // Stop listening for new clients.
                 TCPServer.Stop();
             }
         }
 
-        
-        private string ReceivedMessage(string xml) 
+
+        private string ReceivedMessage(string xml)
         {
 
             Object obj = xml.DeserializeXML();
-            
-            string message="";
-      
+
+            string message = "";
+
             if (obj is DivideProblem) { //Message to task Manager
 
 
-            }  else if (obj is NoOperation) {//Sent in response to status messge
+            } else if (obj is NoOperation) {//Sent in response to status messge
 
 
             } else if (obj is Register) { //Register message is sent by TM, CN and Backup CS to the CS after they are activated.
                 RegisterResponse response = new RegisterResponse();
                 message = response.SerializeToXML();
-            
+
             } else if (obj is RegisterResponse) {
-               
+
             } else if (obj is SolutionRequest) {
 
 
@@ -317,22 +272,62 @@ namespace ComputationalCluster.Nodes
         }
 
 
-        public int GetNthIndex(string s, char t, int n)
+
+        #region Private
+
+        private String[] ParseParameters(string parameters)
+        {
+            String[] Data = new String[3];
+            int t;
+            int port;
+            //wezmiemy tylko tylko cyfre między -port a -t
+            var count = parameters.Count(x => x == '-');
+            if (count == 3) {
+                string PortS = parameters.Substring(GetNthIndex(parameters, 't', 1) + 1, GetNthIndex(parameters, '-', 2) - GetNthIndex(parameters, 't', 1) - 1);
+                string backup = parameters.Substring(GetNthIndex(parameters, '-', 2), GetNthIndex(parameters, '-', 3) - GetNthIndex(parameters, '-', 2));
+                string tS = parameters.Substring(GetNthIndex(parameters, '-', 3) + 2);
+                Console.WriteLine(PortS);
+
+                bool x = Int32.TryParse(tS, out t);
+                if (x = !true) {
+                    Console.WriteLine("Wrong timeout");
+                    return null;
+                }
+
+                x = Int32.TryParse(PortS, out port);
+                if (x != true) {
+                    Console.WriteLine("Wrong _port number");
+                    return null;
+                }
+
+                Data[0] = PortS;
+                Data[1] = backup;
+                Data[2] = tS;
+
+            } else {
+                Console.WriteLine("Incorrect Syntax");
+                return null;
+            }
+
+            return Data;
+        }
+
+
+        private int GetNthIndex(string s, char t, int n)
         {
             int count = 0;
-            for (int i = 0; i < s.Length; i++)
-            {
-                if (s[i] == t)
-                {
+            for (int i = 0; i < s.Length; i++) {
+                if (s[i] == t) {
                     count++;
-                    if (count == n)
-                    {
+                    if (count == n) {
                         return i;
                     }
                 }
             }
             return -1;
         }
+
+        #endregion
 
     }
 }

@@ -22,16 +22,17 @@ namespace ComputationalCluster.Nodes
             nodeType = NodeType.Client;
         }
 
-        public void startInstance(Int32 Port, String HostName, Int32 Timeout) {
+        public void startInstance(Int32 port, String hostName, Int32 timeout) 
+        {
+            //HostName = "P21911";
+            //Port = 13000;
 
-
-            //Timeout = _timeout;
-            //Port = _port;
-            HostName = "P21911";
-            Port = 13000;
+            this.Timeout = timeout;
+            this.Port = port;
+            this.HostName = hostName;
 
             Console.WriteLine("Client Started");
-            while (Port == 0)
+            while (port == 0)
             {
                 Console.WriteLine(" Parameters Syntax: [-address [IPv4 address or IPv6 address or host name]] [-port[port number]]");
                 Console.Write("> ");
@@ -39,32 +40,26 @@ namespace ComputationalCluster.Nodes
                 String parameters;
                 parameters = Console.ReadLine();
                 parameters = parameters.Replace(" ", string.Empty);
-                Shared.Connection.ConnectionHelpers.CheckInputSyntax(parameters, Port, HostName);
+                Shared.Connection.ConnectionHelpers.CheckInputSyntax(parameters, port, hostName);
             }
 
             String message = "";
             Register registerRequest = new Register();
             message = registerRequest.SerializeToXML();
 
-            CMSocket.Instance.SendMessage(Port, HostName, message);
+            CMSocket.Instance.SendMessage(port, hostName, message);
 
             Status statusRequest = new Status();
             message = statusRequest.SerializeToXML();
 
-            while(true)
-            {
-                Thread.Sleep(Timeout);
+            while(true) {
+                Thread.Sleep(timeout);
                 try {
-                    CMSocket.Instance.SendMessage(Port, HostName, message);
-                }
-                catch (Exception ex)
-                {
+                    CMSocket.Instance.SendMessage(port, hostName, message);
+                } catch (Exception ex) {
                     Console.WriteLine(ex.ToString());
                 }                
             }
-
-
-            //Shared.Utilities.Utilities.waitUntilUserClose();
         }
 
     }

@@ -16,10 +16,10 @@ namespace ComputationalCluster.Nodes
             //set { }
         }
         public NodeType nodeType { get; set; }
+        public System.Net.IPAddress localIP { get; set; } //?
         public System.Net.IPAddress IP {get; set;}
         public string HostName { get; set; }
         public int Port { get; set; }
-
 
         public override string ToString() {
             string msg;

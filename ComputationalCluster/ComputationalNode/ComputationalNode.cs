@@ -19,11 +19,10 @@ namespace ComputationalCluster.Nodes
             nodeType = NodeType.ComputationalNode;
         }
 
-
-        public void startInstance(Int32 _port, String _HostName, Int32 _timeout) {
-            Timeout = _timeout;
-            Port = _port;
-            HostName = _HostName;
+        public void startInstance(Int32 port, String hostName, Int32 timeout) {
+            this.Timeout = timeout;
+            this.Port = port;
+            this.HostName = hostName;
             
             Console.WriteLine("Computational Node Started");
             String message = "";
@@ -31,13 +30,13 @@ namespace ComputationalCluster.Nodes
             Register register = new Register();
             message = register.SerializeToXML();
 
-            CMSocket.Instance.SendMessage(_port, HostName, message);
+            CMSocket.Instance.SendMessage(port, HostName, message);
 
             while (true) {
                 Thread.Sleep(Timeout);
                 Status _status = new Status();
                 message = _status.SerializeToXML();
-                CMSocket.Instance.SendMessage(_port, HostName, message);
+                CMSocket.Instance.SendMessage(port, HostName, message);
             } 
         }   
     }
