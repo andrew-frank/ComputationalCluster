@@ -20,11 +20,11 @@ namespace ComputationalCluster.Nodes
         public Int32 Timeout { get; set; }
         public ulong ID { get; set; }
         public string TypeName {
-            get {  return  Utilities.NodeNameForType(NodeType); }//test
+            get {  return  Utilities.NodeNameForType(NodeType); }
             //set { }
         }
         public NodeType NodeType { get; set; }
-        public System.Net.IPAddress LocalIP { get; set; } //?
+        public System.Net.IPAddress LocalIP { get; set; } 
         public System.Net.IPAddress IP {get; set;}
         public string HostName { get; set; }
         public int Port { get; set; }
