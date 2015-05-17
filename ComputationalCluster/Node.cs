@@ -20,7 +20,7 @@ namespace ComputationalCluster.Nodes
         public Int32 Timeout { get; set; }
         public ulong ID { get; set; }
         public string TypeName {
-            get {  return  Utilities.NodeNameForType(NodeType); }
+            get {  return  Utilities.NodeNameForType(NodeType); }//test
             //set { }
         }
         public NodeType NodeType { get; set; }
