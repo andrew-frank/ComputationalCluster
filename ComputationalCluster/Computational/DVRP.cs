@@ -81,11 +81,11 @@ namespace ComputationalCluster.Computational
 
         }
 
-        private double TotalDistance(List<int> Ids, List<DVRPClient> Clients, double length, Depot D)
+        private double TotalDistance(List<int> Ids, List<DVRPClient> Clients, double length, , List<Depot> D)
         {
             length = 0;
             double time=0;
-            length = getDistance(D.Location, Clients[0].Location);
+            length = getDistance(D[0].Location, Clients[0].Location);
             time += Clients[0].UnloadTime;
            
             for (int i = 0; i < Clients.Count() - 1; i++) //przez wszystkie 
@@ -94,7 +94,7 @@ namespace ComputationalCluster.Computational
                 time += Clients[i].UnloadTime;
             }
 
-            length += getDistance(Clients[Clients.Count - 1].Location, D.Location);
+            length += getDistance(Clients[Clients.Count - 1].Location, D[0].Location);
             return length;
         }
 
