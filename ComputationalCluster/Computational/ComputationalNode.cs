@@ -12,14 +12,25 @@ using ComputationalCluster.Shared.Connection;
 using System.Diagnostics;
 using ComputationalCluster.Misc;
 using ComputationalCluster.Shared.Messages.RegisterResponseNamespace;
+using ComputationalCluster.Computational;
 
 namespace ComputationalCluster.Nodes
 {
     public class ComputationalNode : Node
     {
+
+        #region Properties/ivars
+
         private ProblemType[] _solvableProblems;
         public ProblemType[] SolvableProblems { get { return _solvableProblems; } }
 
+
+        private List<NodeWorker> _workers = new List<NodeWorker>();
+        public List<NodeWorker> Workers {get {return _workers; } }
+
+        #endregion
+
+        #region Public
 
         public ComputationalNode()
         {
@@ -44,10 +55,16 @@ namespace ComputationalCluster.Nodes
             this.StartTimeoutTimer();
         }
 
+        #endregion
+
+
+        #region Overrides
 
         protected override Status CurrentStatus()
         {
             Status status = new Status();
+            status.Threads = this.CurrentStatusThreads();
+            status.Id = this.ID;
             return status;
         }
 
@@ -67,5 +84,46 @@ namespace ComputationalCluster.Nodes
 
             return register;
         }
+
+        #endregion
+
+
+        #region Private
+
+        private StatusThreadsThread[] CurrentStatusThreads()
+        {
+            List<StatusThreadsThread> threads = new List<StatusThreadsThread>();
+
+            foreach (NodeWorker worker in this.Workers)
+                threads.Add(ComputationalNode.StatusThreadsThreadFromNodeWorker(worker));
+
+            return threads.ToArray();
+        }
+
+        private static StatusThreadsThread StatusThreadsThreadFromNodeWorker(NodeWorker worker)
+        {
+            StatusThreadsThread thread = new StatusThreadsThread();
+            thread.State = worker.StateString;
+            if (worker.State == true) {
+                if (thread.HowLong > 0) {
+                    thread.HowLong = worker.HowLong;
+                    thread.HowLongSpecified = true;
+                } else
+                    thread.HowLongSpecified = false;
+                thread.TaskIdSpecified = true;
+                thread.TaskId = worker.TaskId;
+                thread.ProblemInstanceId = worker.ProblemInstanceId;
+                thread.ProblemInstanceIdSpecified = true;
+                thread.ProblemType = worker.ProblemType;
+            } else {
+                thread.TaskIdSpecified = false;
+                thread.HowLongSpecified = false;
+                thread.ProblemInstanceIdSpecified = false;
+            }
+
+            return thread;
+        }
+
+        #endregion
     }
 }
