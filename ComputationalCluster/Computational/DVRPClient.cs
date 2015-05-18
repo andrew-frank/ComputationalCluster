@@ -20,10 +20,10 @@ namespace ComputationalCluster.Computational
       {
           this.Location = location;
       }
-      public DVRPClient(Point location, int size)
+      public DVRPClient(Point location, int uTime)
       {
           this.Location = location;
-          this.Size = size;
+          this.UnloadTime = uTime;
 
       }
 

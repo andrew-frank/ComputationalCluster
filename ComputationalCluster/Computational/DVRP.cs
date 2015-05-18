@@ -1,10 +1,13 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+
 namespace ComputationalCluster.Computational
+
 {
   
 
@@ -13,10 +16,12 @@ namespace ComputationalCluster.Computational
     
     public class DVRP
     {
+
         public List<Depot> Depots;
         public List<DVRPClient> Clients;
         public List<Vehicle> Vehicles;
         public List<Point> Locations;
+
         public double getDistance(Point a, Point b)
         {
 
@@ -32,9 +37,11 @@ namespace ComputationalCluster.Computational
             Clients.Clear();
             Vehicles.Clear();
 
+
             Depot dp= new Depot(new Point (0,0), 0, 560);
             Depots.Add(dp);
 
+            int unloadTime = 560;
             Point A = new Point(0, 0);
             Point B = new Point(-39, 97);
             Point C = new Point(77, -20);
@@ -52,7 +59,7 @@ namespace ComputationalCluster.Computational
             }
             foreach(Point L in Locations)
             {
-                DVRPClient client = new DVRPClient(L);
+                DVRPClient client = new DVRPClient(L, unloadTime);
                 Clients.Add(client);
             }
         }
@@ -74,16 +81,20 @@ namespace ComputationalCluster.Computational
 
         }
 
-        private double TotalDistance(List<int> Ids, List<Point> locations, double length, Depot D)
+        private double TotalDistance(List<int> Ids, List<DVRPClient> Clients, double length, Depot D)
         {
             length = 0;
-            length = getDistance(D.Location, locations[0]);
-            for (int i = 0; i < locations.Count() - 1; i++) //przez wszystkie 
+            double time=0;
+            length = getDistance(D.Location, Clients[0].Location);
+            time += Clients[0].UnloadTime;
+           
+            for (int i = 0; i < Clients.Count() - 1; i++) //przez wszystkie 
             {
-                length += getDistance(locations[i], locations[i + 1]);
+                length += getDistance(Clients[i].Location, Clients[i + 1].Location);
+                time += Clients[i].UnloadTime;
             }
 
-            length += getDistance(locations[locations.Count - 1], D.Location);
+            length += getDistance(Clients[Clients.Count - 1].Location, D.Location);
             return length;
         }
 
