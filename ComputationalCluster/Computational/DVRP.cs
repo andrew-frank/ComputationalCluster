@@ -72,18 +72,28 @@ namespace ComputationalCluster.Computational
             for (int i = 0; i < Clients.Count; i++)
                 ClientIds.Add(i+1);
 
-            while(true)
+            double length = 1000000;
+
+            do
             {
+                double MinLength;
+                MinLength = TotalDistance(ClientIds, Clients, Depots);
+                if(MinLength<length)
+                {
+                    length = MinLength;
+                }
+
 
             }
-
+            while (!next_permutation(ClientIds));
 
 
         }
 
-        private double TotalDistance(List<int> Ids, List<DVRPClient> Clients, double length, , List<Depot> D)
+        private double TotalDistance(List<int> Ids, List<DVRPClient> Clients,  List<Depot> D)
         {
-            length = 0;
+
+            double length = 0;
             double time=0;
             length = getDistance(D[0].Location, Clients[0].Location);
             time += Clients[0].UnloadTime;
@@ -97,6 +107,37 @@ namespace ComputationalCluster.Computational
             length += getDistance(Clients[Clients.Count - 1].Location, D[0].Location);
             return length;
         }
+        // https://42bits.wordpress.com/2010/04/12/generating_all_possible_permutations_of_a_sequence/
+        public bool next_permutation(List<int>ClientIds)
+        {
+            int i, j, l;
+
+     
+            for (j = ClientIds.Count - 2; j >= 0; j--) //get maximum index j for which arr[j+1] > arr[j]
+                if (ClientIds[j + 1] >ClientIds[j])
+                    break;
+            if (j == -1) //has reached it's lexicographic maximum value, No more permutations left 
+                return false;
+
+            for (l = ClientIds.Count - 1; l > j; l--) //get maximum index l for which arr[l] > arr[j]
+                if (ClientIds[l] > ClientIds[j])
+                    break;
+
+            int swap = ClientIds[j]; //Swap arr[i],arr[j] 
+            ClientIds[j] = ClientIds[l];
+            ClientIds[l] = swap;
+
+            for (i = j + 1; i < ClientIds.Count; i++) //reverse array present after index : j+1 
+            {
+                if (i > ClientIds.Count - i + j)
+                    break;
+                swap = ClientIds[i];
+                ClientIds[i] = ClientIds[ClientIds.Count - i + j];
+                ClientIds[ClientIds.Count - i + j] = swap;
+            }
+
+            return true;
+        }   
 
 
     }
