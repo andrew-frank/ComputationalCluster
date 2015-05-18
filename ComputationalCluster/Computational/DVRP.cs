@@ -23,7 +23,6 @@ namespace ComputationalCluster.Computational
             double x= b.X - a.X;
             double y = b.Y - b.Y;
             double Distance = Math.Sqrt(x * x + y * y);
-
             return Distance;
         }
 
@@ -56,13 +55,37 @@ namespace ComputationalCluster.Computational
                 DVRPClient client = new DVRPClient(L);
                 Clients.Add(client);
             }
+        }
+
+        
+
+        public void Solve()
+        {
+            List<int> ClientIds = new List<int>();
+            for (int i = 0; i < Clients.Count; i++)
+                ClientIds.Add(i+1);
+
+            while(true)
+            {
+
+            }
+
 
 
         }
 
+        private double TotalDistance(List<int> Ids, List<Point> locations, double length, Depot D)
+        {
+            length = 0;
+            length = getDistance(D.Location, locations[0]);
+            for (int i = 0; i < locations.Count() - 1; i++) //przez wszystkie 
+            {
+                length += getDistance(locations[i], locations[i + 1]);
+            }
 
-
-
+            length += getDistance(locations[locations.Count - 1], D.Location);
+            return length;
+        }
 
 
     }
