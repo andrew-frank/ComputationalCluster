@@ -66,7 +66,7 @@ namespace ComputationalCluster.Computational
 
         
 
-        public void Solve()
+        public double Solve()
         {
             List<int> ClientIds = new List<int>();
             for (int i = 0; i < Clients.Count; i++)
@@ -83,11 +83,10 @@ namespace ComputationalCluster.Computational
                     length = MinLength;
                 }
 
-
             }
             while (!next_permutation(ClientIds));
 
-
+            return length;
         }
 
         private double TotalDistance(List<int> Ids, List<DVRPClient> Clients,  List<Depot> D)
@@ -107,6 +106,8 @@ namespace ComputationalCluster.Computational
             length += getDistance(Clients[Clients.Count - 1].Location, D[0].Location);
             return length;
         }
+
+
         // https://42bits.wordpress.com/2010/04/12/generating_all_possible_permutations_of_a_sequence/
         public bool next_permutation(List<int>ClientIds)
         {
