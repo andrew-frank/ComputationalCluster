@@ -32,7 +32,7 @@ namespace ComputationalCluster
             componentToStart = componentToStart.Replace(" ", string.Empty);
             componentToStart = componentToStart.Replace(".", string.Empty);
 
-            Int32 port = 13000;
+            UInt16 port = 13000;
             string hostName = Dns.GetHostName();
             IPAddress ip = Shared.Connection.ConnectionHelpers.getIPAddressOfTheLocalMachine();
 

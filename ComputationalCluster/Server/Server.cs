@@ -22,98 +22,6 @@ using ComputationalCluster.Shared.Connection;
 
 namespace ComputationalCluster.Nodes
 {
-
-    public class RegisteredNodes
-    {
-        private List<Node> _clients = new List<Node>();
-        private List<Node> _taskManagers = new List<Node>();
-        private List<Node> _computationalNodes = new List<Node>();
-        private List<Node> _backupServers = new List<Node>();
-
-        public List<Node> Clients { get { return _clients; } }
-        public List<Node> TaskManagers { get { return _taskManagers; } }
-        public List<Node> ComputationalNodes { get { return _computationalNodes; } }
-        public List<Node> BackupServers { get { return _backupServers; } }
-
-
-        public void RegisterClient(Node node)
-        {
-            this.Clients.Add(node);
-        }
-
-        public void RegisterTaskManager(Node node)
-        {
-            this.TaskManagers.Add(node);
-        }
-
-        public void RegisterComputationalNode(Node node)
-        {
-            this.ComputationalNodes.Add(node);
-        }
-
-        public void RegisterBackupServer(Node node)
-        {
-            this.BackupServers.Add(node);
-        }
-
-        public bool DeregisterClient(Node node)
-        {
-            int i = 0;
-            foreach (Node n in Clients) {
-                if (n.ID == node.ID) {
-                    Clients.RemoveAt(i);
-                    return true;
-                }
-
-                i++;
-            }
-            return false;
-        }
-
-        public bool DeregisterBackupServer(Node node)
-        {
-            int i = 0;
-            foreach (Node n in BackupServers) {
-                if (n.ID == node.ID) {
-                    Clients.RemoveAt(i);
-                    return true;
-                }
-
-                i++;
-            }
-            return false;
-        }
-
-        public bool DeregisterComputationalNode(Node node)
-        {
-            int i = 0;
-            foreach (Node n in ComputationalNodes) {
-                if (n.ID == node.ID) {
-                    Clients.RemoveAt(i);
-                    return true;
-                }
-
-                i++;
-            }
-            return false;
-        }
-
-        public bool DeregisterTaskManagers(Node node)
-        {
-            int i = 0;
-            foreach (Node n in TaskManagers) {
-                if (n.ID == node.ID) {
-                    Clients.RemoveAt(i);
-                    return true;
-                }
-
-                i++;
-            }
-            return false;
-        }
-    }
-
-
     public sealed class Server : Node
     {
         #region Properties/ivars
@@ -141,7 +49,7 @@ namespace ComputationalCluster.Nodes
         }
 
 
-        public void startInstance(Int32 port, IPAddress localIPAddress)
+        public void startInstance(UInt16 port, IPAddress localIPAddress)
         {
             this.ID = 0;
             Console.WriteLine("Server Started, Specify Parameters");
@@ -166,13 +74,14 @@ namespace ComputationalCluster.Nodes
                 Data = this.ParseParameters(parameters);
             }
 
-            this.Port = Int32.Parse(Data[0]);
+            this.Port = UInt16.Parse(Data[0]);
             this.backupAddr = Data[1];
             this.Timeout = UInt32.Parse(Data[2]);
 
             this.LocalIP = localIPAddress;
-            Listen(this.Port, this.LocalIP);
+            this.Listen(this.Port, this.LocalIP);
 
+            //TODO: backup server code. These below are unreachable, beacuse of blocking Listen() method
             if (this.BackupMode) {
                 this.RegisterComponent();
                 this.StartTimeoutTimer();
@@ -199,42 +108,99 @@ namespace ComputationalCluster.Nodes
         #endregion
 
 
+        #region Private/Communication handling
+
+        private string ReceivedRegister(Register register)
+        {
+            string type = register.Type;
+
+            //Register message is sent by TM, CN and Backup CS to the CS after they are activated.
+            RegisterResponse response = new RegisterResponse();
+            response.Id = RegisteredNodes.NextNodeID;
+            response.Timeout = this.Timeout;
+            List<RegisterResponseBackupCommunicationServersBackupCommunicationServer> backupServers = new List<RegisterResponseBackupCommunicationServersBackupCommunicationServer>();
+            foreach (Node comp in this.RegisteredComponents.BackupServers) {
+                RegisterResponseBackupCommunicationServersBackupCommunicationServer backup = new RegisterResponseBackupCommunicationServersBackupCommunicationServer();
+                backup.address = comp.IP.ToString();
+                if (comp.Port > 0) {
+                    backup.port = comp.Port;
+                    backup.portSpecified = true;
+                }
+            }
+
+            response.BackupCommunicationServers = backupServers.ToArray();
+
+            return response.SerializeToXML();
+        }
+
+
+        private string ReceivedStatus(Status status)
+        {
+            NoOperation noOperationResponse = new NoOperation();
+            return noOperationResponse.SerializeToXML();
+        }
+
+        private string ReceivedDivideProblem(DivideProblem divideProblem)
+        {
+            return "";
+        }
+
+        private string ReceivedSolutionRequest(SolutionRequest solutionRequest)
+        {
+            return "";
+        }
+
+        private string ReceivedSolvePartialProblems(SolvePartialProblems solvePartialProblems)
+        {
+            return "";
+        }
+
+        private string ReceivedSolveRequest(SolveRequest solveRequest)
+        {
+            return "";
+        }
+
+        #endregion
+
+
         #region Private
 
+        /// <summary>
+        /// Deserializes message, generates appriopriate action and returns message to response.
+        /// </summary>
+        /// <param name="xml">Message received from a node</param>
+        /// <returns>Serialized response to a node</returns>
         private string ReceivedMessage(string xml)
         {
             Object obj = xml.DeserializeXML();
 
-            string message = "";
-
             if (obj is DivideProblem) {  //Message to task Manager
+                return this.ReceivedDivideProblem((DivideProblem)obj);
 
+            } else if (obj is Register) {
+                return this.ReceivedRegister((Register)obj);
 
-            } else if (obj is NoOperation) {  //Sent in response to status messge
-
-
-            } else if (obj is Register) { 
-                //Register message is sent by TM, CN and Backup CS to the CS after they are activated.
-                RegisterResponse response = new RegisterResponse();
-                message = response.SerializeToXML();
-
-            } else if (obj is RegisterResponse) {
-
-            } else if (obj is SolutionRequest) {
-
+            }else if (obj is SolutionRequest) {
+                return this.ReceivedSolutionRequest((SolutionRequest)obj);
 
             } else if (obj is SolvePartialProblems) {
+                return this.ReceivedSolvePartialProblems((SolvePartialProblems)obj);
 
             } else if (obj is SolveRequest) {
+                return this.ReceivedSolveRequest((SolveRequest)obj);
 
             } else if (obj is Status) {
-                NoOperation noOperationResponse = new NoOperation();
-                message = noOperationResponse.SerializeToXML();
+                return this.ReceivedStatus((Status)obj);
+
+            } else if (obj is RegisterResponse) {
+                Debug.Assert(false, "RegisterResponse received to primary Server");
+
+            } else if (obj is NoOperation) {  //Sent in response to status messge
+                Debug.Assert(false, "NoOperation received to primary Server");
             }
 
-            return message;
-
-            //etc...
+            Debug.Assert(false, "Unrecognized request");
+            return "Error";
         }
 
 

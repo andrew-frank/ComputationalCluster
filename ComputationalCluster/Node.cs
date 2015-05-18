@@ -29,7 +29,7 @@ namespace ComputationalCluster.Nodes
         public System.Net.IPAddress LocalIP { get; set; } 
         public System.Net.IPAddress IP {get; set;}
         public string HostName { get; set; }
-        public int Port { get; set; }
+        public ushort Port { get; set; }
 
 
         //the number of threads that could be efficiently run in parallel

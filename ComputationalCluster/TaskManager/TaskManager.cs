@@ -27,7 +27,7 @@ namespace ComputationalCluster.Nodes
         }
 
 
-        public void startInstance(Int32 port, String hostName)
+        public void startInstance(UInt16 port, String hostName)
         {
             this.Port = port;
             this.HostName = hostName;
