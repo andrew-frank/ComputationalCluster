@@ -13,6 +13,8 @@ using System.Threading;
 using ComputationalCluster.Shared.Messages.StatusNamespace;
 using ComputationalCluster.Shared.Connection;
 using System.Diagnostics;
+using ComputationalCluster.Misc;
+using ComputationalCluster.Shared.Messages.SolveRequestResponseNamespace;
 
 namespace ComputationalCluster.Nodes
 {
@@ -57,7 +59,15 @@ namespace ComputationalCluster.Nodes
             }
 
             Console.WriteLine("Specify name of the problem file");
-            string filename = Console.ReadLine();
+            String filename = Console.ReadLine();
+            string problem = System.IO.File.ReadAllText(filename);
+            byte[] base64Problem = problem.Base64Encode();
+
+            SolveRequest request = new SolveRequest();
+            request.Data = base64Problem;
+            request.ProblemType = Utilities.ProblemNameForType(ProblemType.DVRP);
+            request.SolvingTimeoutSpecified = false;
+            request.IdSpecified = false;
         }
 
         #endregion
@@ -79,7 +89,19 @@ namespace ComputationalCluster.Nodes
 
         #region Private
 
+        private void SendSolveRequest(SolveRequest solveRequest)
+        {
+            string message = solveRequest.SerializeToXML();
+            string res = CMSocket.Instance.SendMessage(this.Port, this.HostName, message);
+            Object obj = res.DeserializeXML();
+            if (!(obj is SolveRequestResponse))
+                throw new Exception("Wrong type");
 
+            SolveRequestResponse response = (SolveRequestResponse)obj;
+            if (response.IdSpecified) {
+                ulong id = response.Id;
+            }
+        }
 
         #endregion
     }

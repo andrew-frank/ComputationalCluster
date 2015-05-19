@@ -19,8 +19,27 @@ using ComputationalCluster.Misc;
 
 namespace ComputationalCluster.Shared.Utilities {
 
-    public static class Utilities 
+    public static class Utilities
     {
+        #region encoding
+
+        public static byte[] Base64Encode(this string str)
+        {
+            byte[] bytes = new byte[str.Length * sizeof(char)];
+            System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
+            return bytes;
+        }
+
+        public static string Base64Decode(byte[] bytes)
+        {
+            char[] chars = new char[bytes.Length / sizeof(char)];
+            System.Buffer.BlockCopy(bytes, 0, chars, 0, bytes.Length);
+            return new string(chars);
+        }
+
+        #endregion
+
+
         #region Misc
 
         public static string ProblemNameForType(ProblemType t)
