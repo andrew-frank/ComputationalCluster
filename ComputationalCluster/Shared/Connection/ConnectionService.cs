@@ -52,6 +52,7 @@ namespace ComputationalCluster.Shared.Connection
                 // Receive the TcpServer.response. 
 
                 // Buffer to store the response bytes.
+
                 data = new Byte[256];
                 int temp;
                 String response = "";
@@ -73,6 +74,7 @@ namespace ComputationalCluster.Shared.Connection
                 } while (stream.DataAvailable);
 
                 responseData = response;
+
                 Console.WriteLine("Received: {0}", responseData);
                 //Int32 bytes = stream.Read(data, 0, data.Length);
                 //responseData = System.Text.Encoding.ASCII.GetString(data, 0, bytes);
