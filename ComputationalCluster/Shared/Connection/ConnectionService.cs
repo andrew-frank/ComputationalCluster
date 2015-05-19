@@ -53,10 +53,29 @@ namespace ComputationalCluster.Shared.Connection
 
                 // Buffer to store the response bytes.
                 data = new Byte[256];
-
+                int temp;
+                String response = "";
+                String tempData = "";
                 // Read the first batch of the TcpServer response bytes.
-                Int32 bytes = stream.Read(data, 0, data.Length);
-                responseData = System.Text.Encoding.ASCII.GetString(data, 0, bytes);
+                // Loop to receive all the data sent by the client.
+                do
+                {
+                    temp = stream.Read(data, 0, data.Length);
+
+                    Console.WriteLine("Rozmiar byte array=" + temp + "\n");
+
+                    // Translate data bytes to a ASCII string.
+                    tempData = System.Text.Encoding.ASCII.GetString(data, 0, temp);
+                    response += tempData;
+
+                    Console.WriteLine("Received: \n" + tempData + "\n");
+
+                } while (stream.DataAvailable);
+
+                responseData = response;
+                Console.WriteLine("Received: {0}", responseData);
+                //Int32 bytes = stream.Read(data, 0, data.Length);
+                //responseData = System.Text.Encoding.ASCII.GetString(data, 0, bytes);
 
                 // Close everything.
                 stream.Close();
