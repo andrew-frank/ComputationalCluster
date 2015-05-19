@@ -58,6 +58,7 @@ namespace ComputationalCluster.Nodes
             string debug = Console.ReadLine();
             if (debug == "y") {
                 Console.WriteLine("");
+                this.Timeout = 10000;
                 this.Port = port;
                 this.Listen(this.Port, localIPAddress);
                 return;
