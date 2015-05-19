@@ -35,6 +35,8 @@ namespace ComputationalCluster.Nodes
 
             this.RegisterComponent();
             this.StartTimeoutTimer();
+
+            while (true) Console.ReadLine();
         }
 
 
