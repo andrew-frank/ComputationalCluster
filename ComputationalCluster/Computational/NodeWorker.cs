@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ComputationalCluster.Computational
 {
-    class NodeWorker
+    public class NodeWorker
     {
         #region Properties/ivars
 

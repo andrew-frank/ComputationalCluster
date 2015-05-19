@@ -18,6 +18,8 @@ namespace ComputationalCluster.Nodes
 {
     public sealed class Client : Node
     {
+        #region Public
+
         public Client()
         {
             this.CommonInit();
@@ -47,6 +49,9 @@ namespace ComputationalCluster.Nodes
             }
         }
 
+        #endregion
+
+        #region Overrides
         //Invalid:
         protected override Status CurrentStatus()
         {
@@ -58,6 +63,13 @@ namespace ComputationalCluster.Nodes
             throw new Exception("Client does not implement GenerateRegister()");
         }
 
+        #endregion
+
+        #region Private
+
+
+
+        #endregion
     }
 
 }

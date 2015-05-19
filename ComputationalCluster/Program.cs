@@ -54,12 +54,7 @@ namespace ComputationalCluster
                 }
             }
 
-            Console.Write("Provide ID of the node:\n>");
-            string idStr = Console.ReadLine();
-            ulong id = 0;
-            while (!UInt64.TryParse(idStr, out id)) ;
-
-
+            
             switch (componentToStart.ToUpper()) {
 
                 case "TASKMANAGER":
