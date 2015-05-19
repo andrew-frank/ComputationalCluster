@@ -92,7 +92,7 @@ namespace ComputationalCluster.Nodes
         private void SendSolveRequest(SolveRequest solveRequest)
         {
             string message = solveRequest.SerializeToXML();
-            string res = CMSocket.Instance.SendMessage(this.Port, this.HostName, message);
+            string res = CMSocket.Instance.SendMessage(this.Port, this.IP, message);
             Object obj = res.DeserializeXML();
             if (!(obj is SolveRequestResponse))
                 throw new Exception("Wrong type");
