@@ -58,7 +58,6 @@ namespace ComputationalCluster.Nodes
             string debug = Console.ReadLine();
             if (debug == "y") {
                 Console.WriteLine("");
-                this.Timeout = 10;
                 this.Port = port;
                 this.Listen(this.Port, localIPAddress);
                 return;
@@ -209,78 +208,83 @@ namespace ComputationalCluster.Nodes
 
         private void Listen(Int32 port, IPAddress localAddr)
         {
-            TcpListener TCPServer = null;
-            try {
-                // TcpListener server = new TcpListener(port);
-                TCPServer = new TcpListener(localAddr, port);
-
-                // Start listening for client requests.
-                TCPServer.Start();
-
-                // Buffer for reading data
-                Byte[] bytes = new Byte[256];
-                String data = null;
-                String response = null;
-
-                // Enter the listening loop. 
-                while (true) {
-
-                    Console.Write("Waiting for a connection... ");
-
-                    // Perform a blocking call to accept requests. 
-                    // You could also user server.AcceptSocket() here.
-
-                    //TcpClient client = TCPServer.AcceptTcpClient();
-                    TcpClient client = TCPServer.AcceptTcpClient();
-
-                    data = null;
-
-                    // Get a stream object for reading and writing
-                    NetworkStream stream = client.GetStream();
-
-                    response = "";
-                    int temp;
-
-                    // Loop to receive all the data sent by the client.
-                    do {
-                        temp = stream.Read(bytes, 0, bytes.Length);
-
-                        Console.WriteLine("Rozmiar byte array=" + temp + "\n");
-
-                        // Translate data bytes to a ASCII string.
-                        data = System.Text.Encoding.ASCII.GetString(bytes, 0, temp);
-                        response += data;
-
-                        Console.WriteLine("Received: \n" + data + "\n");
-
-                    } while (stream.DataAvailable);
-
-                    Console.WriteLine("Received: {0}", response);
-                    //parse/map object & react
-                    string xml = (string)response;
-                    string m = this.ReceivedMessage(xml);
 
 
-                    byte[] msg = System.Text.Encoding.ASCII.GetBytes(m);
+            AsynchronousSocketListener.StartListening(port, localAddr);
+            
+            //TcpListener TCPServer = null;
+            //try {
+            //    // TcpListener server = new TcpListener(port);
+            //    TCPServer = new TcpListener(localAddr, port);
 
-                    stream.WriteAsync(msg, 0, msg.Length);
-                    //Console.WriteLine("Sent: {0}", response);
+            //    // Start listening for client requests.
+            //    TCPServer.Start();
 
-                    // Shutdown and end connection
-                    client.Close();
-                }
+            //    // Buffer for reading data
+            //    Byte[] bytes = new Byte[256];
+            //    String data = null;
+            //    String response = null;
 
-            } catch (SocketException e) {
-                Console.WriteLine("Server SocketException: " + e.ToString());
-                System.Diagnostics.Debug.WriteLine("SocketException: " + e.ToString());
-            } catch (Exception e) {
-                Console.WriteLine("Server SocketException: " + e.ToString());
-                System.Diagnostics.Debug.WriteLine("SocketException: " + e.ToString());
-                throw e;
-            } finally {
-                // Stop listening for new clients.
-                TCPServer.Stop();
-            }
+            //    // Enter the listening loop. 
+            //    while (true) {
+
+            //        Console.Write("Waiting for a connection... ");
+
+            //        // Perform a blocking call to accept requests. 
+            //        // You could also user server.AcceptSocket() here.
+
+            //        //TcpClient client = TCPServer.AcceptTcpClient();
+            //        TcpClient client = TCPServer.AcceptTcpClient();
+
+            //        data = null;
+
+            //        // Get a stream object for reading and writing
+            //        NetworkStream stream = client.GetStream();
+
+            //        response = "";
+            //        int temp;
+
+            //        // Loop to receive all the data sent by the client.
+            //        do {
+            //            temp = stream.Read(bytes, 0, bytes.Length);
+
+            //            Console.WriteLine("Rozmiar byte array=" + temp + "\n");
+
+            //            // Translate data bytes to a ASCII string.
+            //            data = System.Text.Encoding.ASCII.GetString(bytes, 0, temp);
+            //            response += data;
+
+            //            Console.WriteLine("Received: \n" + data + "\n");
+
+            //        } while (stream.DataAvailable);
+
+            //        Console.WriteLine("Received: {0}", response);
+            //        //parse/map object & react
+            //        string xml = (string)response;
+            //        string m = this.ReceivedMessage(xml);
+
+
+            //        byte[] msg = System.Text.Encoding.ASCII.GetBytes(m);
+            //        //stream.Write(msg, 0, msg.Length);
+
+            //        stream.WriteAsync(msg, 0, msg.Length);
+            //        //Console.WriteLine("Sent: {0}", response);
+
+            //        // Shutdown and end connection
+            //        client.Close();
+            //    }
+
+            //} catch (SocketException e) {
+            //    Console.WriteLine("Server SocketException: " + e.ToString());
+            //    System.Diagnostics.Debug.WriteLine("SocketException: " + e.ToString());
+            //} catch (Exception e) {
+            //    Console.WriteLine("Server SocketException: " + e.ToString());
+            //    System.Diagnostics.Debug.WriteLine("SocketException: " + e.ToString());
+            //    throw e;
+            //} finally {
+            //    // Stop listening for new clients.
+            //    TCPServer.Stop();
+            //}
         }
         #endregion
 

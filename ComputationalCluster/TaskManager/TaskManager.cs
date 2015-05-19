@@ -27,10 +27,11 @@ namespace ComputationalCluster.Nodes
         }
 
 
-        public void startInstance(UInt16 port, String hostName)
+        public void startInstance(UInt16 port, IPAddress server)
         {
             this.Port = port;
-            this.HostName = hostName;
+            //this.HostName = hostName;
+            this.IP = server;
             Console.WriteLine("Task Manager Started");
 
             this.RegisterComponent();

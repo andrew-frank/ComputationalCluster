@@ -31,10 +31,10 @@ namespace ComputationalCluster.Nodes
         }
 
 
-        public void startInstance(UInt16 port, String hostName)
+        public void startInstance(UInt16 port, IPAddress server)
         {
             this.Port = port;
-            this.HostName = hostName;
+            this.IP = server;
             Console.WriteLine("Client Started");
 
             Console.Write("Debug? [y/n] \n>");
@@ -53,7 +53,7 @@ namespace ComputationalCluster.Nodes
                 String parameters;
                 parameters = Console.ReadLine();
                 parameters = parameters.Replace(" ", string.Empty);
-                Shared.Connection.ConnectionHelpers.CheckInputSyntax(parameters, port, hostName);
+                //Shared.Connection.ConnectionHelpers.CheckInputSyntax(parameters, port, hostName);
             }
 
             Console.WriteLine("Specify name of the problem file");
