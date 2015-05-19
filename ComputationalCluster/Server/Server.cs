@@ -26,8 +26,7 @@ namespace ComputationalCluster.Nodes
     {
         #region Properties/ivars
 
-        private RegisteredNodes _registeredComponents = new RegisteredNodes();
-        public RegisteredNodes RegisteredComponents { get { return _registeredComponents; } }
+        
 
         [Obsolete] //po co nam to tu? patrz 'Registered Nodes'
         public string backupAddr;
@@ -64,7 +63,7 @@ namespace ComputationalCluster.Nodes
                 return;
             }
 
-            while (Data == null) {
+            while (Data == null || Data[0] == null || Data[1] == null ||  Data[2] == null ) {
                 Console.WriteLine("Parameters syntax: [-port [port number]] [-backup] [-t [time in seconds]]");
                 Console.Write("> ");
 

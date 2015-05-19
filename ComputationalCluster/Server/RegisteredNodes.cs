@@ -44,7 +44,16 @@ namespace ComputationalCluster.Nodes
 
         public void RegisterBackupServer(Node node)
         {
+            foreach (Node n in this.BackupServers) { //do not duplicate same backup
+                if (n.IP.Equals(node.IP) && n.Port == node.Port)
+                    return;
+            }
             this.BackupServers.Add(node);
+        }
+
+        public void UpdateBackupServers(List<Node> backupservers)
+        {
+            _backupServers = backupservers;
         }
 
         public bool DeregisterClient(Node node)
@@ -61,19 +70,6 @@ namespace ComputationalCluster.Nodes
             return false;
         }
 
-        public bool DeregisterBackupServer(Node node)
-        {
-            int i = 0;
-            foreach (Node n in BackupServers) {
-                if (n.ID == node.ID) {
-                    Clients.RemoveAt(i);
-                    return true;
-                }
-
-                i++;
-            }
-            return false;
-        }
 
         public bool DeregisterComputationalNode(Node node)
         {

@@ -1,4 +1,5 @@
 ﻿using ComputationalCluster.Shared.Connection;
+using ComputationalCluster.Shared.Messages.NoOperationNamespace;
 using ComputationalCluster.Shared.Messages.RegisterNamespace;
 using ComputationalCluster.Shared.Messages.RegisterResponseNamespace;
 using ComputationalCluster.Shared.Messages.StatusNamespace;
@@ -35,6 +36,12 @@ namespace ComputationalCluster.Nodes
         //the number of threads that could be efficiently run in parallel
         private int _parallelThreads = 1;
         public int ParallelThreads { get { return Convert.ToByte(_parallelThreads); } }
+
+
+        //server uses all the fields. other components use only backupServers field
+        private RegisteredNodes _registeredComponents = new RegisteredNodes();
+        public RegisteredNodes RegisteredComponents { get { return _registeredComponents; } }
+
 
         #endregion
 
@@ -95,7 +102,31 @@ namespace ComputationalCluster.Nodes
             String message = "";
             Status status = this.CurrentStatus();
             message = status.SerializeToXML();
-            CMSocket.Instance.SendMessage(this.Port, this.HostName, message);
+            string response = CMSocket.Instance.SendMessage(this.Port, this.HostName, message);
+        }
+
+        protected void ReceivedResponse(string xml)
+        {
+            Object obj = xml.DeserializeXML();
+            Debug.Assert(obj is NoOperation, "Wrong server response");
+            this.ReceivedNoOperation((NoOperation)obj);
+        }
+
+        protected void ReceivedNoOperation(NoOperation noOperation)
+        {
+            List<Node> backupServers = new List<Node>();
+            foreach (NoOperationBackupCommunicationServers backups in noOperation.Items) {
+                foreach (NoOperationBackupCommunicationServersBackupCommunicationServer backup in backups.BackupCommunicationServer) {
+                    Node server = new Server();
+                    server.IP = System.Net.IPAddress.Parse(backup.address);
+                    server.NodeType = Nodes.NodeType.Server;
+                    if(backup.portSpecified)
+                        server.Port = backup.port;
+                    backupServers.Add(server);
+                }
+            }
+
+            this.RegisteredComponents.UpdateBackupServers(backupServers);
         }
 
 
