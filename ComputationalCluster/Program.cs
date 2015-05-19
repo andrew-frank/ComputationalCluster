@@ -59,7 +59,7 @@ namespace ComputationalCluster
 
                 case "TASKMANAGER":
                     TaskManager newTaskManagerInstance = new TaskManager();
-                    newTaskManagerInstance.startInstance(port, hostName);
+                    newTaskManagerInstance.startInstance(port, ip);
                     break;
 
                 case "SERVER":
@@ -69,12 +69,12 @@ namespace ComputationalCluster
 
                 case "CLIENT":
                     Client newClientInstance = new Client();
-                    newClientInstance.startInstance(port, hostName);
+                    newClientInstance.startInstance(port, ip);
                     break;
 
                 case "COMPUTATIONALNODE":
                     ComputationalNode newComputationalNodeInstance = new ComputationalNode();
-                    newComputationalNodeInstance.startInstance(port, hostName);
+                    newComputationalNodeInstance.startInstance(port, ip);
                     break;
             }
         }

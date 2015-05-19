@@ -83,7 +83,7 @@ namespace ComputationalCluster.Nodes
             if (message == null)
                 return;
 
-            string response = CMSocket.Instance.SendMessage(this.Port, this.HostName, message);
+            string response = CMSocket.Instance.SendMessage(this.Port, this.IP, message);
             Object obj = response.DeserializeXML();
 
             if (!(obj is RegisterResponse))
@@ -102,7 +102,7 @@ namespace ComputationalCluster.Nodes
             String message = "";
             Status status = this.CurrentStatus();
             message = status.SerializeToXML();
-            string response = CMSocket.Instance.SendMessage(this.Port, this.HostName, message);
+            string response = CMSocket.Instance.SendMessage(this.Port, this.IP, message);
         }
 
         protected void ReceivedResponse(string xml)

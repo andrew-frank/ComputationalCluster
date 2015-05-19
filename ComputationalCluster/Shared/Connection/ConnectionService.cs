@@ -29,70 +29,73 @@ namespace ComputationalCluster.Shared.Connection
             }
         }
 
-        public string SendMessage(Int32 port, String server, String message)
+        public string SendMessage(Int32 port, IPAddress server, String message)
         {
-            // String to store the response ASCII representation.
-            String responseData = String.Empty;
 
-            try {
-                this.client = new TcpClient(server, port);
+            return AsynchronousClient.StartClient(port, server, message);
+            
+            
+            
+        //    // String to store the response ASCII representation.
+        //    String responseData = String.Empty;
 
-                // Translate the passed message into ASCII and store it as a Byte array.
-                Byte[] data = System.Text.Encoding.ASCII.GetBytes(message);
+        //    try {
+        //        this.client = new TcpClient(server, port);
 
-                // Get a client stream for reading and writing. 
-                //  Stream stream = client.GetStream();
-                NetworkStream stream = client.GetStream();
+        //        // Translate the passed message into ASCII and store it as a Byte array.
+        //        Byte[] data = System.Text.Encoding.ASCII.GetBytes(message);
 
-                // Send the message to the connected TcpServer. 
-                stream.Write(data, 0, data.Length);
+        //        // Get a client stream for reading and writing. 
+        //        //  Stream stream = client.GetStream();
+        //        NetworkStream stream = client.GetStream();
 
-                Console.WriteLine("Sent: {0}", message);
+        //        // Send the message to the connected TcpServer. 
+        //        stream.Write(data, 0, data.Length);
 
-                // Receive the TcpServer.response. 
+        //        Console.WriteLine("Sent: {0}", message);
 
-                // Buffer to store the response bytes.
+        //        // Receive the TcpServer.response. 
 
-                data = new Byte[256];
-                int temp;
-                String response = "";
-                String tempData = "";
-                // Read the first batch of the TcpServer response bytes.
-                // Loop to receive all the data sent by the client.
-                do
-                {
-                    temp = stream.Read(data, 0, data.Length);
+        //        // Buffer to store the response bytes.
+        //        data = new Byte[256];
+        //        int temp;
+        //        String response = "";
+        //        String tempData = "";
+        //        // Read the first batch of the TcpServer response bytes.
+        //        // Loop to receive all the data sent by the client.
+        //        do
+        //        {
+        //            temp = stream.Read(data, 0, data.Length);
 
-                    Console.WriteLine("Rozmiar byte array=" + temp + "\n");
+        //            Console.WriteLine("Rozmiar byte array=" + temp + "\n");
 
-                    // Translate data bytes to a ASCII string.
-                    tempData = System.Text.Encoding.ASCII.GetString(data, 0, temp);
-                    response += tempData;
+        //            // Translate data bytes to a ASCII string.
+        //            tempData = System.Text.Encoding.ASCII.GetString(data, 0, temp);
+        //            response += tempData;
 
-                    Console.WriteLine("Received: \n" + tempData + "\n");
+        //            Console.WriteLine("Received: \n" + tempData + "\n");
 
-                } while (stream.DataAvailable);
+        //        } while (stream.DataAvailable);
 
-                responseData = response;
+        //        responseData = response;
+        //        Console.WriteLine("Received: {0}", responseData);
+        //        //Int32 bytes = stream.Read(data, 0, data.Length);
+        //        //responseData = System.Text.Encoding.ASCII.GetString(data, 0, bytes);
 
-                Console.WriteLine("Received: {0}", responseData);
-                //Int32 bytes = stream.Read(data, 0, data.Length);
-                //responseData = System.Text.Encoding.ASCII.GetString(data, 0, bytes);
+        //        // Close everything.
+        //        stream.Close();
+        //        client.Close();
 
-                // Close everything.
-                stream.Close();
-                //client.Close();
+        //    } catch (ArgumentNullException e) {
+        //        Console.WriteLine("ArgumentNullException: {0}", e);
+        //        System.Diagnostics.Debug.WriteLine("ArgumentNullException: " + e.ToString());
 
-            } catch (ArgumentNullException e) {
-                Console.WriteLine("ArgumentNullException: {0}", e);
-                System.Diagnostics.Debug.WriteLine("ArgumentNullException: " + e.ToString());
+        //    } catch (SocketException e) {
+        //        Console.WriteLine("Util SocketException: " + e.ToString());
+        //        System.Diagnostics.Debug.WriteLine("SocketException: " + e.ToString());
+        //    }
 
-            } catch (SocketException e) {
-                Console.WriteLine("Util SocketException: " + e.ToString());
-                System.Diagnostics.Debug.WriteLine("SocketException: " + e.ToString());
-            }
-
-            return responseData;
+        //    return responseData;
         }
 
     }
