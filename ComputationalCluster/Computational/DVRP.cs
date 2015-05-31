@@ -136,22 +136,7 @@ namespace ComputationalCluster.Computational
             return true;
         }
 
-         static void Main(string[] args)
-        {
-           
-        List<Depot> Depots = new List<Depot>();
-        List<DVRPClient> Clients = new List<DVRPClient>();
-        List<Vehicle> Vehicles= new List<Vehicle>();
-        List<Point> Locations = new List<Point>();
-        Example(Depots, Clients, Vehicles, Locations);
-        double D = Solve(Clients, Depots);
-        string doubled = D.ToString();
-
-        Console.Write(doubled);
-        Console.ReadKey();
-         
-        }
-
+  
     }
 
 
