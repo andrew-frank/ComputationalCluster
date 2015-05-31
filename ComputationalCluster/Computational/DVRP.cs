@@ -12,16 +12,10 @@ namespace ComputationalCluster.Computational
 
 
 
-
-    public class DVRP
+ public class DVRP
     {
 
-        public List<Depot> Depots;
-        public List<DVRPClient> Clients;
-        public List<Vehicle> Vehicles;
-        public List<Point> Locations;
-
-        public double getDistance(Point a, Point b)
+        public static double getDistance(Point a, Point b)
         {
 
             double x = b.X - a.X;
@@ -30,7 +24,7 @@ namespace ComputationalCluster.Computational
             return Distance;
         }
 
-        public void Example()
+        public static void Example(List<Depot> Depots, List<DVRPClient> Clients, List<Vehicle> Vehicles, List<Point> Locations)
         {
             Depots.Clear();
             Clients.Clear();
@@ -51,11 +45,13 @@ namespace ComputationalCluster.Computational
             Point H = new Point(-93, -3);
             Locations.Add(A); Locations.Add(B); Locations.Add(C); Locations.Add(D); Locations.Add(E); Locations.Add(F); Locations.Add(G); Locations.Add(H);
 
-            for (int i = 0; i < 8; i++) {
+            for (int i = 0; i < 8; i++)
+            {
                 Vehicle V = new Vehicle(1, 1);
                 Vehicles.Add(V);
             }
-            foreach (Point L in Locations) {
+            foreach (Point L in Locations)
+            {
                 DVRPClient client = new DVRPClient(L, unloadTime);
                 Clients.Add(client);
             }
@@ -63,32 +59,42 @@ namespace ComputationalCluster.Computational
 
 
 
-        public double Solve()
+        public static double Solve(List<DVRPClient> Clients, List<Depot> Depots)
         {
-            List<int> ClientIds = new List<int>();
-            for (int i = 0; i < Clients.Count; i++)
-                ClientIds.Add(i + 1);
 
+            for (int i = 0; i < Clients.Count; i++)
+            {
+                Clients[i].ID = i + 1;
+            }
             double length = 1000000;
 
-            do {
+            do
+            {
                 double MinLength;
-                MinLength = TotalDistance(ClientIds, Clients, Depots);
-                if (MinLength < length) {
+                MinLength = TotalDistance(Clients, Depots);
+                if (MinLength < length)
+                {
                     length = MinLength;
                 }
-
-            } while (!next_permutation(ClientIds));
+  
+            } while (next_permutation(Clients));
 
             return length;
         }
 
-        private double TotalDistance(List<int> Ids, List<DVRPClient> Clients, List<Depot> D)
+        private static double TotalDistance(List<DVRPClient> Clients, List<Depot> Depots)
         {
 
-            double length = 0;
+            double length = 10000;
             double time = 0;
-            length = getDistance(D[0].Location, Clients[0].Location);
+            for (int i = 0; i < Depots.Count; i++)
+            {
+                double minlength = getDistance(Depots[i].Location, Clients[0].Location);
+                if (minlength < length)
+                    length = minlength;
+
+            }
+            length = getDistance(Depots[0].Location, Clients[0].Location);
             time += Clients[0].UnloadTime;
 
             for (int i = 0; i < Clients.Count() - 1; i++) //przez wszystkie 
@@ -97,43 +103,56 @@ namespace ComputationalCluster.Computational
                 time += Clients[i].UnloadTime;
             }
 
-            length += getDistance(Clients[Clients.Count - 1].Location, D[0].Location);
+            length += getDistance(Clients[Clients.Count - 1].Location, Depots[0].Location);
             return length;
         }
 
-
         // https://42bits.wordpress.com/2010/04/12/generating_all_possible_permutations_of_a_sequence/
-        public bool next_permutation(List<int> ClientIds)
+        public static bool next_permutation(List<DVRPClient> Clients)
         {
             int i, j, l;
-
-
-            for (j = ClientIds.Count - 2; j >= 0; j--) //get maximum index j for which arr[j+1] > arr[j]
-                if (ClientIds[j + 1] > ClientIds[j])
+            for (j = Clients.Count - 2; j >= 0; j--) //get maximum index j for which arr[j+1] > arr[j]
+                if (Clients[j + 1].ID > Clients[j].ID)
                     break;
             if (j == -1) //has reached it's lexicographic maximum value, No more permutations left 
                 return false;
 
-            for (l = ClientIds.Count - 1; l > j; l--) //get maximum index l for which arr[l] > arr[j]
-                if (ClientIds[l] > ClientIds[j])
+            for (l = Clients.Count - 1; l > j; l--) //get maximum index l for which arr[l] > arr[j]
+                if (Clients[l].ID > Clients[j].ID)
                     break;
 
-            int swap = ClientIds[j]; //Swap arr[i],arr[j] 
-            ClientIds[j] = ClientIds[l];
-            ClientIds[l] = swap;
+            DVRPClient swap = Clients[j]; //Swap arr[i],arr[j] 
+            Clients[j] = Clients[l];
+            Clients[l] = swap;
 
-            for (i = j + 1; i < ClientIds.Count; i++) //reverse array present after index : j+1 
+            for (i = j + 1; i < Clients.Count; i++) //reverse array present after index : j+1 
             {
-                if (i > ClientIds.Count - i + j)
+                if (i > Clients.Count - i + j)
                     break;
-                swap = ClientIds[i];
-                ClientIds[i] = ClientIds[ClientIds.Count - i + j];
-                ClientIds[ClientIds.Count - i + j] = swap;
+                swap = Clients[i];
+                Clients[i] = Clients[Clients.Count - i + j];
+                Clients[Clients.Count - i + j] = swap;
             }
-
             return true;
         }
 
+         static void Main(string[] args)
+        {
+           
+        List<Depot> Depots = new List<Depot>();
+        List<DVRPClient> Clients = new List<DVRPClient>();
+        List<Vehicle> Vehicles= new List<Vehicle>();
+        List<Point> Locations = new List<Point>();
+        Example(Depots, Clients, Vehicles, Locations);
+        double D = Solve(Clients, Depots);
+        string doubled = D.ToString();
+
+        Console.Write(doubled);
+        Console.ReadKey();
+         
+        }
 
     }
+
+
 }

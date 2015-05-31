@@ -27,7 +27,7 @@ namespace ComputationalCluster.Computational
 
       }
 
-
+      public int ID { get; set; }
       public Point Location { get; protected set; }
       public double Time { get; protected set; }
       public double UnloadTime { get; protected set; }
