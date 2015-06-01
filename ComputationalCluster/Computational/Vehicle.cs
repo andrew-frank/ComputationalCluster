@@ -7,14 +7,10 @@ using System.Threading.Tasks;
 namespace ComputationalCluster.Computational
 {
     public class Vehicle
-    {
-        public Vehicle(int capacity, int speed)
-        {
-            Capacity = capacity;
-            Speed = speed;
-        }
+   {
+        public int Id { get; set; }
 
-        public int Capacity { get; protected set; }
-        public int Speed { get; protected set; }
+        public Deport Deport { get; set; }
     }
 }
+
