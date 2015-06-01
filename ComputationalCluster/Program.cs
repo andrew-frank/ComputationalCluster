@@ -68,7 +68,7 @@ namespace ComputationalCluster
                     break;
 
                 case "CLIENT":
-                    Client newClientInstance = new Client();
+                    ComputationalCluster.Nodes.Client newClientInstance = new ComputationalCluster.Nodes.Client();
                     newClientInstance.startInstance(port, ip);
                     break;
 

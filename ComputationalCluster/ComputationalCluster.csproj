@@ -62,6 +62,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Client\Client.cs" />
+    <Compile Include="Computational\ExampleObject.cs" />
+    <Compile Include="Computational\ProblemLoader.cs" />
     <Compile Include="Computational\BruteForceCounter.cs" />
     <Compile Include="Computational\ImpossibleRouteException.cs" />
     <Compile Include="Computational\NodeWorker.cs" />

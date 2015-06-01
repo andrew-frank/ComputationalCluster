@@ -15,6 +15,7 @@ using ComputationalCluster.Shared.Connection;
 using System.Diagnostics;
 using ComputationalCluster.Misc;
 using ComputationalCluster.Shared.Messages.SolveRequestResponseNamespace;
+using ComputationalCluster.Client;
 
 namespace ComputationalCluster.Nodes
 {
@@ -61,6 +62,8 @@ namespace ComputationalCluster.Nodes
             Console.WriteLine("Specify name of the problem file");
             String filename = Console.ReadLine();
             string problem = System.IO.File.ReadAllText(filename);
+     
+
             byte[] base64Problem = problem.Base64Encode();
 
             SolveRequest request = new SolveRequest();
@@ -86,6 +89,7 @@ namespace ComputationalCluster.Nodes
         }
 
         #endregion
+
 
         #region Private
 
