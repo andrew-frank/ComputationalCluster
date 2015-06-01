@@ -7,7 +7,7 @@ using System.Windows;
 
 namespace ComputationalCluster.Computational
 {
-    class Request
+    public class Request
     {
         public int Id { get; set; }
 

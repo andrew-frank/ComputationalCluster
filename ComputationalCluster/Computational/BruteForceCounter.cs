@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ComputationalCluster.Computational
 {
-    class BruteForceCounter
+    public class BruteForceCounter
     {
         static BruteForceCounter()
         {

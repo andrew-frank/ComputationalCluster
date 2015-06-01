@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ComputationalCluster.Computational
 {
-    class ImpossibleRouteException : ApplicationException
+    public class ImpossibleRouteException : ApplicationException
     {
         public ImpossibleRouteException(string message, IList<Request> impossibleRequests)
             : base(message)
