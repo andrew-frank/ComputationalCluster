@@ -16,7 +16,7 @@ namespace ComputationalCluster.Computational
 
         public double End { get; set; }
 
-        public int Venicles { get; set; }
+        public int Vehicles { get; set; }
     }
  
 }

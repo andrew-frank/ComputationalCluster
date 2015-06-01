@@ -61,7 +61,7 @@ namespace ComputationalCluster.Computational
             var id = 1;
             foreach (var deport in deports)
             {
-                for (var i = 0; i < deport.Venicles; i++)
+                for (var i = 0; i < deport.Vehicles; i++)
                 {
                     result.Add(new Vehicle
                     {
