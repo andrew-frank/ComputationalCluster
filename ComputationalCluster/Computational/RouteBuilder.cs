@@ -15,7 +15,7 @@ namespace ComputationalCluster.Computational
             _venicleInfo = venicleInfo;
         }
 
-        public IList<Route> Build(IList<Deport> deports, VehicleInfo venicleInfo, List<Request> requests)
+        public IList<Route> Build(IList<Depot> deports, VehicleInfo venicleInfo, List<Request> requests)
         {
             BruteForceCounter.MaximumOption = 0;
             BruteForceCounter.CurrentOption = 0;
@@ -55,7 +55,7 @@ namespace ComputationalCluster.Computational
         }
 
         //private static IEnumerable<Venicle> CreateVenicles(IEnumerable<Deport> deports)
-        public static IEnumerable<Vehicle> CreateVenicles(IEnumerable<Deport> deports)
+        public static IEnumerable<Vehicle> CreateVenicles(IEnumerable<Depot> deports)
         {
             var result = new List<Vehicle>();
             var id = 1;

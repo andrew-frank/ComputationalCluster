@@ -27,7 +27,7 @@ namespace ComputationalCluster.Client
             List<int> TimeAvailable = new List<int>();
             List<Request> requests = new List<Request>();
             List<VehicleInfo> vehicles = new List<VehicleInfo>();
-            List<Deport> depots = new List<Deport>();
+            List<Depot> depots = new List<Depot>();
             if (filename != null)
             {
 
@@ -111,7 +111,7 @@ namespace ComputationalCluster.Client
 
                     for (int i = 0; i < n_depots; i++)
                     {
-                        Deport z = new Deport();
+                        Depot z = new Depot();
                         z.Location = locations[i];
                         z.Start = 0;
                         z.End = TimeWindows[i];
