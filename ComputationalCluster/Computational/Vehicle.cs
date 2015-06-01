@@ -10,7 +10,7 @@ namespace ComputationalCluster.Computational
    {
         public int Id { get; set; }
 
-        public Deport Deport { get; set; }
+        public Depot Deport { get; set; }
     }
 }
 
