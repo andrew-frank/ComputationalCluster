@@ -1,6 +1,6 @@
 ﻿namespace VehicleRouting
 {
-    public class VenicleInfo
+    public class VehicleInfo
     {
         public double Speed { get; set; }
 

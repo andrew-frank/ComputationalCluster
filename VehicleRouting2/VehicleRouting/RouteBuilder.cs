@@ -5,14 +5,14 @@ namespace VehicleRouting
 {
     public class RouteBuilder
     {
-        private readonly VenicleInfo _venicleInfo;
+        private readonly VehicleInfo _venicleInfo;
 
-        public RouteBuilder(VenicleInfo venicleInfo)
+        public RouteBuilder(VehicleInfo venicleInfo)
         {
             _venicleInfo = venicleInfo;
         }
 
-        public IList<Route> Build(IList<Deport> deports, VenicleInfo venicleInfo, List<Request> requests)
+        public IList<Route> Build(IList<Depot> deports, VehicleInfo venicleInfo, List<Request> requests)
         {
             BruteForceCounter.MaximumOption = 0;
             BruteForceCounter.CurrentOption = 0;
@@ -52,15 +52,15 @@ namespace VehicleRouting
         }
 
         //private static IEnumerable<Venicle> CreateVenicles(IEnumerable<Deport> deports)
-        public static IEnumerable<Venicle> CreateVenicles(IEnumerable<Deport> deports)
+        public static IEnumerable<Vehicle> CreateVenicles(IEnumerable<Depot> deports)
         {
-            var result = new List<Venicle>();
+            var result = new List<Vehicle>();
             var id = 1;
             foreach (var deport in deports)
             {
                 for (var i = 0; i < deport.Venicles; i++)
                 {
-                    result.Add(new Venicle
+                    result.Add(new Vehicle
                     {
                         Id = id++,
                         Deport = deport
@@ -70,7 +70,7 @@ namespace VehicleRouting
             return result;
         }
 
-        private Route BuildRoute(Venicle venicle, List<Request> requests)
+        private Route BuildRoute(Vehicle venicle, List<Request> requests)
         {
             if (!requests.Any())
                 return null;

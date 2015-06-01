@@ -7,15 +7,15 @@ namespace VehicleRouting
 {
     public class Route
     {
-        private readonly VenicleInfo _venicleInfo;
+        private readonly VehicleInfo _venicleInfo;
 
-        public Route(VenicleInfo venicleInfo)
+        public Route(VehicleInfo venicleInfo)
         {
             _venicleInfo = venicleInfo;
             Requests = new List<Request>();
         }
 
-        public Venicle Venicle { get; set; }
+        public Vehicle Venicle { get; set; }
 
         public IList<Request> Requests { get; set; }
 

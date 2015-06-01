@@ -3,12 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="551.429" Width="845">
     <Grid>
-        <Label Content="Deports" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="22"/>
-        <TextBox Name="DeportsTextBox" AcceptsReturn="True"  HorizontalAlignment="Left" Height="67" Margin="10,37,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="494"/>
-        <Label Content="Venicles" HorizontalAlignment="Left" Margin="10,109,0,0" VerticalAlignment="Top" Height="22"/>
-        <TextBox x:Name="VenicleInfoTextBox" HorizontalAlignment="Left" Height="19" Margin="10,136,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="494"/>
-        <Label Content="Requests" HorizontalAlignment="Left" Margin="10,160,0,0" VerticalAlignment="Top" Height="22" RenderTransformOrigin="0.832,-1.796"/>
-        <TextBox Name="RequestsTextBox" AcceptsReturn="True"  HorizontalAlignment="Left" Height="205" Margin="10,187,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="494"/>
+        <Label Content="Deports" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="34"/>
+        <TextBox Name="DeportsTextBox" AcceptsReturn="True"  HorizontalAlignment="Left" Height="55" Margin="10,49,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="494"/>
+        <Label Content="Venicles" HorizontalAlignment="Left" Margin="15,109,0,0" VerticalAlignment="Top" Height="38"/>
+        <TextBox x:Name="VenicleInfoTextBox" HorizontalAlignment="Left" Height="19" Margin="10,152,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="494"/>
+        <Label Content="Requests" HorizontalAlignment="Left" Margin="10,176,0,0" VerticalAlignment="Top" Height="30" RenderTransformOrigin="0.832,-1.796"/>
+        <TextBox Name="RequestsTextBox" AcceptsReturn="True"  HorizontalAlignment="Left" Height="205" Margin="10,206,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="494"/>
         <Button Content="Build routes" HorizontalAlignment="Left" Margin="533,37,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
         <TextBox Name="RoutesResultTextBox" AcceptsReturn="True"  HorizontalAlignment="Left" Height="307" Margin="533,85,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="277"/>
     </Grid>

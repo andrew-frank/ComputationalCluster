@@ -2,7 +2,7 @@
 
 namespace VehicleRouting
 {
-    public class Deport
+    public class Depot
     {
         public string Name { get; set; }
 

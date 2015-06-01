@@ -55,11 +55,11 @@
     </ApplicationDefinition>
     <Compile Include="BruteForceCounter.cs" />
     <Compile Include="ImpossibleRouteException.cs" />
-    <Compile Include="Venicle.cs" />
+    <Compile Include="Vehicle.cs" />
     <Compile Include="Route.cs" />
     <Compile Include="RouteBuilder.cs" />
-    <Compile Include="Deport.cs" />
-    <Compile Include="VenicleInfo.cs" />
+    <Compile Include="Depot.cs" />
+    <Compile Include="VehicleInfo.cs" />
     <Compile Include="Request.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

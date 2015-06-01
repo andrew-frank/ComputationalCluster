@@ -1,9 +1,9 @@
 ﻿namespace VehicleRouting
 {
-    public class Venicle
+    public class Vehicle
     {
         public int Id { get; set; }
 
-        public Deport Deport { get; set; }
+        public Depot Deport { get; set; }
     }
 }
