@@ -8,7 +8,7 @@ namespace ComputationalCluster.Computational
 {
     public class ExampleObject {
 
-        public   List<Deport> Depots        = new List<Deport>();
+        public   List<Depot> Depots        = new List<Depot>();
         public   List<VehicleInfo> Vehicles = new List<VehicleInfo>();
         public   List<Request> Requests     = new List<Request>();
 

@@ -129,8 +129,8 @@ namespace ComputationalCluster.Client
                     {
                         requests[i].Start = 0;
                         requests[i].End = TimeAvailable[i];
-                        requests[i].Id = i + 1;
-                        requests[i].Unload = demands[i];
+                        requests[i].Id = i + 1;                       
+                        requests[i].Unload = -demands[i];
                     }
                     for(int i=0; i<n_vehicles; i++)
                     {

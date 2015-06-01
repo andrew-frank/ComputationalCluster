@@ -16,6 +16,7 @@ using System.Diagnostics;
 using ComputationalCluster.Misc;
 using ComputationalCluster.Shared.Messages.SolveRequestResponseNamespace;
 using ComputationalCluster.Client;
+using ComputationalCluster.Computational;
 
 namespace ComputationalCluster.Nodes
 {
@@ -61,18 +62,29 @@ namespace ComputationalCluster.Nodes
 
             Console.WriteLine("Specify name of the problem file");
             String filename = Console.ReadLine();
-            string problem = System.IO.File.ReadAllText(filename);
+
+            ExampleObject exampleFromFile = ProblemLoader.LoadProblem(filename + ".vrp");
+
+            //ALGORITHM//
+
+
+            
+
+            Console.ReadLine();
+            //string problem = System.IO.File.ReadAllText(filename);
      
 
-            byte[] base64Problem = problem.Base64Encode();
+            //byte[] base64Problem = problem.Base64Encode();
 
-            SolveRequest request = new SolveRequest();
-            request.Data = base64Problem;
-            request.ProblemType = Utilities.ProblemNameForType(ProblemType.DVRP);
-            request.SolvingTimeoutSpecified = false;
-            request.IdSpecified = false;
+            //SolveRequest request = new SolveRequest();
+            //request.Data = base64Problem;
+            //request.ProblemType = Utilities.ProblemNameForType(ProblemType.DVRP);
+            //request.SolvingTimeoutSpecified = false;
+            //request.IdSpecified = false;
         }
+       
 
+        
         #endregion
 
         #region Overrides
