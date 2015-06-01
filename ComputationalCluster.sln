@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComputationalClusterTests", "ComputationalClusterTests\ComputationalClusterTests.csproj", "{B34B6CE0-97B3-43E4-B277-0A03A7FCF32C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComputationalCluster", "ComputationalCluster\ComputationalCluster.csproj", "{CD39E59A-5A1A-4A80-BE99-C65AE027337D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VehicleRouting", "VehicleRouting2\VehicleRouting\VehicleRouting.csproj", "{841CC7E9-7250-43B5-8F8F-6078F2005121}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{CD39E59A-5A1A-4A80-BE99-C65AE027337D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD39E59A-5A1A-4A80-BE99-C65AE027337D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD39E59A-5A1A-4A80-BE99-C65AE027337D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{841CC7E9-7250-43B5-8F8F-6078F2005121}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{841CC7E9-7250-43B5-8F8F-6078F2005121}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{841CC7E9-7250-43B5-8F8F-6078F2005121}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{841CC7E9-7250-43B5-8F8F-6078F2005121}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
