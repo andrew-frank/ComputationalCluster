@@ -76,6 +76,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Server\RegisteredNodes.cs" />
     <Compile Include="Server\Server.cs" />
+    <Compile Include="Server\ServerQueues.cs" />
     <Compile Include="Shared\Connection\AsynchronousSocketListener.cs" />
     <Compile Include="Shared\Connection\ConnectionService.cs" />
     <Compile Include="Shared\Connection\AsynchronusClient.cs" />

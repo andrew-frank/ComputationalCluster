@@ -151,6 +151,7 @@ namespace ComputationalCluster.Nodes
         Server = 0,
         Client,
         ComputationalNode,
-        TaskManager
+        TaskManager,
+        Unspecified = -1
     }
 }

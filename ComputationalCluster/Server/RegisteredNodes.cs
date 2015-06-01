@@ -98,6 +98,22 @@ namespace ComputationalCluster.Nodes
             }
             return false;
         }
+
+
+
+        public Node NodeWithID(ulong ID)
+        {
+            foreach (Node node in TaskManagers)
+                if (node.ID == ID)
+                    return node;
+            foreach (Node node in ComputationalNodes)
+                if (node.ID == ID)
+                    return node;
+            foreach (Node node in BackupServers)
+                if (node.ID == ID)
+                    return node;
+            return null;
+        }
     }
 
 

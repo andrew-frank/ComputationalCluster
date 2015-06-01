@@ -61,6 +61,17 @@ namespace ComputationalCluster.Shared.Utilities {
             }
         }
 
+        public static NodeType NodeTypeForName(string t)
+        {
+            switch (t) {
+                case "CommunicationServer": return NodeType.Server;
+                case "Client": return NodeType.Client;
+                case "ComputationalNode": return NodeType.ComputationalNode;
+                case "TaskManager": return NodeType.TaskManager;
+                default: return NodeType.Unspecified;
+            }
+        }
+
         #endregion
 
         #region Serialization

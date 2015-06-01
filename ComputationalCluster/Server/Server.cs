@@ -19,6 +19,7 @@ using ComputationalCluster.Shared.Messages.StatusNamespace;
 using ComputationalCluster.Nodes;
 using System.Diagnostics;
 using ComputationalCluster.Shared.Connection;
+using ComputationalCluster.Misc;
 
 namespace ComputationalCluster.Nodes
 {
@@ -26,7 +27,7 @@ namespace ComputationalCluster.Nodes
     {
         #region Properties/ivars
 
-        
+        private ServerQueues serverQueues { get; set; }
 
         [Obsolete] //po co nam to tu? patrz 'Registered Nodes'
         public string backupAddr;
@@ -45,6 +46,7 @@ namespace ComputationalCluster.Nodes
         private void CommonInit()
         {
             this.NodeType = NodeType.Server;
+            this.serverQueues = new ServerQueues();
         }
 
 
@@ -110,9 +112,31 @@ namespace ComputationalCluster.Nodes
 
         #region Private/Communication handling
 
+
         private string ReceivedRegister(Register register)
         {
             string type = register.Type;
+            Node newNode;
+            switch (Utilities.NodeTypeForName(type)) {
+                case NodeType.TaskManager:
+                    newNode = new TaskManager();
+                    this.RegisteredComponents.RegisterTaskManager(newNode);
+                    break;
+                case NodeType.ComputationalNode:
+                    newNode = new ComputationalNode();
+                    this.RegisteredComponents.RegisterComputationalNode(newNode);
+                    break;
+                case NodeType.Server:
+                    newNode = new Server(); //not needed?
+                    this.RegisteredComponents.RegisterBackupServer(newNode);
+                    break;
+                case NodeType.Client: //not needed
+                    newNode = new ComputationalNode();
+                    this.RegisteredComponents.RegisterClient(newNode);
+                    break;
+                default:
+                    break;
+            }
 
             //Register message is sent by TM, CN and Backup CS to the CS after they are activated.
             RegisterResponse response = new RegisterResponse();
@@ -129,35 +153,107 @@ namespace ComputationalCluster.Nodes
             }
 
             response.BackupCommunicationServers = backupServers.ToArray();
-
             return response.SerializeToXML();
         }
 
 
         private string ReceivedStatus(Status status)
         {
+            Node node = this.RegisteredComponents.NodeWithID(status.Id);
+            switch (node.NodeType) {
+                case NodeType.TaskManager:
+                    if (this.serverQueues.SolveRequests.Count > 0) {
+                        SolveRequest solveRequest = this.serverQueues.SolveRequests.Dequeue();
+                        return solveRequest.SerializeToXML();
+                    }
+                    if (this.serverQueues.PartialSolutions.Count > 0) {
+                        Solutions solutions = this.serverQueues.PartialSolutions.Dequeue();
+                        return solutions.SerializeToXML();
+                    }
+                    break;
+                case NodeType.ComputationalNode: //TODO: check!!
+                    if (this.serverQueues.ProblemsToSolve.Count > 0) {
+                        PartialProblem partialProblems = this.serverQueues.ProblemsToSolve.Dequeue();
+                        return partialProblems.SerializeToXML();
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            Debug.Assert(node != null, "Received unregistered node status");
+            if (node == null) {
+                Console.WriteLine("Received unregistered node status");
+                return (new NoOperation()).SerializeToXML();
+            }
+
             NoOperation noOperationResponse = new NoOperation();
             return noOperationResponse.SerializeToXML();
         }
 
         private string ReceivedDivideProblem(DivideProblem divideProblem)
         {
-            return "";
+            /* Divide Problem is sent to TM to start the action of dividing the problem instance to smaller tasks. 
+             * TM is provided with information about the computational power of the cluster in terms of total number 
+             * of available threads. The same message is used to relay information for synchronizing info with Backup CS.
+             */
+            Debug.Assert(this.BackupMode == true, "ReceivedDivideProblem received to primary Server");
+
+            NoOperation noOperationResponse = new NoOperation();
+            return noOperationResponse.SerializeToXML();
         }
 
         private string ReceivedSolutionRequest(SolutionRequest solutionRequest)
         {
-            return "";
+            /* Solution Request message is sent from the CC in order to check whether the cluster has successfully 
+             * computed the solution. It allows CC to be shut down and disconnected from server during computations.
+             */
+            Solutions solution = new Solutions();
+            List<Solutions> solutions = this.serverQueues.FinalSolutions.ToList();
+            foreach (Solutions s in solutions) {
+                if (s.Id == solutionRequest.Id) {
+                    solution = s;
+                    break;
+                }
+            }
+
+            return solution.SerializeToXML();
         }
 
         private string ReceivedSolvePartialProblems(SolvePartialProblems solvePartialProblems)
         {
-            return "";
+            /* Partial problems message is sent by the TM after dividing the problem into smaller partial problems. 
+             * The data in it consists of two parts – common for all partial problems and specific for the given task. 
+             * The same Partial Problems schema is used for the messages sent to be computed by the CN and to relay 
+             * information for synchronizing info with Backup CS.
+             */
+
+            NoOperationBackupCommunicationServers servers = new NoOperationBackupCommunicationServers();
+            List<NoOperationBackupCommunicationServersBackupCommunicationServer> backups = new List<NoOperationBackupCommunicationServersBackupCommunicationServer>();
+            foreach (Node comp in this.RegisteredComponents.BackupServers) {
+                NoOperationBackupCommunicationServersBackupCommunicationServer backup = new NoOperationBackupCommunicationServersBackupCommunicationServer();
+                backup.address = comp.IP.ToString();
+                if (comp.Port > 0) {
+                    backup.port = comp.Port;
+                    backup.portSpecified = true;
+                }
+                backups.Add(backup);
+            }
+            servers.BackupCommunicationServer = backups.ToArray();
+            return (new NoOperation()).SerializeToXML();
         }
+
+        static ulong TaskIDCounter = 0;
 
         private string ReceivedSolveRequest(SolveRequest solveRequest)
         {
-            return "";
+            this.serverQueues.SolveRequests.Enqueue(solveRequest);
+
+            SolveRequestResponse response = new SolveRequestResponse();
+            response.Id = TaskIDCounter++;
+            response.IdSpecified = true;
+
+            return response.SerializeToXML();
         }
 
         #endregion
