@@ -6,21 +6,17 @@ using System.Threading.Tasks;
 using System.Windows;
 namespace ComputationalCluster.Computational
 {
-    public class Depot
+    public class Deport
     {
-        public Depot(Point location, int start, int end)
-        {
-            this.Location = location;
-            this.Start = start;
-            this.End = end;
-            this.workingHours = end - start;
-        }
+        public string Name { get; set; }
 
+        public Point Location { get; set; }
 
-        public Point Location { get; protected set; }
-        public int Start { get; protected set; }
-        public int End { get; protected set; }
-        public int workingHours { get; protected set; }
+        public double Start { get; set; }
+
+        public double End { get; set; }
+
+        public int Venicles { get; set; }
     }
  
 }
