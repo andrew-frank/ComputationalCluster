@@ -8,14 +8,14 @@ namespace ComputationalCluster.Computational
 {
     public class RouteBuilder
     {
-        private readonly VehicleInfo _venicleInfo;
+        private readonly VenicleInfo _venicleInfo;
 
-        public RouteBuilder(VehicleInfo venicleInfo)
+        public RouteBuilder(VenicleInfo venicleInfo)
         {
             _venicleInfo = venicleInfo;
         }
 
-        public IList<Route> Build(IList<Depot> deports, VehicleInfo venicleInfo, List<Request> requests)
+        public IList<Route> Build(IList<Deport> deports, VenicleInfo venicleInfo, List<Request> requests)
         {
             BruteForceCounter.MaximumOption = 0;
             BruteForceCounter.CurrentOption = 0;
@@ -55,15 +55,15 @@ namespace ComputationalCluster.Computational
         }
 
         //private static IEnumerable<Venicle> CreateVenicles(IEnumerable<Deport> deports)
-        public static IEnumerable<Vehicle> CreateVenicles(IEnumerable<Depot> deports)
+        public static IEnumerable<Venicle> CreateVenicles(IEnumerable<Deport> deports)
         {
-            var result = new List<Vehicle>();
+            var result = new List<Venicle>();
             var id = 1;
             foreach (var deport in deports)
             {
                 for (var i = 0; i < deport.Venicles; i++)
                 {
-                    result.Add(new Vehicle
+                    result.Add(new Venicle
                     {
                         Id = id++,
                         Deport = deport
@@ -73,7 +73,7 @@ namespace ComputationalCluster.Computational
             return result;
         }
 
-        private Route BuildRoute(Vehicle venicle, List<Request> requests)
+        private Route BuildRoute(Venicle venicle, List<Request> requests)
         {
             if (!requests.Any())
                 return null;

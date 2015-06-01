@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 namespace ComputationalCluster.Computational
 {
-    public class Depot
+    public class Deport
     {
         public string Name { get; set; }
 

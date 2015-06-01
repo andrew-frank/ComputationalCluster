@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace ComputationalCluster.Computational
 {
-    public class Vehicle
-   {
-        public int Id { get; set; }
+    public class VenicleInfo
+    {
+        public double Speed { get; set; }
 
-        public Depot Deport { get; set; }
+        public double Capacity { get; set; }
     }
 }
-

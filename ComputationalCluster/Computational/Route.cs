@@ -9,15 +9,15 @@ namespace ComputationalCluster.Computational
 {
     public class Route
     {
-        private readonly VehicleInfo _venicleInfo;
+        private readonly VenicleInfo _venicleInfo;
 
-        public Route(VehicleInfo venicleInfo)
+        public Route(VenicleInfo venicleInfo)
         {
             _venicleInfo = venicleInfo;
             Requests = new List<Request>();
         }
 
-        public Vehicle Venicle { get; set; }
+        public Venicle Venicle { get; set; }
 
         public IList<Request> Requests { get; set; }
 
