@@ -72,8 +72,8 @@
     <Compile Include="Computational\Request.cs" />
     <Compile Include="Computational\Route.cs" />
     <Compile Include="Computational\RouteBuilder.cs" />
-    <Compile Include="Computational\Venicle.cs" />
-    <Compile Include="Computational\VenicleInfo.cs" />
+    <Compile Include="Computational\Vehicle.cs" />
+    <Compile Include="Computational\VehicleInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Server\RegisteredNodes.cs" />
