@@ -13,6 +13,7 @@ using System.Diagnostics;
 using ComputationalCluster.Misc;
 using ComputationalCluster.Shared.Messages.RegisterResponseNamespace;
 using ComputationalCluster.Computational;
+using ComputationalCluster.Client;
 
 namespace ComputationalCluster.Nodes
 {
@@ -50,7 +51,8 @@ namespace ComputationalCluster.Nodes
             this.Port = port;
             this.IP = server;
             Console.WriteLine("Computational Node Started");
-
+            string filename = "problem.vrp";
+            ProblemLoader.LoadProblem(filename);
             this.RegisterComponent();
             this.StartTimeoutTimer();
 
