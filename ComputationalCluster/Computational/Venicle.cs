@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ComputationalCluster.Computational
 {
-    public class Vehicle
+    public class Venicle
    {
         public int Id { get; set; }
 

@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace ComputationalCluster.Computational
 {
-    public class BruteForceCounter
+    public static class BruteForceCounter
     {
         static BruteForceCounter()
         {
-            PossibleRequests = new List<Request>();
+            PossibleRequests = new List<Computational.Request>();
         }
 
         public static IList<Route> MinPath { get; set; }
