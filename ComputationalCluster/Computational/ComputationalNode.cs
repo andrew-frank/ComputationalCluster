@@ -52,7 +52,12 @@ namespace ComputationalCluster.Nodes
             this.IP = server;
             Console.WriteLine("Computational Node Started");
             string filename = "problem.vrp";
-            ProblemLoader.LoadProblem(filename);
+            ExampleObject example = ProblemLoader.LoadProblem(filename);
+
+          if(example.Requests.Count==0)
+          {   /*some exception*/ }
+           
+            //Here fire the algorithm for example.
             this.RegisterComponent();
             this.StartTimeoutTimer();
 

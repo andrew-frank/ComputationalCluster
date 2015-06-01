@@ -10,7 +10,7 @@ namespace ComputationalCluster.Client
 {
     public  static class ProblemLoader
     {
-    public    static  void LoadProblem(string filename)
+    public    static  ExampleObject LoadProblem(string filename)
         { 
             string line;
             //local variables
@@ -26,6 +26,8 @@ namespace ComputationalCluster.Client
             List<int> TimeWindows = new List<int>();
             List<int> TimeAvailable = new List<int>();
             List<Request> requests = new List<Request>();
+            List<VehicleInfo> vehicles = new List<VehicleInfo>();
+            List<Depot> depots = new List<Depot>();
             if (filename != null)
             {
 
@@ -113,6 +115,7 @@ namespace ComputationalCluster.Client
                         z.Location = locations[i];
                         z.Start = 0;
                         z.End = TimeWindows[i];
+                        depots.Add(z);
                     }
 
                     for (int i = n_depots; i < locations.Count; i++)
@@ -129,14 +132,30 @@ namespace ComputationalCluster.Client
                         requests[i].Id = i + 1;
                         requests[i].Unload = demands[i];
                     }
+                    for(int i=0; i<n_vehicles; i++)
+                    {
+                        VehicleInfo V = new VehicleInfo();
+                        vehicles.Add(V);
+
+                    }
+
+
+                    ExampleObject Example = new ExampleObject();
+                    Example.Depots = depots;
+                    Example.Vehicles = vehicles;
+                    Example.Requests = requests;
+                    return Example;
+
+
                 }
 
-                catch (Exception a)
+                catch (Exception )
                 {
-                               }
+                 }
 
             }
-
+            ExampleObject Ex = new ExampleObject();
+            return Ex;
         }
 
 
