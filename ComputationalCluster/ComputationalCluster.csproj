@@ -64,8 +64,6 @@
     <Compile Include="Client\Client.cs" />
     <Compile Include="Computational\ImpossibleRouteException.cs" />
     <Compile Include="Computational\NodeWorker.cs" />
-    <Compile Include="Computational\DVRP.cs" />
-    <Compile Include="Computational\DVRPClient.cs" />
     <Compile Include="Computational\ComputationalNode.cs" />
     <Compile Include="Computational\Depot.cs" />
     <Compile Include="Computational\Request.cs" />
