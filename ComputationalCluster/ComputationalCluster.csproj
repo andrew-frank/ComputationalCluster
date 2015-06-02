@@ -69,6 +69,7 @@
     <Compile Include="Computational\NodeWorker.cs" />
     <Compile Include="Computational\ComputationalNode.cs" />
     <Compile Include="Computational\Depot.cs" />
+    <Compile Include="Computational\ProperProblemLoader.cs" />
     <Compile Include="Computational\Request.cs" />
     <Compile Include="Computational\Route.cs" />
     <Compile Include="Computational\RouteBuilder.cs" />

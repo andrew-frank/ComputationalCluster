@@ -50,7 +50,6 @@ namespace ComputationalCluster.Client
                         if (line.Contains("NUM_VISITS"))
                         {
                             n_visits = (int)line.ElementAt(line.Count() - 1) - '0';
-
                         }
                         if (line.Contains("NUM_LOCATIONS"))
                         {
@@ -60,7 +59,13 @@ namespace ComputationalCluster.Client
                         {
                             n_vehicles = (int)line.ElementAt(line.Count() - 1) - '0';
                         }
-                        ///         string[] words = line.Split(',');
+
+                        if (line.Contains("CAPACITIES")) {
+
+                            string[] words = line.Split(' ');
+                            //capacity = ;
+                        }
+                        
                         if (line.Contains("DEMAND_SECTION"))
                         {
                             for (int i = n_depots; i < n_locations; i++)
@@ -115,34 +120,34 @@ namespace ComputationalCluster.Client
                         z.Location = locations[i];
                         z.Start = 0;
                         z.End = TimeWindows[i];
+                        z.Vehicles = n_vehicles;
                         depots.Add(z);
                     }
 
                     for (int i = n_depots; i < locations.Count; i++)
-                    {
-                     
+                    {                     
                         Request r = new Request();
                         r.Location = locations[i];
                         requests.Add(r);
                     }
+
                     for (int i = 0; i < requests.Count; i++)
                     {
-                        requests[i].Start = 0;
-                        requests[i].End = TimeAvailable[i];
+                        requests[i].Start = TimeAvailable[i];
+                        requests[i].End = TimeWindows[0];
                         requests[i].Id = i + 1;                       
                         requests[i].Unload = -demands[i];
                     }
-                    for(int i=0; i<n_vehicles; i++)
-                    {
-                        VehicleInfo V = new VehicleInfo();
-                        vehicles.Add(V);
-
-                    }
+                   
+                    VehicleInfo v = new VehicleInfo();
+                    v.Speed = 1;
+                    v.Capacity = 100;
+                   
 
 
                     ExampleObject Example = new ExampleObject();
                     Example.Depots = depots;
-                    Example.Vehicles = vehicles;
+                    Example.vehicleInfo = v;
                     Example.Requests = requests;
                     return Example;
 
