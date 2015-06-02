@@ -51,10 +51,22 @@ namespace ComputationalCluster.Nodes
             this.Port = port;
             this.IP = server;
             Console.WriteLine("Computational Node Started");
-            string filename = "problem.vrp";
-            ExampleObject example = ProblemLoader.LoadProblem(filename);
+            string filename = "problem";
+            //ExampleObject example = ProblemLoader.LoadProblem(filename);
 
-          if(example.Requests.Count==0)
+            ExampleObject properExample = ProperProblemLoader.LoadProblem(filename);
+
+            //ALGORITHM//
+            var watch = Stopwatch.StartNew();
+            TryServe(properExample.Depots, properExample.vehicleInfo, properExample.Requests);
+            watch.Stop();
+            var elapsedMs = watch.ElapsedMilliseconds;
+            Console.WriteLine("Algorith executed in: " + elapsedMs + "ms");
+
+            Console.ReadLine();
+
+
+          if (properExample.Requests.Count == 0)
           {   /*some exception*/ }
            
             //Here fire the algorithm for example.
@@ -62,6 +74,44 @@ namespace ComputationalCluster.Nodes
             this.StartTimeoutTimer();
 
             while (true) Console.ReadLine();
+        }
+
+        private void TryServe(IList<Depot> Depots, VehicleInfo vehicleInfo, List<Request> requests)
+        {
+
+            try {
+                var builder = new RouteBuilder(vehicleInfo);
+                var routes = builder.Build(Depots, vehicleInfo, requests).ToList();
+
+                String foundRoutes = "";
+                String totalDistance = "";
+                foundRoutes += string.Format("Found {0} routes", routes.Count()) + Environment.NewLine + Environment.NewLine;
+                foreach (var route in routes) {
+                    foundRoutes += string.Join(" -> " + Environment.NewLine, route.GetTimeTable().Select(checkPoint => "[Ar = " + checkPoint.ArrivalTime + " Loc = " + checkPoint.Location.X + " " + checkPoint.Location.Y + "[" + checkPoint.LocationID +  "]" + " Route ID = " + route.Venicle.Id + "]")) + Environment.NewLine;
+                    foundRoutes += "vehicle distance: " + route.GetTotalDistance() + Environment.NewLine;
+                    foundRoutes += Environment.NewLine;
+                }
+                Console.WriteLine(foundRoutes);
+                totalDistance += "Total distance: " + routes.Sum(r => r.GetTotalDistance()) + Environment.NewLine;
+                totalDistance += Environment.NewLine;
+                Console.WriteLine(totalDistance);
+
+            } catch (ImpossibleRouteException exception) {
+                String failedServeRequest = "";
+                String routesWithoutRequests = ""; ;
+                failedServeRequest = "Can not serve requests:" + Environment.NewLine;
+                foreach (var request in exception.ImpossibleRequests) {
+                    failedServeRequest += "Loc = " + request.Location.X + " " + request.Location.Y + Environment.NewLine;
+                }
+                failedServeRequest += Environment.NewLine;
+                Console.WriteLine(failedServeRequest);
+
+                routesWithoutRequests += "Routes without these requests:" + Environment.NewLine;
+                Console.WriteLine(routesWithoutRequests);
+                TryServe(Depots, vehicleInfo, requests.Except(exception.ImpossibleRequests).ToList());
+            } catch (Exception exception) {
+                Console.WriteLine(exception.Message);
+            }
         }
 
         #endregion
