@@ -14,6 +14,8 @@ using ComputationalCluster.Misc;
 using ComputationalCluster.Shared.Messages.RegisterResponseNamespace;
 using ComputationalCluster.Computational;
 using ComputationalCluster.Client;
+using ComputationalCluster.Shared.Messages.SolveRequestNamespace;
+using ComputationalCluster.Shared.Messages.SolveRequestResponseNamespace;
 
 namespace ComputationalCluster.Nodes
 {
@@ -51,29 +53,24 @@ namespace ComputationalCluster.Nodes
             this.Port = port;
             this.IP = server;
             Console.WriteLine("Computational Node Started");
-            string filename = "io2_9_plain_e_D";
-            //ExampleObject example = ProblemLoader.LoadProblem(filename);
 
-            ExampleObject properExample = ProperProblemLoader.LoadProblem(filename);
+            //if (properExample.Requests.Count == 0) {   /*some exception*/ }
 
-            //ALGORITHM//
-            var watch = Stopwatch.StartNew();
-            TryServe(properExample.Depots, properExample.vehicleInfo, properExample.Requests);
-            watch.Stop();
-            var elapsedMs = watch.ElapsedMilliseconds;
-            Console.WriteLine("Algorith executed in: " + elapsedMs + "ms");
-
-            Console.ReadLine();
-
-
-          if (properExample.Requests.Count == 0)
-          {   /*some exception*/ }
-           
             //Here fire the algorithm for example.
             this.RegisterComponent();
-            this.StartTimeoutTimer();
+            //this.StartTimeoutTimer();
 
-            while (true) Console.ReadLine();
+            
+            //ExampleObject properExample = ProperProblemLoader.LoadProblemFromString("");
+
+            ////ALGORITHM//
+            //var watch = Stopwatch.StartNew();
+            //TryServe(properExample.Depots, properExample.vehicleInfo, properExample.Requests);
+            //watch.Stop();
+            //var elapsedMs = watch.ElapsedMilliseconds;
+            //Console.WriteLine("Algorith executed in: " + elapsedMs + "ms");
+
+            Console.ReadLine();
         }
 
         private void TryServe(IList<Depot> Depots, VehicleInfo vehicleInfo, List<Request> requests)
@@ -148,6 +145,7 @@ namespace ComputationalCluster.Nodes
 
 
         #region Private
+
 
         private StatusThreadsThread[] CurrentStatusThreads()
         {

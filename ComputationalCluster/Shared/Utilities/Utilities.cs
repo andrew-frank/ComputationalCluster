@@ -28,13 +28,22 @@ namespace ComputationalCluster.Shared.Utilities {
             byte[] bytes = new byte[str.Length * sizeof(char)];
             System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
             return bytes;
+
+            //var bytes = Encoding.UTF8.GetBytes(str);
+            //string base64 = Convert.ToBase64String(bytes);
+            //return base64;
+            //Console.WriteLine(base64);
         }
 
-        public static string Base64Decode(byte[] bytes)
+        public static string Base64Decode(byte[] bytes) //byte[] bytes
         {
             char[] chars = new char[bytes.Length / sizeof(char)];
             System.Buffer.BlockCopy(bytes, 0, chars, 0, bytes.Length);
             return new string(chars);
+
+            //var data = Convert.FromBase64String(bytes);
+            //var str = Encoding.UTF8.GetString(data);
+            //return str;
         }
 
         #endregion

@@ -11,6 +11,7 @@ namespace ComputationalCluster.Nodes
         #region Properties/ivars
 
         private static ulong _nodeIDCounter = 0;
+
         public static ulong NextNodeID {
             get { _nodeIDCounter++; return _nodeIDCounter; } 
         }

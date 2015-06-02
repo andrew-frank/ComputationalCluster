@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Diagnostics;
+using ComputationalCluster.Nodes;
 
 namespace ComputationalCluster.Shared.Connection
 {
@@ -26,7 +27,7 @@ namespace ComputationalCluster.Shared.Connection
         // The response from the remote device.
         private static String response = String.Empty;
 
-        public static String StartClient(Int32 port, IPAddress ipAddress, String message)
+        public static String StartClient(Int32 port, IPAddress ipAddress, String message, Node node)
         {
             // Connect to a remote device.
             try
@@ -58,6 +59,7 @@ namespace ComputationalCluster.Shared.Connection
 
                 // Write the response to the console.
                 Console.WriteLine("Response received : {0}", response);
+                node.ReceivedResponse(response);
 
                 Console.ReadLine();
                 // Release the socket.

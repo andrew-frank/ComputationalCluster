@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Diagnostics;
+using ComputationalCluster.Nodes;
 
 
 namespace ComputationalCluster.Shared.Connection
@@ -94,8 +95,7 @@ namespace ComputationalCluster.Shared.Connection
             // Create the state object.
             StateObject state = new StateObject();
             state.workSocket = handler;
-            handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
-                new AsyncCallback(ReadCallback), state);
+            handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0, new AsyncCallback(ReadCallback), state);
         }
 
         public static void ReadCallback(IAsyncResult ar)
@@ -125,8 +125,13 @@ namespace ComputationalCluster.Shared.Connection
                     // client. Display it on the console.
                     Console.WriteLine("Read {0} bytes from socket. \n Data : {1}",
                         content.Length, content);
+
+
                     // Echo the data back to the client.
-                    Send(handler, content);
+                    Server server = Server.MainServer;
+                    content = content.Replace("<EOF>", "");
+                    Send(handler, server.ReceivedMessage(content));
+
                 }
                 else
                 {

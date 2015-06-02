@@ -27,6 +27,10 @@ namespace ComputationalCluster.Nodes
     {
         #region Properties/ivars
 
+        public static Server MainServer { get; private set; }
+
+        static ulong TaskIDCounter = 0;
+
         private ServerQueues serverQueues { get; set; }
 
         [Obsolete] //po co nam to tu? patrz 'Registered Nodes'
@@ -47,6 +51,11 @@ namespace ComputationalCluster.Nodes
         {
             this.NodeType = NodeType.Server;
             this.serverQueues = new ServerQueues();
+            this.BackupMode = false;
+
+            ///
+            if (this.BackupMode == false)
+                Server.MainServer = this;
         }
 
 
@@ -117,21 +126,26 @@ namespace ComputationalCluster.Nodes
         {
             string type = register.Type;
             Node newNode;
+            ulong ID = RegisteredNodes.NextNodeID;
             switch (Utilities.NodeTypeForName(type)) {
                 case NodeType.TaskManager:
                     newNode = new TaskManager();
+                    newNode.ID = ID;
                     this.RegisteredComponents.RegisterTaskManager(newNode);
                     break;
                 case NodeType.ComputationalNode:
                     newNode = new ComputationalNode();
+                    newNode.ID = ID;
                     this.RegisteredComponents.RegisterComputationalNode(newNode);
                     break;
                 case NodeType.Server:
                     newNode = new Server(); //not needed?
+                    newNode.ID = ID;
                     this.RegisteredComponents.RegisterBackupServer(newNode);
                     break;
                 case NodeType.Client: //not needed
                     newNode = new ComputationalNode();
+                    newNode.ID = ID;
                     this.RegisteredComponents.RegisterClient(newNode);
                     break;
                 default:
@@ -140,7 +154,7 @@ namespace ComputationalCluster.Nodes
 
             //Register message is sent by TM, CN and Backup CS to the CS after they are activated.
             RegisterResponse response = new RegisterResponse();
-            response.Id = RegisteredNodes.NextNodeID;
+            response.Id = ID;
             response.Timeout = this.Timeout;
             List<RegisterResponseBackupCommunicationServersBackupCommunicationServer> backupServers = new List<RegisterResponseBackupCommunicationServersBackupCommunicationServer>();
             foreach (Node comp in this.RegisteredComponents.BackupServers) {
@@ -159,6 +173,7 @@ namespace ComputationalCluster.Nodes
 
         private string ReceivedStatus(Status status)
         {
+            Debug.Assert(this.serverQueues != null, "null server queue");
             Node node = this.RegisteredComponents.NodeWithID(status.Id);
             switch (node.NodeType) {
                 case NodeType.TaskManager:
@@ -243,8 +258,6 @@ namespace ComputationalCluster.Nodes
             return (new NoOperation()).SerializeToXML();
         }
 
-        static ulong TaskIDCounter = 0;
-
         private string ReceivedSolveRequest(SolveRequest solveRequest)
         {
             this.serverQueues.SolveRequests.Enqueue(solveRequest);
@@ -256,17 +269,12 @@ namespace ComputationalCluster.Nodes
             return response.SerializeToXML();
         }
 
-        #endregion
-
-
-        #region Private
-
         /// <summary>
         /// Deserializes message, generates appriopriate action and returns message to response.
         /// </summary>
         /// <param name="xml">Message received from a node</param>
         /// <returns>Serialized response to a node</returns>
-        private string ReceivedMessage(string xml)
+        public string ReceivedMessage(string xml)
         {
             Object obj = xml.DeserializeXML();
 
@@ -300,6 +308,12 @@ namespace ComputationalCluster.Nodes
         }
 
 
+        #endregion
+
+
+        
+        
+
         #region Connection/Private
 
 
@@ -307,6 +321,7 @@ namespace ComputationalCluster.Nodes
         {
             AsynchronousSocketListener.StartListening(port, localAddr);         
         }
+        
         #endregion
 
 
@@ -366,7 +381,6 @@ namespace ComputationalCluster.Nodes
 
         #endregion
 
-        #endregion
 
     }
 }
