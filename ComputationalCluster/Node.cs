@@ -59,6 +59,25 @@ namespace ComputationalCluster.Nodes
         }
 
 
+        public void ReceivedResponse(string xml)
+        {
+            Console.WriteLine("Node - received response: " + xml);
+            Object obj = xml.DeserializeXML();
+            //Debug.Assert(obj is NoOperation, "Wrong server response");
+            //this.ReceivedNoOperation((NoOperation)obj);
+
+            if (obj is RegisterResponse) {
+                RegisterResponse registerResponse = (RegisterResponse)obj;
+                this.ID = registerResponse.Id;
+                this.Timeout = registerResponse.Timeout;
+                this.StartTimeoutTimer();
+
+            } else {
+
+            }
+        }
+
+
         #endregion
 
 
@@ -83,16 +102,16 @@ namespace ComputationalCluster.Nodes
             if (message == null)
                 return;
 
-            string response = CMSocket.Instance.SendMessage(this.Port, this.IP, message);
-            Object obj = response.DeserializeXML();
+            CMSocket.Instance.SendMessage(this.Port, this.IP, message, this);
+            //Object obj = response.DeserializeXML();
 
-            if (!(obj is RegisterResponse))
-                throw new Exception("Invalid response");
+            //if (!(obj is RegisterResponse))
+            //    throw new Exception("Invalid response");
 
-            RegisterResponse registerResponse = (RegisterResponse)obj;
-            this.ID = registerResponse.Id;
-            this.Timeout = registerResponse.Timeout;
-            this.StartTimeoutTimer();
+            //RegisterResponse registerResponse = (RegisterResponse)obj;
+            //this.ID = registerResponse.Id;
+            //this.Timeout = registerResponse.Timeout;
+            //this.StartTimeoutTimer();
         }
 
 
@@ -102,17 +121,10 @@ namespace ComputationalCluster.Nodes
             String message = "";
             Status status = this.CurrentStatus();
             message = status.SerializeToXML();
-            string response = CMSocket.Instance.SendMessage(this.Port, this.IP, message);
+            string response = CMSocket.Instance.SendMessage(this.Port, this.IP, message, this);
             this.ReceivedResponse(response);
         }
 
-        protected void ReceivedResponse(string xml)
-        {
-            Console.WriteLine("Node - received response: " + xml);
-            Object obj = xml.DeserializeXML();
-            //Debug.Assert(obj is NoOperation, "Wrong server response");
-            //this.ReceivedNoOperation((NoOperation)obj);
-        }
 
         protected void ReceivedNoOperation(NoOperation noOperation)
         {

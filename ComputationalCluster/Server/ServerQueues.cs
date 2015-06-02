@@ -11,6 +11,14 @@ namespace ComputationalCluster.Nodes
 {
     public sealed class ServerQueues
     {
+        public ServerQueues()
+        {
+            this.SolveRequests = new Queue<SolveRequest>();
+            this.PartialSolutions = new Queue<Solutions>();
+            this.ProblemsToSolve = new Queue<PartialProblem>();
+            this.FinalSolutions = new Queue<Solutions>();
+        }
+
         public Queue<SolveRequest> SolveRequests { get; set; }
 
         /*

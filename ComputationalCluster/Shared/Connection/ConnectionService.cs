@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ComputationalCluster.Nodes;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -29,9 +30,9 @@ namespace ComputationalCluster.Shared.Connection
             }
         }
 
-        public string SendMessage(Int32 port, IPAddress server, String message)
+        public string SendMessage(Int32 port, IPAddress server, String message, Node node)
         {
-            return AsynchronousClient.StartClient(port, server, message);
+            return AsynchronousClient.StartClient(port, server, message, node);
         }
 
     }

@@ -126,21 +126,26 @@ namespace ComputationalCluster.Nodes
         {
             string type = register.Type;
             Node newNode;
+            ulong ID = RegisteredNodes.NextNodeID;
             switch (Utilities.NodeTypeForName(type)) {
                 case NodeType.TaskManager:
                     newNode = new TaskManager();
+                    newNode.ID = ID;
                     this.RegisteredComponents.RegisterTaskManager(newNode);
                     break;
                 case NodeType.ComputationalNode:
                     newNode = new ComputationalNode();
+                    newNode.ID = ID;
                     this.RegisteredComponents.RegisterComputationalNode(newNode);
                     break;
                 case NodeType.Server:
                     newNode = new Server(); //not needed?
+                    newNode.ID = ID;
                     this.RegisteredComponents.RegisterBackupServer(newNode);
                     break;
                 case NodeType.Client: //not needed
                     newNode = new ComputationalNode();
+                    newNode.ID = ID;
                     this.RegisteredComponents.RegisterClient(newNode);
                     break;
                 default:
@@ -149,7 +154,7 @@ namespace ComputationalCluster.Nodes
 
             //Register message is sent by TM, CN and Backup CS to the CS after they are activated.
             RegisterResponse response = new RegisterResponse();
-            response.Id = RegisteredNodes.NextNodeID;
+            response.Id = ID;
             response.Timeout = this.Timeout;
             List<RegisterResponseBackupCommunicationServersBackupCommunicationServer> backupServers = new List<RegisterResponseBackupCommunicationServersBackupCommunicationServer>();
             foreach (Node comp in this.RegisteredComponents.BackupServers) {
@@ -168,6 +173,7 @@ namespace ComputationalCluster.Nodes
 
         private string ReceivedStatus(Status status)
         {
+            Debug.Assert(this.serverQueues != null, "null server queue");
             Node node = this.RegisteredComponents.NodeWithID(status.Id);
             switch (node.NodeType) {
                 case NodeType.TaskManager:
