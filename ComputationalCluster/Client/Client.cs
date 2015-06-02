@@ -46,20 +46,17 @@ namespace ComputationalCluster.Nodes
 
             if (debug == "n") {
                 this.Port = 0;
-                port = 0;
-                this.HostName = "";
+                while (port == 0) {
+                    Console.WriteLine(" Parameters Syntax: [-address [IPv4 address or IPv6 address or host name]] [-port[port number]]");
+                    Console.Write("> ");
+
+                    String parameters;
+                    parameters = Console.ReadLine();
+                    parameters = parameters.Replace(" ", string.Empty);
+                    //Shared.Connection.ConnectionHelpers.CheckInputSyntax(parameters, port, hostName);
+                }
+
             }
-
-            while (port == 0) {
-                Console.WriteLine(" Parameters Syntax: [-address [IPv4 address or IPv6 address or host name]] [-port[port number]]");
-                Console.Write("> ");
-
-                String parameters;
-                parameters = Console.ReadLine();
-                parameters = parameters.Replace(" ", string.Empty);
-                //Shared.Connection.ConnectionHelpers.CheckInputSyntax(parameters, port, hostName);
-            }
-
 
             while (true) {
                 Console.WriteLine("Possible actions:\n1.Send problem\n2.Check for solution\n>");

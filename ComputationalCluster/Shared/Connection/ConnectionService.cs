@@ -54,6 +54,7 @@ namespace ComputationalCluster.Shared.Connection
                 if (addr[i].IsIPv6LinkLocal == false && addr[i].AddressFamily == AddressFamily.InterNetwork) {
                     Console.WriteLine("Correct IP Address {0}: {1} ", i, addr[i].ToString());
                     IPv4 = addr[i];
+                    return IPv4;
                 } else
                     System.Diagnostics.Debug.WriteLine("Incorrect Address {0}: {1} ", i, addr[i].ToString());
             }

@@ -56,8 +56,6 @@ namespace ComputationalCluster.Nodes
 
             //if (properExample.Requests.Count == 0) {   /*some exception*/ }
 
-
-           
             //Here fire the algorithm for example.
             this.RegisterComponent();
             //this.StartTimeoutTimer();
