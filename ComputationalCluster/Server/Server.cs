@@ -27,6 +27,10 @@ namespace ComputationalCluster.Nodes
     {
         #region Properties/ivars
 
+        public static Server MainServer { get; private set; }
+
+        static ulong TaskIDCounter = 0;
+
         private ServerQueues serverQueues { get; set; }
 
         [Obsolete] //po co nam to tu? patrz 'Registered Nodes'
@@ -47,6 +51,11 @@ namespace ComputationalCluster.Nodes
         {
             this.NodeType = NodeType.Server;
             this.serverQueues = new ServerQueues();
+            this.BackupMode = false;
+
+            ///
+            if (this.BackupMode == false)
+                Server.MainServer = this;
         }
 
 
@@ -243,8 +252,6 @@ namespace ComputationalCluster.Nodes
             return (new NoOperation()).SerializeToXML();
         }
 
-        static ulong TaskIDCounter = 0;
-
         private string ReceivedSolveRequest(SolveRequest solveRequest)
         {
             this.serverQueues.SolveRequests.Enqueue(solveRequest);
@@ -256,17 +263,12 @@ namespace ComputationalCluster.Nodes
             return response.SerializeToXML();
         }
 
-        #endregion
-
-
-        #region Private
-
         /// <summary>
         /// Deserializes message, generates appriopriate action and returns message to response.
         /// </summary>
         /// <param name="xml">Message received from a node</param>
         /// <returns>Serialized response to a node</returns>
-        private string ReceivedMessage(string xml)
+        public string ReceivedMessage(string xml)
         {
             Object obj = xml.DeserializeXML();
 
@@ -300,6 +302,12 @@ namespace ComputationalCluster.Nodes
         }
 
 
+        #endregion
+
+
+        
+        
+
         #region Connection/Private
 
 
@@ -307,6 +315,7 @@ namespace ComputationalCluster.Nodes
         {
             AsynchronousSocketListener.StartListening(port, localAddr);         
         }
+        
         #endregion
 
 
@@ -366,7 +375,6 @@ namespace ComputationalCluster.Nodes
 
         #endregion
 
-        #endregion
 
     }
 }

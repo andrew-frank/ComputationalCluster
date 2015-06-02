@@ -103,13 +103,15 @@ namespace ComputationalCluster.Nodes
             Status status = this.CurrentStatus();
             message = status.SerializeToXML();
             string response = CMSocket.Instance.SendMessage(this.Port, this.IP, message);
+            this.ReceivedResponse(response);
         }
 
         protected void ReceivedResponse(string xml)
         {
+            Console.WriteLine("Node - received response: " + xml);
             Object obj = xml.DeserializeXML();
-            Debug.Assert(obj is NoOperation, "Wrong server response");
-            this.ReceivedNoOperation((NoOperation)obj);
+            //Debug.Assert(obj is NoOperation, "Wrong server response");
+            //this.ReceivedNoOperation((NoOperation)obj);
         }
 
         protected void ReceivedNoOperation(NoOperation noOperation)
