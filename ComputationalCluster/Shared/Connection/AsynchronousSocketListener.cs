@@ -8,7 +8,7 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Diagnostics;
 using ComputationalCluster.Nodes;
-
+using ComputationalCluster.Shared.Utilities;
 
 namespace ComputationalCluster.Shared.Connection
 {
@@ -119,7 +119,15 @@ namespace ComputationalCluster.Shared.Connection
                 // Check for end-of-file tag. If it is not there, read 
                 // more data.
                 content = state.sb.ToString();
-                if (content.IndexOf("<EOF>") > -1)
+                if (content.DeserializeXML() == null)
+                //if (content.IndexOf("<EOF>") > -1)
+                {
+
+                    // Not all data received. Get more.
+                    handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
+                    new AsyncCallback(ReadCallback), state);
+                }
+                else
                 {
                     // All the data has been read from the 
                     // client. Display it on the console.
@@ -131,13 +139,6 @@ namespace ComputationalCluster.Shared.Connection
                     Server server = Server.MainServer;
                     content = content.Replace("<EOF>", "");
                     Send(handler, server.ReceivedMessage(content));
-
-                }
-                else
-                {
-                    // Not all data received. Get more.
-                    handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
-                    new AsyncCallback(ReadCallback), state);
                 }
             }
         }

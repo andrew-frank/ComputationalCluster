@@ -103,6 +103,11 @@ namespace ComputationalCluster.Shared.Utilities {
             }
         }
 
+        public static Object DeserializeXMLString(this String XMLString)
+        {
+            return ((string)XMLString).DeserializeXML();
+        }
+
 
         public static Object DeserializeXML(this string XMLString)
         {
