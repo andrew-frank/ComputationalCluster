@@ -137,7 +137,7 @@ namespace ComputationalCluster.Computational
                                 for (int i = 1; i <= _num_visits; i++) {
                                     timeAvailSectionLine = linesOfFile[j + z + i].Split(timeAvailSectionSeparator, StringSplitOptions.RemoveEmptyEntries);     
                                     listOfRequests.ElementAt(i - 1).Start = Int32.Parse(timeAvailSectionLine[1]);
-                                    //MADAFAKA ZMIANA TIME AVAILABLE
+                                    // ZMIANA TIME AVAILABLE
                                     if (listOfRequests.ElementAt(i - 1).Start > (CUT_OFF_TIME * listOfRequests.ElementAt(i - 1).End))                                        
                                         listOfRequests.ElementAt(i - 1).Start = 0;
                                     

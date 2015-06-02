@@ -51,7 +51,7 @@ namespace ComputationalCluster.Nodes
             this.Port = port;
             this.IP = server;
             Console.WriteLine("Computational Node Started");
-            string filename = "problem";
+            string filename = "io2_9_plain_e_D";
             //ExampleObject example = ProblemLoader.LoadProblem(filename);
 
             ExampleObject properExample = ProperProblemLoader.LoadProblem(filename);
