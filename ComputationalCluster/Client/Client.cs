@@ -60,20 +60,25 @@ namespace ComputationalCluster.Nodes
                 //Shared.Connection.ConnectionHelpers.CheckInputSyntax(parameters, port, hostName);
             }
 
+            //while(true) {
+            //    PrintMenuToConsole();
+            //    if (Console.ReadLine() == "1") {
+            //        Console.WriteLine("Specify name of the problem file");
+            //        String problemContent = System.IO.File.ReadAllText(Console.ReadLine() + ".vrp");                    
+            //    }
+            //    if (Console.ReadLine() == "2") {
+            //        Console.WriteLine("Specify ID of the problem");
+            //        String problemID = Console.ReadLine();
+            //    }
+            //}
+
             Console.WriteLine("Specify name of the problem file");
-            String filename = Console.ReadLine();
+            String problemContent = System.IO.File.ReadAllText(Console.ReadLine() + ".vrp");  
+
 
             //ExampleObject exampleFromFile = ProblemLoader.LoadProblem(filename + ".vrp");
 
-            ExampleObject properExample = ProperProblemLoader.LoadProblem(filename + ".vrp");
-            //ALGORITHM//
-            var watch = Stopwatch.StartNew();
-            TryServe(properExample.Depots, properExample.vehicleInfo, properExample.Requests);
-            watch.Stop();
-            var elapsedMs = watch.ElapsedMilliseconds;
-            Console.WriteLine("Algorith executed in: " + elapsedMs + "ms");         
             
-            Console.ReadLine();
             //string problem = System.IO.File.ReadAllText(filename);
      
 
@@ -85,44 +90,14 @@ namespace ComputationalCluster.Nodes
             //request.SolvingTimeoutSpecified = false;
             //request.IdSpecified = false;
         }
-        //
-        private void TryServe(IList<Depot> Depots, VehicleInfo vehicleInfo, List<Request> requests)
+
+        private void PrintMenuToConsole()
         {
-            
-            try {
-                var builder = new RouteBuilder(vehicleInfo);
-                var routes = builder.Build(Depots, vehicleInfo, requests).ToList();
-
-                String foundRoutes = "";
-                String totalDistance =  "";
-                foundRoutes += string.Format("Found {0} routes", routes.Count()) + Environment.NewLine + Environment.NewLine;
-                foreach (var route in routes) {
-                    foundRoutes += string.Join(" -> " + Environment.NewLine, route.GetTimeTable().Select(checkPoint => "[Ar = " + checkPoint.ArrivalTime + " Loc = " + checkPoint.Location.X + " " + checkPoint.Location.Y + "]")) + Environment.NewLine;
-                    foundRoutes += "vehicle distance: " + route.GetTotalDistance() + Environment.NewLine;
-                    foundRoutes += Environment.NewLine;
-                }
-                Console.WriteLine(foundRoutes);
-                totalDistance += "Total distance: " + routes.Sum(r => r.GetTotalDistance()) + Environment.NewLine;
-                totalDistance += Environment.NewLine;
-                Console.WriteLine(totalDistance);
-
-            } catch (ImpossibleRouteException exception) {
-                String failedServeRequest = "";
-                String routesWithoutRequests = "";;
-                failedServeRequest = "Can not serve requests:" + Environment.NewLine;
-                foreach (var request in exception.ImpossibleRequests) {
-                    failedServeRequest += "Loc = " + request.Location.X + " " + request.Location.Y + Environment.NewLine;
-                }
-                failedServeRequest += Environment.NewLine;
-                Console.WriteLine(failedServeRequest);
-
-                routesWithoutRequests += "Routes without these requests:" + Environment.NewLine;
-                Console.WriteLine(routesWithoutRequests);
-                TryServe(Depots, vehicleInfo, requests.Except(exception.ImpossibleRequests).ToList());
-            } catch (Exception exception) {
-                Console.WriteLine(exception.Message);
-            }
+            Console.WriteLine("Please define the operation you want to proceed:");
+            Console.WriteLine("1 - load problem");
+            Console.WriteLine("2 - check status of the problem");           
         }
+        
 
         
         #endregion

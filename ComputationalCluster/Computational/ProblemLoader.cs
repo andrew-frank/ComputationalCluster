@@ -62,8 +62,7 @@ namespace ComputationalCluster.Client
 
                         if (line.Contains("CAPACITIES")) {
 
-                            string[] words = line.Split(' ');
-                            //capacity = ;
+                            capacity = (int)line.ElementAt(line.Count() - 1) - '0'; ;
                         }
                         
                         if (line.Contains("DEMAND_SECTION"))

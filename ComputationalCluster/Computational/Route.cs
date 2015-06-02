@@ -54,7 +54,8 @@ namespace ComputationalCluster.Computational
                 new CheckPoint
                 {
                     ArrivalTime = 0,
-                    Location = Venicle.Deport.Location
+                    Location = Venicle.Deport.Location,
+                    LocationID = 0
                 }
             };
             double totalTime = Venicle.Deport.Start;
@@ -64,7 +65,8 @@ namespace ComputationalCluster.Computational
                 result.Add(new CheckPoint
                 {
                     ArrivalTime = totalTime,
-                    Location = request.Location
+                    Location = request.Location,
+                    LocationID = request.Id
                 });
                 totalTime = Math.Max(totalTime, request.Start) + request.Unload;
             }
@@ -105,6 +107,8 @@ namespace ComputationalCluster.Computational
             public double ArrivalTime { get; set; }
 
             public Point Location { get; set; }
+
+            public int LocationID { get; set; }
         }
     }
 }
