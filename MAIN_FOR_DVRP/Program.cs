@@ -20,7 +20,7 @@ public class Program
 			List<int> X_CoordinateList = new List<int>();
 			List<int> Y_CoordinateList = new List<int>();
 			
-			StreamReader InputFile = new System.IO.StreamReader(Directory.GetCurrentDirectory() + @"\InputFiles\io2_9_plain_e_D.txt");
+			StreamReader InputFile = new System.IO.StreamReader(Directory.GetCurrentDirectory() + @"\problem.txt");
 			
 			using(InputFile)
 			{
