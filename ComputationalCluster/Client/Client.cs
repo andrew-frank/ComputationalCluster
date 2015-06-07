@@ -139,16 +139,19 @@ namespace ComputationalCluster.Nodes
         private void SendSolveRequest(SolveRequest solveRequest)
         {
             String message = solveRequest.SerializeToXML();
-            string response = CMSocket.Instance.SendMessage(this.Port, this.IP, message, this);
+            CMSocket.Instance.SendMessage(this.Port, this.IP, message, this);
 
-            Object obj = response.DeserializeXML();
-            Debug.Assert(obj is SolveRequestResponse, "Wrong response object");
-            SolveRequestResponse requestResopnse = (SolveRequestResponse)obj;
-            Debug.Assert(requestResopnse.IdSpecified, "No ID in solve request response");
-            if (!requestResopnse.IdSpecified)
-                return;
-            Console.WriteLine("ID of the problem" + requestResopnse.Id);
+            //nowy comment
+            //Object obj = response.DeserializeXML();
+            //Debug.Assert(obj is SolveRequestResponse, "Wrong response object");
+            //SolveRequestResponse requestResopnse = (SolveRequestResponse)obj;
+            //Debug.Assert(requestResopnse.IdSpecified, "No ID in solve request response");
+            //if (!requestResopnse.IdSpecified)
+            //    return;
+            //Console.WriteLine("ID of the problem" + requestResopnse.Id);
 
+
+            //stary comment
             //string message = solveRequest.SerializeToXML();
             //string res = CMSocket.Instance.SendMessage(this.Port, this.IP, message, this);
             //Object obj = res.DeserializeXML();

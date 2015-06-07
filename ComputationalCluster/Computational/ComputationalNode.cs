@@ -70,7 +70,8 @@ namespace ComputationalCluster.Nodes
             //var elapsedMs = watch.ElapsedMilliseconds;
             //Console.WriteLine("Algorith executed in: " + elapsedMs + "ms");
 
-            Console.ReadLine();
+
+            while(true) Console.ReadLine();
         }
 
         private void TryServe(IList<Depot> Depots, VehicleInfo vehicleInfo, List<Request> requests)

@@ -27,7 +27,7 @@ namespace ComputationalCluster.Shared.Connection
         // The response from the remote device.
         private static String response = String.Empty;
 
-        public static String StartClient(Int32 port, IPAddress ipAddress, String message, Node node)
+        public static void StartClient(Int32 port, IPAddress ipAddress, String message, Node node)
         {
             // Connect to a remote device.
             try
@@ -41,12 +41,10 @@ namespace ComputationalCluster.Shared.Connection
                 IPEndPoint remoteEP = new IPEndPoint(ipAddress, port);
 
                 // Create a TCP/IP socket.
-                Socket client = new Socket(AddressFamily.InterNetwork,
-                    SocketType.Stream, ProtocolType.Tcp);
+                Socket client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
                 // Connect to the remote endpoint.
-                client.BeginConnect(remoteEP,
-                    new AsyncCallback(ConnectCallback), client);
+                client.BeginConnect(remoteEP, new AsyncCallback(ConnectCallback), client);
                 connectDone.WaitOne();
 
                 // Send test data to the remote device.
@@ -54,24 +52,21 @@ namespace ComputationalCluster.Shared.Connection
                 sendDone.WaitOne();
 
                 // Receive the response from the remote device.
-                Receive(client);
+                Receive(client, node);
                 receiveDone.WaitOne();
 
                 // Write the response to the console.
-                Console.WriteLine("Response received : {0}", response);
-                node.ReceivedResponse(response);
-
+                //Console.WriteLine("Response received : {0}", response);
+                
                 Console.ReadLine();
+
                 // Release the socket.
                 client.Shutdown(SocketShutdown.Both);
                 client.Close();
-                return response;
-
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
-                return response;
             }
         }
 
@@ -85,8 +80,7 @@ namespace ComputationalCluster.Shared.Connection
                 // Complete the connection.
                 client.EndConnect(ar);
 
-                Console.WriteLine("Socket connected to {0}",
-                    client.RemoteEndPoint.ToString());
+                Console.WriteLine("\nSocket connected to {0}", client.RemoteEndPoint.ToString());
 
                 // Signal that the connection has been made.
                 connectDone.Set();
@@ -97,13 +91,14 @@ namespace ComputationalCluster.Shared.Connection
             }
         }
 
-        public static void Receive(Socket client)
+        public static void Receive(Socket client, Node node)
         {
             try
             {
                 // Create the state object.
                 StateObject state = new StateObject();
                 state.workSocket = client;
+                state.node = node;
 
                 // Begin receiving the data from the remote device.
                 client.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
@@ -142,6 +137,7 @@ namespace ComputationalCluster.Shared.Connection
                     if (state.sb.Length > 1)
                     {
                         response = state.sb.ToString();
+                        state.node.ReceivedResponse(response);
                     }
                     // Signal that all bytes have been received.
                     receiveDone.Set();

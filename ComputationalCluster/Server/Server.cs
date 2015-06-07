@@ -66,24 +66,24 @@ namespace ComputationalCluster.Nodes
             String[] Data = new String[3];
 
             Console.Write("Debug? [y/n] \n>");
-            string debug = Console.ReadLine();
+            string debug = "y";// Console.ReadLine();
             if (debug == "y") {
                 Console.WriteLine("Backup? [y/n] \n>");
-                string backup = Console.ReadLine();
+                string backup = "n"; // Console.ReadLine();
+                this.Port = port;
+                this.LocalIP = localIPAddress;
+                this.IP = localIPAddress;
+                this.Timeout = 3;
                 if (backup == "y") {
                     this.BackupMode = true;
-                    this.Port = port;
-                    this.Timeout = 4;
-                    this.Listen(this.Port, localIPAddress);
-                    return;
+                    this.RegisterComponent();
+                    this.StartTimeoutTimer();
+                    while (true) Console.ReadLine();
                 } else {
                     this.BackupMode = false;
-                    this.Port = port;
-                    this.Timeout = 4;
                     this.Listen(this.Port, localIPAddress);
-                    return;
                 }
-                
+                return;
             }
 
             while (Data == null || Data[0] == null || Data[1] == null ||  Data[2] == null ) {
@@ -99,15 +99,15 @@ namespace ComputationalCluster.Nodes
             this.Port = UInt16.Parse(Data[0]);
             this.backupAddr = Data[1];
             this.Timeout = UInt32.Parse(Data[2]);
-
             this.LocalIP = localIPAddress;
-            this.Listen(this.Port, this.LocalIP);
 
-            //TODO: backup server code. These below are unreachable, beacuse of blocking Listen() method
             if (this.BackupMode) {
                 this.RegisterComponent();
                 this.StartTimeoutTimer();
+                return;
             }
+
+            this.Listen(this.Port, this.LocalIP);
         }
 
         #endregion
@@ -133,7 +133,7 @@ namespace ComputationalCluster.Nodes
         #region Private/Communication handling
 
 
-        private string ReceivedRegister(Register register)
+        private string ReceivedRegister(Register register, IPAddress senderAddr)
         {
             string type = register.Type;
             Node newNode;
@@ -142,21 +142,25 @@ namespace ComputationalCluster.Nodes
                 case NodeType.TaskManager:
                     newNode = new TaskManager();
                     newNode.ID = ID;
+                    newNode.IP = senderAddr;
                     this.RegisteredComponents.RegisterTaskManager(newNode);
                     break;
                 case NodeType.ComputationalNode:
                     newNode = new ComputationalNode();
                     newNode.ID = ID;
+                    newNode.IP = senderAddr;
                     this.RegisteredComponents.RegisterComputationalNode(newNode);
                     break;
                 case NodeType.Server:
-                    newNode = new Server(); //not needed?
+                    newNode = new Server();
                     newNode.ID = ID;
+                    newNode.IP = senderAddr;
                     this.RegisteredComponents.RegisterBackupServer(newNode);
                     break;
-                case NodeType.Client: //not needed
+                case NodeType.Client: //not needed!
                     newNode = new ComputationalNode();
                     newNode.ID = ID;
+                    newNode.IP = senderAddr;
                     this.RegisteredComponents.RegisterClient(newNode);
                     break;
                 default:
@@ -285,7 +289,7 @@ namespace ComputationalCluster.Nodes
         /// </summary>
         /// <param name="xml">Message received from a node</param>
         /// <returns>Serialized response to a node</returns>
-        public string ReceivedMessage(string xml)
+        public string ReceivedMessage(string xml, IPAddress senderAddr)
         {
             Object obj = xml.DeserializeXML();
 
@@ -293,7 +297,7 @@ namespace ComputationalCluster.Nodes
                 return this.ReceivedDivideProblem((DivideProblem)obj);
 
             } else if (obj is Register) {
-                return this.ReceivedRegister((Register)obj);
+                return this.ReceivedRegister((Register)obj, senderAddr);
 
             }else if (obj is SolutionRequest) {
                 return this.ReceivedSolutionRequest((SolutionRequest)obj);

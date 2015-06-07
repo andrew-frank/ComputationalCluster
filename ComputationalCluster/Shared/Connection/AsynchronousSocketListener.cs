@@ -23,6 +23,8 @@ namespace ComputationalCluster.Shared.Connection
         public byte[] buffer = new byte[BufferSize];
         // Received data string.
         public StringBuilder sb = new StringBuilder();
+
+        public Node node;
     }
 
     public class AsynchronousSocketListener
@@ -120,7 +122,7 @@ namespace ComputationalCluster.Shared.Connection
                 // more data.
                 content = state.sb.ToString();
                 if (content.DeserializeXML() == null)
-                //if (content.IndexOf("<EOF>") > -1)
+                //if (content.IndexOf("<EOF>") < 0)
                 {
 
                     // Not all data received. Get more.
@@ -131,14 +133,12 @@ namespace ComputationalCluster.Shared.Connection
                 {
                     // All the data has been read from the 
                     // client. Display it on the console.
-                    Console.WriteLine("Read {0} bytes from socket. \n Data : {1}",
-                        content.Length, content);
-
+                    //Console.WriteLine("Read {0} bytes from socket. \n Data : {1}", content.Length, content);
 
                     // Echo the data back to the client.
                     Server server = Server.MainServer;
                     content = content.Replace("<EOF>", "");
-                    Send(handler, server.ReceivedMessage(content));
+                    Send(handler, server.ReceivedMessage(content, ((handler.RemoteEndPoint) as IPEndPoint).Address));
                 }
             }
         }
@@ -162,7 +162,7 @@ namespace ComputationalCluster.Shared.Connection
 
                 // Complete sending the data to the remote device.
                 int bytesSent = handler.EndSend(ar);
-                Console.WriteLine("Sent {0} bytes to client.", bytesSent);
+                //Console.WriteLine("Sent {0} bytes to client.", bytesSent);
 
                 handler.Shutdown(SocketShutdown.Both);
                 handler.Close();

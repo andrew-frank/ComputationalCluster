@@ -61,7 +61,7 @@ namespace ComputationalCluster.Nodes
 
         public void ReceivedResponse(string xml)
         {
-            Console.WriteLine("Node - received response: " + xml);
+            Console.WriteLine("Node - received response:\n" + xml + "\n");
             Object obj = xml.DeserializeXML();
             //Debug.Assert(obj is NoOperation, "Wrong server response");
             //this.ReceivedNoOperation((NoOperation)obj);
@@ -121,8 +121,9 @@ namespace ComputationalCluster.Nodes
             String message = "";
             Status status = this.CurrentStatus();
             message = status.SerializeToXML();
-            string response = CMSocket.Instance.SendMessage(this.Port, this.IP, message, this);
-            this.ReceivedResponse(response);
+            CMSocket.Instance.SendMessage(this.Port, this.IP, message, this);
+
+            //this.ReceivedResponse(response);
         }
 
 

@@ -30,9 +30,9 @@ namespace ComputationalCluster.Shared.Connection
             }
         }
 
-        public string SendMessage(Int32 port, IPAddress server, String message, Node node)
+        public void SendMessage(Int32 port, IPAddress server, String message, Node node)
         {
-            return AsynchronousClient.StartClient(port, server, message, node);
+            AsynchronousClient.StartClient(port, server, message, node);
         }
 
     }
