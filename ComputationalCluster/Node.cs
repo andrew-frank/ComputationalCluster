@@ -58,6 +58,11 @@ namespace ComputationalCluster.Nodes
             return msg;
         }
 
+        public void FailedToConnectToServer()
+        {
+            //unimplemented
+        }
+
 
         public void ReceivedResponse(string xml)
         {

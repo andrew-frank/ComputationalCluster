@@ -67,6 +67,7 @@ namespace ComputationalCluster.Shared.Connection
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
+                node.FailedToConnectToServer();
             }
         }
 
