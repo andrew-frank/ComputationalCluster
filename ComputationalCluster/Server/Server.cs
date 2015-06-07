@@ -68,11 +68,22 @@ namespace ComputationalCluster.Nodes
             Console.Write("Debug? [y/n] \n>");
             string debug = Console.ReadLine();
             if (debug == "y") {
-                Console.WriteLine("");
-                this.Port = port;
-                this.Timeout = 4;
-                this.Listen(this.Port, localIPAddress);
-                return;
+                Console.WriteLine("Backup? [y/n] \n>");
+                string backup = Console.ReadLine();
+                if (backup == "y") {
+                    this.BackupMode = true;
+                    this.Port = port;
+                    this.Timeout = 4;
+                    this.Listen(this.Port, localIPAddress);
+                    return;
+                } else {
+                    this.BackupMode = false;
+                    this.Port = port;
+                    this.Timeout = 4;
+                    this.Listen(this.Port, localIPAddress);
+                    return;
+                }
+                
             }
 
             while (Data == null || Data[0] == null || Data[1] == null ||  Data[2] == null ) {
