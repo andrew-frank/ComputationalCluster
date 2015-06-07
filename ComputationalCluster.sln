@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
-MinimumVisualStudioVersion = 10.0.40219.1
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComputationalClusterTests", "ComputationalClusterTests\ComputationalClusterTests.csproj", "{B34B6CE0-97B3-43E4-B277-0A03A7FCF32C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComputationalCluster", "ComputationalCluster\ComputationalCluster.csproj", "{CD39E59A-5A1A-4A80-BE99-C65AE027337D}"
@@ -10,6 +8,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VehicleRouting", "VehicleRouting2\VehicleRouting\VehicleRouting.csproj", "{841CC7E9-7250-43B5-8F8F-6078F2005121}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dummy", "Dummy\Dummy.csproj", "{F1528A1E-594A-45DE-81C7-EF9DA324D520}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AL_FOR_DVRP", "..\..\..\Desktop\DVRP2\Class Library\AL_FOR_DVRP\AL_FOR_DVRP.csproj", "{AFA5C34A-34F7-4D74-BF03-59A685FAE5C2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MAIN_FOR_DVRP", "..\..\..\Desktop\DVRP2\Console Application\MAIN_FOR_DVRP\MAIN_FOR_DVRP.csproj", "{64D6033F-EA0E-4D66-A622-82B6493863B8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,14 @@ Global
 		{F1528A1E-594A-45DE-81C7-EF9DA324D520}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F1528A1E-594A-45DE-81C7-EF9DA324D520}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F1528A1E-594A-45DE-81C7-EF9DA324D520}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFA5C34A-34F7-4D74-BF03-59A685FAE5C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFA5C34A-34F7-4D74-BF03-59A685FAE5C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFA5C34A-34F7-4D74-BF03-59A685FAE5C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFA5C34A-34F7-4D74-BF03-59A685FAE5C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64D6033F-EA0E-4D66-A622-82B6493863B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64D6033F-EA0E-4D66-A622-82B6493863B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64D6033F-EA0E-4D66-A622-82B6493863B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64D6033F-EA0E-4D66-A622-82B6493863B8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
