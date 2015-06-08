@@ -23,20 +23,28 @@ using ComputationalCluster.Misc;
 
 namespace ComputationalCluster.Nodes
 {
+    public struct BackupServerQueue
+    {
+        public ulong backupServerId;
+        public Queue<string> messages;
+    }
+
     public sealed class Server : Node
     {
         #region Properties/ivars
 
-        public static Server MainServer { get; private set; }
+        public static Server MainServer { get; set; }
 
         static ulong TaskIDCounter = 0;
 
         private ServerQueues serverQueues { get; set; }
 
+        private List<BackupServerQueue> backupServerQueues { get; set; }
+
         [Obsolete] //po co nam to tu? patrz 'Registered Nodes'
         public string backupAddr;
 
-        public bool BackupMode { get; private set; }
+        public bool BackupMode { get; set; }
 
         #endregion
 
@@ -51,11 +59,8 @@ namespace ComputationalCluster.Nodes
         {
             this.NodeType = NodeType.Server;
             this.serverQueues = new ServerQueues();
+            this.backupServerQueues = new List<BackupServerQueue>();
             this.BackupMode = false;
-
-            ///
-            if (this.BackupMode == false)
-                Server.MainServer = this;
         }
 
 
@@ -66,10 +71,12 @@ namespace ComputationalCluster.Nodes
             String[] Data = new String[3];
 
             Console.Write("Debug? [y/n] \n>");
-            string debug = "y";// Console.ReadLine();
+            string debug = Console.ReadLine();
+            //string debug = "y";
             if (debug == "y") {
                 Console.WriteLine("Backup? [y/n] \n>");
-                string backup = "n"; // Console.ReadLine();
+                string backup = Console.ReadLine();
+                //string backup = "n";
                 this.Port = port;
                 this.LocalIP = localIPAddress;
                 this.IP = localIPAddress;
@@ -81,6 +88,7 @@ namespace ComputationalCluster.Nodes
                     while (true) Console.ReadLine();
                 } else {
                     this.BackupMode = false;
+                    Server.MainServer = this;
                     this.Listen(this.Port, localIPAddress);
                 }
                 return;
@@ -94,7 +102,14 @@ namespace ComputationalCluster.Nodes
                 parameters = Console.ReadLine();
                 parameters = parameters.Replace(" ", string.Empty);
                 Data = this.ParseParameters(parameters);
+
+                Console.WriteLine("Backup mode not implemented via console");
+                //ARE WE BACKUP?!?!! need to get this data from the console
+                //this.BackupMode = 
             }
+
+            if (this.BackupMode == false)
+                Server.MainServer = this;
 
             this.Port = UInt16.Parse(Data[0]);
             this.backupAddr = Data[1];
@@ -117,6 +132,7 @@ namespace ComputationalCluster.Nodes
         protected override Status CurrentStatus()
         {
             Status status = new Status();
+            status.Id = this.ID;
             return status;
         }
 
@@ -143,25 +159,33 @@ namespace ComputationalCluster.Nodes
                     newNode = new TaskManager();
                     newNode.ID = ID;
                     newNode.IP = senderAddr;
+                    newNode.NodeType = Nodes.NodeType.TaskManager;
                     this.RegisteredComponents.RegisterTaskManager(newNode);
                     break;
                 case NodeType.ComputationalNode:
                     newNode = new ComputationalNode();
                     newNode.ID = ID;
                     newNode.IP = senderAddr;
+                    newNode.NodeType = Nodes.NodeType.ComputationalNode;
                     this.RegisteredComponents.RegisterComputationalNode(newNode);
                     break;
                 case NodeType.Server:
                     newNode = new Server();
                     newNode.ID = ID;
+                    BackupServerQueue bsq = new BackupServerQueue {
+                        backupServerId = ID,
+                        messages = new Queue<string>()
+                    };
                     newNode.IP = senderAddr;
+                    newNode.NodeType = Nodes.NodeType.Server;
                     this.RegisteredComponents.RegisterBackupServer(newNode);
                     break;
                 case NodeType.Client: //not needed!
-                    newNode = new ComputationalNode();
-                    newNode.ID = ID;
-                    newNode.IP = senderAddr;
-                    this.RegisteredComponents.RegisterClient(newNode);
+                    //newNode = new ComputationalClient();
+                    //newNode.ID = ID;
+                    //newNode.IP = senderAddr;
+                    //newNode.NodeType = Nodes.NodeType.Client;
+                    //this.RegisteredComponents.RegisterClient(newNode);
                     break;
                 default:
                     break;
@@ -179,17 +203,24 @@ namespace ComputationalCluster.Nodes
                     backup.port = comp.Port;
                     backup.portSpecified = true;
                 }
+                backupServers.Add(backup);
             }
 
             response.BackupCommunicationServers = backupServers.ToArray();
             return response.SerializeToXML();
         }
 
+        //public static bool kupa = false;
 
         private string ReceivedStatus(Status status)
         {
             Debug.Assert(this.serverQueues != null, "null server queue");
             Node node = this.RegisteredComponents.NodeWithID(status.Id);
+
+            NoOperation noOperationResponse = new NoOperation();
+            if (node == null)
+                return noOperationResponse.SerializeToXML();
+
             switch (node.NodeType) {
                 case NodeType.TaskManager:
                     if (this.serverQueues.SolveRequests.Count > 0) {
@@ -207,6 +238,13 @@ namespace ComputationalCluster.Nodes
                         return partialProblems.SerializeToXML();
                     }
                     break;
+                case NodeType.Server: {
+                        foreach (BackupServerQueue bsq in this.backupServerQueues) {
+                            if(bsq.backupServerId == status.Id)
+                                return bsq.messages.Dequeue();
+                        }
+                    }
+                    break;
                 default:
                     break;
             }
@@ -217,7 +255,6 @@ namespace ComputationalCluster.Nodes
                 return (new NoOperation()).SerializeToXML();
             }
 
-            NoOperation noOperationResponse = new NoOperation();
             return noOperationResponse.SerializeToXML();
         }
 
@@ -292,6 +329,8 @@ namespace ComputationalCluster.Nodes
         public string ReceivedMessage(string xml, IPAddress senderAddr)
         {
             Object obj = xml.DeserializeXML();
+            foreach(BackupServerQueue bsq in this.backupServerQueues)
+                bsq.messages.Enqueue(xml);
 
             if (obj is DivideProblem) {  //Message to task Manager
                 return this.ReceivedDivideProblem((DivideProblem)obj);
@@ -332,7 +371,7 @@ namespace ComputationalCluster.Nodes
         #region Connection/Private
 
 
-        private void Listen(Int32 port, IPAddress localAddr)
+        public void Listen(Int32 port, IPAddress localAddr)
         {
             AsynchronousSocketListener.StartListening(port, localAddr);         
         }

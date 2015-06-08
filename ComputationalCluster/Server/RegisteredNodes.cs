@@ -19,12 +19,12 @@ namespace ComputationalCluster.Nodes
         private List<Node> _clients = new List<Node>();
         private List<Node> _taskManagers = new List<Node>();
         private List<Node> _computationalNodes = new List<Node>();
-        private List<Node> _backupServers = new List<Node>();
+        private Queue<Node> _backupServers = new Queue<Node>();
 
         public List<Node> Clients { get { return _clients; } }
         public List<Node> TaskManagers { get { return _taskManagers; } }
         public List<Node> ComputationalNodes { get { return _computationalNodes; } }
-        public List<Node> BackupServers { get { return _backupServers; } }
+        public Queue<Node> BackupServers { get { return _backupServers; } }
 
         #endregion
 
@@ -49,12 +49,16 @@ namespace ComputationalCluster.Nodes
                 if (n.IP.Equals(node.IP) && n.Port == node.Port)
                     return;
             }
-            this.BackupServers.Add(node);
+
+            this.BackupServers.Enqueue(node);
         }
 
         public void UpdateBackupServers(List<Node> backupservers)
         {
-            _backupServers = backupservers;
+            _backupServers.Clear();
+            foreach (Node n in backupservers)
+                _backupServers.Enqueue(n);
+            //_backupServers = backupservers;
         }
 
         public bool DeregisterClient(Node node)

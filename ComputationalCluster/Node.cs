@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Timers;
 
@@ -16,6 +17,10 @@ namespace ComputationalCluster.Nodes
     public abstract class Node : Object
     {
         #region Properties
+
+
+        public bool ReconnectMode = false;
+        //public Queue<string> MsgQueues = new Queue<string>();
 
         protected Timer TimeoutTimer { get; private set; }
 
@@ -58,9 +63,51 @@ namespace ComputationalCluster.Nodes
             return msg;
         }
 
-        public void FailedToConnectToServer()
+        public void FailedToSendToServer(String message)
         {
-            //unimplemented
+            if (this.ReconnectMode)
+                return;
+            this.ReconnectMode = true;
+
+            //if(this.TimeoutTimer != null)
+            //this.TimeoutTimer.Stop();
+            if (this.RegisteredComponents.BackupServers.Count <= 0) {
+                Console.WriteLine("No more backup servers");
+                this.ReconnectMode = false;
+                return;
+            }
+
+            Node backupServer = this.RegisteredComponents.BackupServers.Dequeue();
+
+            if (this.NodeType == Nodes.NodeType.Server) {
+                if (backupServer.ID == this.ID) {
+                    (this as Server).BackupMode = true;
+                    this.IP = backupServer.IP;
+                    //this.Port = backupServer.Port;
+                    if (this.TimeoutTimer != null) {
+                        this.TimeoutTimer.Stop();
+                        this.TimeoutTimer = null;
+                    }
+                    this.ReconnectMode = false;
+                    Server.MainServer = (Server)this;
+                    (this as Server).Listen(this.Port, this.IP);
+                }
+                return;
+            }
+
+            this.RegisteredComponents.BackupServers.Enqueue(backupServer);
+
+            if (backupServer == null) {
+                Console.WriteLine("No more backup servers");
+                return;
+            }
+
+            this.IP = backupServer.IP;
+            this.Port = backupServer.Port;
+            this.ReconnectMode = false;
+            //this.TimeoutTimer.Start();
+            if(message != null)
+                CMSocket.Instance.SendMessage(this.Port, this.IP, message, this);
         }
 
 
@@ -73,6 +120,18 @@ namespace ComputationalCluster.Nodes
 
             if (obj is RegisterResponse) {
                 RegisterResponse registerResponse = (RegisterResponse)obj;
+
+                RegisterResponseBackupCommunicationServersBackupCommunicationServer[] backupServers = registerResponse.BackupCommunicationServers;
+                foreach (RegisterResponseBackupCommunicationServersBackupCommunicationServer comp in backupServers) {
+                    Node backup = new Server();
+                    backup.IP = IPAddress.Parse(comp.address);
+                    backup.Timeout = registerResponse.Timeout;
+                    backup.ID = registerResponse.Id;
+                    if (comp.portSpecified)
+                        backup.Port = comp.port;
+                    this.RegisteredComponents.RegisterBackupServer(backup);
+                }
+
                 this.ID = registerResponse.Id;
                 this.Timeout = registerResponse.Timeout;
                 this.StartTimeoutTimer();
