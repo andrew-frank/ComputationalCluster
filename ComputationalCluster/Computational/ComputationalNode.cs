@@ -72,6 +72,12 @@ namespace ComputationalCluster.Nodes
             //var elapsedMs = watch.ElapsedMilliseconds;
             //Console.WriteLine("Algorith executed in: " + elapsedMs + "ms");
 
+            //////////////ALOGIRTHM 2///////////////
+      //    string a = File.ReadAllText("problem9.vrp");
+      //     newExampleObject o = ProblemLoader.loadnewExampleString(a);
+       //   double d=  AlgorithmSolution.Find_Solution(o.Location, o.DeliverDemand, o.ServiceBegin, o.ServiceEnd, o.ServiceDuration, o.DistanceMatrix, o.DriveTimeMatrix, o.VehicleName, o.VehicleCapacity);
+            //    Console.WriteLine("This is the answer from algorithm: " + d);
+
 
             while(true) Console.ReadLine();
         }
@@ -121,15 +127,6 @@ namespace ComputationalCluster.Nodes
 
         protected override Status CurrentStatus()
         {
-
-            //This shouldn't be here, just a check.
-
-      //     string a = File.ReadAllText("problem9.vrp");
-        //    newExampleObject o = ProblemLoader.loadnewExampleString(a);
-
-       //  double d=  AlgorithmSolution.Find_Solution(o.Location, o.DeliverDemand, o.ServiceBegin, o.ServiceEnd, o.ServiceDuration, o.DistanceMatrix, o.DriveTimeMatrix, o.VehicleName, o.VehicleCapacity);
-       //  Console.WriteLine("This is the answer from algorithm: " + d);
-
             Status status = new Status();
             status.Threads = this.CurrentStatusThreads();
             status.Id = this.ID;
