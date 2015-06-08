@@ -7,27 +7,21 @@ using System.Threading.Tasks;
 namespace ComputationalCluster.Computational
 {
 
-    public class ExampleObject
-    {
-        public IList<Depot> Depots;
-        public VehicleInfo vehicleInfo;
-        public List<Request> Requests;
-    }
 
     public class newExampleObject
     {
 
-        public int[] Location;
-        public double[] DeliverDemand;
-        public int[] ServiceDuration;
-        public int[] ServiceBegin;
-        public int[] ServiceEnd;
-        public string[] VehicleName;
-        public double[] VehicleCapacity;
-        public int[] X_Coordinate;
-        public int[] Y_Coordinate;
-        public double[,] DistanceMatrix;
-        public double[,] DriveTimeMatrix;
+     public   int[] Location;
+     public  double[] DeliverDemand;
+     public   int[] ServiceDuration;
+     public  int[] ServiceBegin;
+     public  int[] ServiceEnd;
+     public   string[] VehicleName;
+     public   double[] VehicleCapacity;
+     public   int[] X_Coordinate;
+     public   int[] Y_Coordinate;
+     public double[,] DistanceMatrix;
+     public double[,] DriveTimeMatrix;
         public newExampleObject()
         {
 
@@ -37,7 +31,7 @@ namespace ComputationalCluster.Computational
         {
             Location = locations;
             DeliverDemand = deliverdemand;
-            ServiceDuration = serviceduration;
+            ServiceDuration=serviceduration;
             ServiceBegin = servicebegin;
             ServiceEnd = serviceend;
             VehicleName = vehiclename;
@@ -53,8 +47,6 @@ namespace ComputationalCluster.Computational
 
 
     }
-
-
 
 
 }

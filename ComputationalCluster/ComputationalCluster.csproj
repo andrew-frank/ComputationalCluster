@@ -63,6 +63,10 @@
   <ItemGroup>
     <Compile Include="Client\Client.cs" />
     <Compile Include="Computational\ExampleObject.cs" />
+    <Compile Include="Computational\New Algorithm\AlgorithmSolution.cs" />
+    <Compile Include="Computational\New Algorithm\Chromosome.cs" />
+    <Compile Include="Computational\New Algorithm\Population.cs" />
+    <Compile Include="Computational\New Algorithm\TerminationCriteria.cs" />
     <Compile Include="Computational\ProblemLoader.cs" />
     <Compile Include="Computational\BruteForceCounter.cs" />
     <Compile Include="Computational\ImpossibleRouteException.cs" />
@@ -80,26 +84,26 @@
     <Compile Include="Server\RegisteredNodes.cs" />
     <Compile Include="Server\Server.cs" />
     <Compile Include="Server\ServerQueues.cs" />
-    <Compile Include="Shared\Connection\AsynchronousSocketListener.cs" />
-    <Compile Include="Shared\Connection\ConnectionService.cs" />
-    <Compile Include="Shared\Connection\AsynchronusClient.cs" />
-    <Compile Include="Shared\Messages\DivideProblem.cs" />
-    <Compile Include="Shared\Messages\Message.cs" />
-    <Compile Include="Shared\Messages\NoOperation.cs" />
-    <Compile Include="Shared\Messages\Register.cs" />
-    <Compile Include="Shared\Messages\RegisterResponse.cs" />
-    <Compile Include="Shared\Messages\SolutionRequest.cs" />
-    <Compile Include="Shared\Messages\Solutions.cs" />
-    <Compile Include="Shared\Messages\SolvePartialProblems.cs" />
-    <Compile Include="Shared\Messages\SolveRequest.cs" />
-    <Compile Include="Shared\Messages\SolveRequestResponse.cs" />
-    <Compile Include="Shared\Messages\Status.cs" />
-    <Compile Include="Shared\Misc\FinalSolution.cs" />
+    <Compile Include="TaskManager\Shared\Connection\AsynchronousSocketListener.cs" />
+    <Compile Include="TaskManager\Shared\Connection\ConnectionService.cs" />
+    <Compile Include="TaskManager\Shared\Connection\AsynchronusClient.cs" />
+    <Compile Include="TaskManager\Shared\Messages\DivideProblem.cs" />
+    <Compile Include="TaskManager\Shared\Messages\Message.cs" />
+    <Compile Include="TaskManager\Shared\Messages\NoOperation.cs" />
+    <Compile Include="TaskManager\Shared\Messages\Register.cs" />
+    <Compile Include="TaskManager\Shared\Messages\RegisterResponse.cs" />
+    <Compile Include="TaskManager\Shared\Messages\SolutionRequest.cs" />
+    <Compile Include="TaskManager\Shared\Messages\Solutions.cs" />
+    <Compile Include="TaskManager\Shared\Messages\SolvePartialProblems.cs" />
+    <Compile Include="TaskManager\Shared\Messages\SolveRequest.cs" />
+    <Compile Include="TaskManager\Shared\Messages\SolveRequestResponse.cs" />
+    <Compile Include="TaskManager\Shared\Messages\Status.cs" />
+    <Compile Include="TaskManager\Shared\Misc\FinalSolution.cs" />
     <Compile Include="Node.cs" />
-    <Compile Include="Shared\Misc\PartialProblem.cs" />
-    <Compile Include="Shared\Misc\PartialSolution.cs" />
-    <Compile Include="Shared\Misc\Problem.cs" />
-    <Compile Include="Shared\Utilities\Utilities.cs" />
+    <Compile Include="TaskManager\Shared\Misc\PartialProblem.cs" />
+    <Compile Include="TaskManager\Shared\Misc\PartialSolution.cs" />
+    <Compile Include="TaskManager\Shared\Misc\Problem.cs" />
+    <Compile Include="TaskManager\Shared\Utilities\Utilities.cs" />
     <Compile Include="TaskManager\TaskManager.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -123,7 +127,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
