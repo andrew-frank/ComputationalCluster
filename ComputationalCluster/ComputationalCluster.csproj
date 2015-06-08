@@ -63,6 +63,10 @@
   <ItemGroup>
     <Compile Include="Client\Client.cs" />
     <Compile Include="Computational\ExampleObject.cs" />
+    <Compile Include="Computational\New Algorithm\AlgorithmSolution.cs" />
+    <Compile Include="Computational\New Algorithm\Chromosome.cs" />
+    <Compile Include="Computational\New Algorithm\Population.cs" />
+    <Compile Include="Computational\New Algorithm\TerminationCriteria.cs" />
     <Compile Include="Computational\ProblemLoader.cs" />
     <Compile Include="Computational\BruteForceCounter.cs" />
     <Compile Include="Computational\ImpossibleRouteException.cs" />
@@ -123,7 +127,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
