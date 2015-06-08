@@ -145,30 +145,34 @@ public class Program
 
 
 
-			double[,] DistanceMatrix = new double[Location.GetLength(0), Location.GetLength(0)];
-			double[,] DriveTimeMatrix = new double[Location.GetLength(0), Location.GetLength(0)];
+            //double[,] DistanceMatrix = new double[Location.GetLength(0), Location.GetLength(0)];
+            //double[,] DriveTimeMatrix = new double[Location.GetLength(0), Location.GetLength(0)];
 			
-			for(int i=0;i<X_Coordinate.Length;i++)
-			{
-				for(int j=i;j<X_Coordinate.Length;j++)
-				{
-					if(i==j)
-					{
-						DistanceMatrix[i,j] = 0;
-						DriveTimeMatrix[i,j] = 0;
+            //for(int i=0;i<X_Coordinate.Length;i++)
+            //{
+            //    for(int j=i;j<X_Coordinate.Length;j++)
+            //    {
+            //        if(i==j)
+            //        {
+            //            DistanceMatrix[i,j] = 0;
+            //            DriveTimeMatrix[i,j] = 0;
 						
-					}
-					else
-					{
-						DistanceMatrix[i,j]=Math.Sqrt((X_Coordinate[i] - X_Coordinate[j])*(X_Coordinate[i] - X_Coordinate[j]) + (Y_Coordinate[i] - Y_Coordinate[j])*(Y_Coordinate[i] - Y_Coordinate[j]));
-						DriveTimeMatrix[i,j] = DistanceMatrix[i,j];
-						DistanceMatrix[j,i] = DistanceMatrix[i,j];
-						DriveTimeMatrix[j,i] = DriveTimeMatrix[i,j];
-					}
+            //        }
+            //        else
+            //        {
+            //            DistanceMatrix[i,j]=Math.Sqrt((X_Coordinate[i] - X_Coordinate[j])*(X_Coordinate[i] - X_Coordinate[j]) + (Y_Coordinate[i] - Y_Coordinate[j])*(Y_Coordinate[i] - Y_Coordinate[j]));
+            //            DriveTimeMatrix[i,j] = DistanceMatrix[i,j];
+            //            DistanceMatrix[j,i] = DistanceMatrix[i,j];
+            //            DriveTimeMatrix[j,i] = DriveTimeMatrix[i,j];
+            //        }
 					
-				}
-			}
-			
+            //    }
+            //}
+
+        double[,] DistanceMatrix = o.DistanceMatrix;
+        double[,] DriveTimeMatrix = o.DriveTimeMatrix ;
+
+
 			Console.WriteLine("\n" + "Input data files have been successfully read.");
 
 			AlgorithmSolution.Find_Solution(Location,DeliverDemand,ServiceBegin,ServiceEnd,ServiceDuration,DistanceMatrix,DriveTimeMatrix,VehicleName,VehicleCapacity);
@@ -191,6 +195,6 @@ public class Program
 		}
 		
 		Console.ReadKey(true);
-		
+        Console.ReadKey();		
 	}
 }

@@ -20,13 +20,14 @@ namespace ComputationalCluster.Computational
      public   double[] VehicleCapacity;
      public   int[] X_Coordinate;
      public   int[] Y_Coordinate;
-
+     public double[,] DistanceMatrix;
+     public double[,] DriveTimeMatrix;
         public newExampleObject()
         {
 
         }
         public newExampleObject(int[] locations, double[] deliverdemand, int[] serviceduration, int[] servicebegin, int[] serviceend, string[] vehiclename,
-            double[] vehiclecapacity, int[] x_Coordinate, int[] y_Coordinate)
+            double[] vehiclecapacity, int[] x_Coordinate, int[] y_Coordinate, double[,] distancematrix, double[,] drivetimematrix)
         {
             Location = locations;
             DeliverDemand = deliverdemand;
@@ -37,7 +38,8 @@ namespace ComputationalCluster.Computational
             VehicleCapacity = vehiclecapacity;
             X_Coordinate = x_Coordinate;
             Y_Coordinate = y_Coordinate;
-
+            DistanceMatrix = distancematrix;
+            DriveTimeMatrix = drivetimematrix;
         }
 
 

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -45,6 +46,8 @@ namespace ComputationalCluster.Client
             List<double> VehicleCapacityList = new List<double>();
             List<int> X_CoordinateList = new List<int>();
             List<int> Y_CoordinateList = new List<int>();
+            double[,] DistanceMatrix = new Double[4,4];
+            double[,] DriveTimeMatrix = new Double[4,4];
             #endregion
             if (filename != null)
             {
@@ -54,17 +57,31 @@ namespace ComputationalCluster.Client
                     System.IO.StreamReader file =
                     new System.IO.StreamReader(filename);
 
+                    String[] linesOfFile = { };
+                    try
+                    {
+                        linesOfFile = File.ReadAllLines(filename);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("EXCEPTION: " + e.Message);
+                    }  
+
+
                     String[] words;
                     String[] separators = { ":" };
-
-                    while ((line = file.ReadLine()) != null)
+              
+                 //  while ((line = file.ReadLine()) != null)
+                    for (int j = 0; j < linesOfFile.Count(); j++ )
                     {
+                        line=linesOfFile[j];
+           
                         words = line.Split(separators, StringSplitOptions.RemoveEmptyEntries);
                         if (line.Contains("NUM_DEPOTS"))
                         {
 
                             n_depots = Int32.Parse(words[1]);
-                      
+
                         }
                         if (line.Contains("NUM_CAPACITIES"))
                         {
@@ -86,14 +103,16 @@ namespace ComputationalCluster.Client
                         if (line.Contains("CAPACITIES"))
                         {
 
-                            capacity = Int32.Parse(words[1]); 
+                            capacity = Int32.Parse(words[1]);
                         }
 
                         if (line.Contains("DEMAND_SECTION"))
                         {
                             for (int i = n_depots; i < n_locations; i++)
                             {
-                                line = file.ReadLine();
+                              //  line = file.ReadLine();
+                                j++;
+                                line = linesOfFile[j];
                                 string[] Words = line.Split(' ');
                                 demands.Add(int.Parse(Words[Words.Count() - 1]));
                             }
@@ -102,7 +121,9 @@ namespace ComputationalCluster.Client
                         {
                             for (int i = 0; i < n_locations; i++)
                             {
-                                line = file.ReadLine();
+                            //    line = file.ReadLine();
+                                j++;
+                                line = linesOfFile[j];
                                 string[] Words = line.Split(' ');
                                 Point p = new Point(int.Parse(Words[3]), int.Parse(Words[4]));
                                 locations.Add(p);
@@ -112,7 +133,9 @@ namespace ComputationalCluster.Client
                         {
                             for (int i = 0; i < n_depots; i++)
                             {
-                                line = file.ReadLine();
+                           //     line = file.ReadLine();
+                                j++;
+                                line = linesOfFile[j];
                                 string[] Words = line.Split(' ');
                                 durations.Add(int.Parse(Words[Words.Count() - 1]));
                             }
@@ -121,7 +144,9 @@ namespace ComputationalCluster.Client
                         {
                             for (int i = 0; i < n_depots; i++)
                             {
-                                line = file.ReadLine();
+                             //   line = file.ReadLine();
+                                j++;
+                                line = linesOfFile[j];
                                 string[] Words = line.Split(' ');
                                 TimeWindows.Add(int.Parse(Words[Words.Count() - 1]));///
                             }
@@ -130,7 +155,9 @@ namespace ComputationalCluster.Client
                         {
                             for (int i = 0; i < demands.Count(); i++)
                             {
-                                line = file.ReadLine();
+                              //  line = file.ReadLine();
+                                j++;
+                                line = linesOfFile[j];
                                 string[] Words = line.Split(' ');
                                 TimeAvailable.Add(int.Parse(Words[Words.Count() - 1]));
                             }
@@ -175,9 +202,31 @@ namespace ComputationalCluster.Client
                     ServiceBeginList[i]=0;
 
                     }
+                    int[] Location = LocationList.ToArray(); 
+                     DistanceMatrix = new double[Location.GetLength(0), Location.GetLength(0)];
+                     DriveTimeMatrix = new double[Location.GetLength(0), Location.GetLength(0)];
+                    int[] X_Coordinate = X_CoordinateList.ToArray();
+                    int[] Y_Coordinate = Y_CoordinateList.ToArray(); 
+                    for (int i = 0; i < X_Coordinate.Length; i++)
+                    {
+                        for (int j = i; j < X_Coordinate.Length; j++)
+                        {
+                            if (i == j)
+                            {
+                                DistanceMatrix[i, j] = 0;
+                                DriveTimeMatrix[i, j] = 0;
 
+                            }
+                            else
+                            {
+                                DistanceMatrix[i, j] = Math.Sqrt((X_Coordinate[i] - X_Coordinate[j]) * (X_Coordinate[i] - X_Coordinate[j]) + (Y_Coordinate[i] - Y_Coordinate[j]) * (Y_Coordinate[i] - Y_Coordinate[j]));
+                                DriveTimeMatrix[i, j] = DistanceMatrix[i, j];
+                                DistanceMatrix[j, i] = DistanceMatrix[i, j];
+                                DriveTimeMatrix[j, i] = DriveTimeMatrix[i, j];
+                            }
 
-
+                        }
+                    }
 
                 }
 
@@ -189,7 +238,7 @@ namespace ComputationalCluster.Client
             }
            
             newExampleObject o = new newExampleObject(LocationList.ToArray(), DeliverDemandList.ToArray(), ServiceDurationList.ToArray(),
-                     ServiceBeginList.ToArray(), ServiceEndList.ToArray(), VehicleNameList.ToArray(), VehicleCapacityList.ToArray(), X_CoordinateList.ToArray(), Y_CoordinateList.ToArray());
+                     ServiceBeginList.ToArray(), ServiceEndList.ToArray(), VehicleNameList.ToArray(), VehicleCapacityList.ToArray(), X_CoordinateList.ToArray(), Y_CoordinateList.ToArray(), DistanceMatrix, DriveTimeMatrix);
             return o;
 
         }
