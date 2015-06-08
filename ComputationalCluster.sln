@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComputationalClusterTests", "ComputationalClusterTests\ComputationalClusterTests.csproj", "{B34B6CE0-97B3-43E4-B277-0A03A7FCF32C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComputationalCluster", "ComputationalCluster\ComputationalCluster.csproj", "{CD39E59A-5A1A-4A80-BE99-C65AE027337D}"
@@ -10,6 +12,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dummy", "Dummy\Dummy.csproj", "{F1528A1E-594A-45DE-81C7-EF9DA324D520}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MAIN_FOR_DVRP", "MAIN_FOR_DVRP\MAIN_FOR_DVRP.csproj", "{64D6033F-EA0E-4D66-A622-82B6493863B8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dummy2", "Dummy2\Dummy2.csproj", "{324C3409-C54C-4132-9664-623632FAECD9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +41,10 @@ Global
 		{64D6033F-EA0E-4D66-A622-82B6493863B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{64D6033F-EA0E-4D66-A622-82B6493863B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{64D6033F-EA0E-4D66-A622-82B6493863B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{324C3409-C54C-4132-9664-623632FAECD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{324C3409-C54C-4132-9664-623632FAECD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{324C3409-C54C-4132-9664-623632FAECD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{324C3409-C54C-4132-9664-623632FAECD9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
