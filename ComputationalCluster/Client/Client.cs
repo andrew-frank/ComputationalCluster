@@ -17,6 +17,7 @@ using ComputationalCluster.Misc;
 using ComputationalCluster.Shared.Messages.SolveRequestResponseNamespace;
 using ComputationalCluster.Client;
 using ComputationalCluster.Computational;
+using System.IO;
 
 namespace ComputationalCluster.Nodes
 {
@@ -127,7 +128,9 @@ namespace ComputationalCluster.Nodes
         private void SendExampleProblem()
         {
             SolveRequest solveRequest = new SolveRequest();
-            String problem = "VRPTEST io2_8a\r\nCOMMENT: \r\nNAME: io2_8a\r\nNUM_DEPOTS: 1\r\nNUM_CAPACITIES: 1\r\nNUM_VISITS: 8\r\nNUM_LOCATIONS: 9\r\nNUM_VEHICLES: 8\r\nCAPACITIES: 100\r\nDATA_SECTION\r\nDEPOTS\r\n  0\r\nDEMAND_SECTION\r\n  1 -29\n  2 -21\n  3 -28\n  4 -20\n  5 -8\n  6 -31\n  7 -13\n  8 -29\nLOCATION_COORD_SECTION\r\n  0 0 0\r\n  1 -39 97\n  2 34 -45\n  3 77 -20\n  4 -34 -99\n  5 75 -43\n  6 87 -66\n  7 -55 86\n  8 -93 -3\nDEPOT_LOCATION_SECTION\r\n  0 0\r\nVISIT_LOCATION_SECTION\r\n  1 1\n  2 2\n  3 3\n  4 4\n  5 5\n  6 6\n  7 7\n  8 8\nDURATION_SECTION\r\n  1 20\n  2 20\n  3 20\n  4 20\n  5 20\n  6 20\n  7 20\n  8 20\nDEPOT_TIME_WINDOW_SECTION\r\n  0 0 560\r\nCOMMENT: TIMESTEP: 7\r\nTIME_AVAIL_SECTION\r\n  1 276\n  2 451\n  3 171\n  4 365\n  5 479\n  6 546\n  7 376\n  8 289\nEOF";
+             String problem = "VRPTEST io2_8a\r\nCOMMENT: \r\nNAME: io2_8a\r\nNUM_DEPOTS: 1\r\nNUM_CAPACITIES: 1\r\nNUM_VISITS: 8\r\nNUM_LOCATIONS: 9\r\nNUM_VEHICLES: 8\r\nCAPACITIES: 100\r\nDATA_SECTION\r\nDEPOTS\r\n  0\r\nDEMAND_SECTION\r\n  1 -29\n  2 -21\n  3 -28\n  4 -20\n  5 -8\n  6 -31\n  7 -13\n  8 -29\nLOCATION_COORD_SECTION\r\n  0 0 0\r\n  1 -39 97\n  2 34 -45\n  3 77 -20\n  4 -34 -99\n  5 75 -43\n  6 87 -66\n  7 -55 86\n  8 -93 -3\nDEPOT_LOCATION_SECTION\r\n  0 0\r\nVISIT_LOCATION_SECTION\r\n  1 1\n  2 2\n  3 3\n  4 4\n  5 5\n  6 6\n  7 7\n  8 8\nDURATION_SECTION\r\n  1 20\n  2 20\n  3 20\n  4 20\n  5 20\n  6 20\n  7 20\n  8 20\nDEPOT_TIME_WINDOW_SECTION\r\n  0 0 560\r\nCOMMENT: TIMESTEP: 7\r\nTIME_AVAIL_SECTION\r\n  1 276\n  2 451\n  3 171\n  4 365\n  5 479\n  6 546\n  7 376\n  8 289\nEOF";
+         //   String problem = File.ReadAllText("problem.vrp");
+
             var base64 = problem.Base64Encode();
             solveRequest.Data = base64;
             solveRequest.ProblemType = Utilities.ProblemNameForType(ProblemType.DVRP);

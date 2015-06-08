@@ -6,42 +6,46 @@ using System.Threading.Tasks;
 
 namespace ComputationalCluster.Computational
 {
-    public class ExampleObject {
-        public   IList<Depot> Depots = new List<Depot>();
-        public   VehicleInfo vehicleInfo = new VehicleInfo();
-        public   List<Request> Requests     = new List<Request>();
+
+    public class ExampleObject
+    {
+        public IList<Depot> Depots;
+        public VehicleInfo vehicleInfo;
+        public List<Request> Requests;
     }
 
     public class newExampleObject
     {
 
-     public   int[] Location;
-     public  double[] DeliverDemand;
-     public   int[] ServiceDuration;
-     public  int[] ServiceBegin;
-     public  int[] ServiceEnd;
-     public   string[] VehicleName;
-     public   double[] VehicleCapacity;
-     public   int[] X_Coordinate;
-     public   int[] Y_Coordinate;
-
+        public int[] Location;
+        public double[] DeliverDemand;
+        public int[] ServiceDuration;
+        public int[] ServiceBegin;
+        public int[] ServiceEnd;
+        public string[] VehicleName;
+        public double[] VehicleCapacity;
+        public int[] X_Coordinate;
+        public int[] Y_Coordinate;
+        public double[,] DistanceMatrix;
+        public double[,] DriveTimeMatrix;
         public newExampleObject()
         {
 
         }
         public newExampleObject(int[] locations, double[] deliverdemand, int[] serviceduration, int[] servicebegin, int[] serviceend, string[] vehiclename,
-            double[] vehiclecapacity, int[] x_Coordinate, int[] y_Coordinate)
+            double[] vehiclecapacity, int[] x_Coordinate, int[] y_Coordinate, double[,] distancematrix, double[,] drivetimematrix)
         {
             Location = locations;
             DeliverDemand = deliverdemand;
-            ServiceDuration=serviceduration;
+            ServiceDuration = serviceduration;
             ServiceBegin = servicebegin;
             ServiceEnd = serviceend;
             VehicleName = vehiclename;
             VehicleCapacity = vehiclecapacity;
             X_Coordinate = x_Coordinate;
             Y_Coordinate = y_Coordinate;
-
+            DistanceMatrix = distancematrix;
+            DriveTimeMatrix = drivetimematrix;
         }
 
 
@@ -49,6 +53,8 @@ namespace ComputationalCluster.Computational
 
 
     }
+
+
 
 
 }
