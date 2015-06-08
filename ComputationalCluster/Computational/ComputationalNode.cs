@@ -124,11 +124,11 @@ namespace ComputationalCluster.Nodes
 
             //This shouldn't be here, just a check.
 
-        //    string a = File.ReadAllText("problem9.vrp");
-         //   newExampleObject o = ProblemLoader.loadnewExampleString(a);
+      //     string a = File.ReadAllText("problem9.vrp");
+        //    newExampleObject o = ProblemLoader.loadnewExampleString(a);
 
-         //  AlgorithmSolution.Find_Solution(o.Location, o.DeliverDemand, o.ServiceBegin, o.ServiceEnd, o.ServiceDuration, o.DistanceMatrix, o.DriveTimeMatrix, o.VehicleName, o.VehicleCapacity);
-
+       //  double d=  AlgorithmSolution.Find_Solution(o.Location, o.DeliverDemand, o.ServiceBegin, o.ServiceEnd, o.ServiceDuration, o.DistanceMatrix, o.DriveTimeMatrix, o.VehicleName, o.VehicleCapacity);
+       //  Console.WriteLine("This is the answer from algorithm: " + d);
 
             Status status = new Status();
             status.Threads = this.CurrentStatusThreads();

@@ -1128,7 +1128,7 @@ namespace AL_FOR_DVRP
 			}
 		}
 		
-		public void GenerateOutputFile()
+		public double GenerateOutputFile()
 		{
 			
 			double maxValue = store_best_fitness.Max();
@@ -1178,7 +1178,8 @@ namespace AL_FOR_DVRP
 			Console.WriteLine("{0,30}",store_best_total_route_distance[maxIndex,j]);
 			Console.WriteLine();
 			Console.WriteLine("Total distance travelled by all cars: " + store_best_total_distance[maxIndex]);
-			
+
+            return store_best_total_distance[maxIndex];
 			//ws.Cells[row,column] = total_route_distance[maxIndex,j];
 			//ws.Cells[row+1,column] = total_distance[maxIndex];
 			
