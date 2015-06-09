@@ -36,7 +36,6 @@ namespace ComputationalCluster.Shared.Connection
         {
         }
 
-
         public static void StartListening(int port, IPAddress ipAddress)
         {
             // Data buffer for incoming data.
@@ -82,7 +81,6 @@ namespace ComputationalCluster.Shared.Connection
 
             Console.WriteLine("\nPress ENTER to continue...");
             Console.Read();
-
         }
 
         public static void AcceptCallback(IAsyncResult ar)

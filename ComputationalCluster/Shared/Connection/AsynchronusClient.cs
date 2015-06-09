@@ -30,6 +30,7 @@ namespace ComputationalCluster.Shared.Connection
         public static void StartClient(Int32 port, IPAddress ipAddress, String message, Node node)
         {
             // Connect to a remote device.
+            Socket client = null;
             try {
                 // Establish the remote endpoint for the socket.
                 // The name of the 
@@ -40,7 +41,7 @@ namespace ComputationalCluster.Shared.Connection
                 IPEndPoint remoteEP = new IPEndPoint(ipAddress, port);
 
                 // Create a TCP/IP socket.
-                Socket client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
                 StateObject state = new StateObject();
                 state.workSocket = client;
@@ -66,10 +67,15 @@ namespace ComputationalCluster.Shared.Connection
                 client.Shutdown(SocketShutdown.Both);
                 client.Close();
             } catch (SocketException e) {
+                Console.WriteLine("StartClient Exception: " + e.Message + "\nAttempting to reconnect");
+                if (client != null) {
+                    //Console.WriteLine("Weszłem");
+                    //client.Shutdown(SocketShutdown.Both);
+                    //client.Close();
+                }
                 node.FailedToSendToServer(message);
-                Console.WriteLine(e.Message + "\nAttempting to reconnect");
             } catch (Exception e) {
-                Console.WriteLine(e.ToString());
+                Console.WriteLine("StartClient General Exception: " + e.ToString()+"\n");
             }
         }
 
@@ -90,7 +96,7 @@ namespace ComputationalCluster.Shared.Connection
                 connectDone.Set();
             } catch (Exception e) {
                 node.FailedToSendToServer(null);
-                Console.WriteLine(e.Message + "\nAttempting to reconnect");
+                Console.WriteLine("ConnectCallback Exception: " + e.Message + "\nAttempting to reconnect");
             }
         }
 
@@ -103,11 +109,10 @@ namespace ComputationalCluster.Shared.Connection
                 state.node = node;
 
                 // Begin receiving the data from the remote device.
-                client.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
-                    new AsyncCallback(ReceiveCallback), state);
+                client.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0, new AsyncCallback(ReceiveCallback), state);
             } catch (Exception e) {
                 node.FailedToSendToServer(null);
-                Console.WriteLine(e.Message + "\nAttempting to reconnect");
+                Console.WriteLine("Receive Exception: " + e.Message + "\nAttempting to reconnect");
             }
         }
 
@@ -134,14 +139,19 @@ namespace ComputationalCluster.Shared.Connection
                     // All the data has arrived; put it in response.
                     if (state.sb.Length > 1) {
                         response = state.sb.ToString();
-                        state.node.ReceivedResponse(response);
+                        if (state == null)
+                            Console.WriteLine("State is null!!!");
+                        else if (state.node == null)
+                            Console.WriteLine("Node is null!!!");
+                        else
+                            state.node.ReceivedResponse(response);
                     }
                     // Signal that all bytes have been received.
                     receiveDone.Set();
                 }
-            } catch (Exception e) {
+            } catch (SocketException e) {
                 node.FailedToSendToServer(null);
-                Console.WriteLine(e.Message + "\nAttempting to reconnect");
+                Console.WriteLine("ReceiveCallback Exc: " + e.ToString() + "\nAttempting to reconnect");
             }
         }
 
@@ -173,7 +183,7 @@ namespace ComputationalCluster.Shared.Connection
                 sendDone.Set();
             } catch (Exception e) {
                 node.FailedToSendToServer(null);
-                Console.WriteLine(e.Message + "\nAttempting to reconnect");
+                Console.WriteLine("SendCallback Exception: " + e.Message + "\nAttempting to reconnect");
             }
         }
 

@@ -69,14 +69,15 @@ namespace ComputationalCluster.Nodes
             return msg;
         }
 
-        public void FailedToSendToServer(String message)
-        {
-            if (this.ReconnectMode)
-                return;
-            this.ReconnectMode = true;
+        Timer reconnectTimer = new Timer();
 
-            //if(this.TimeoutTimer != null)
-            //this.TimeoutTimer.Stop();
+        protected void ReconnectTimeoutTimerCallback(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            if (this.reconnectTimer != null) {
+                this.reconnectTimer.Stop();
+                this.reconnectTimer = null;
+            }
+
             if (this.RegisteredComponents.BackupServers.Count <= 0) {
                 Console.WriteLine("No more backup servers");
                 this.ReconnectMode = false;
@@ -84,8 +85,30 @@ namespace ComputationalCluster.Nodes
             }
 
             Node backupServer = this.RegisteredComponents.BackupServers.Dequeue();
+            this.RegisteredComponents.BackupServers.Enqueue(backupServer);
+
+            if (backupServer == null) {
+                Console.WriteLine("No more backup servers");
+                return;
+            }
+
+            this.IP = backupServer.IP;
+            this.Port = backupServer.Port;
+            this.ReconnectMode = false;
+            //this.TimeoutTimer.Start();
+
+            //if (message != null)
+            //    CMSocket.Instance.SendMessage(this.Port, this.IP, message, this);
+        }
+
+        public void FailedToSendToServer(String message)
+        {
+            if (this.ReconnectMode)
+                return;
+            this.ReconnectMode = true;
 
             if (this.NodeType == Nodes.NodeType.Server) {
+                Node backupServer = this.RegisteredComponents.BackupServers.Dequeue();
                 if (backupServer.ID == this.ID) {
                     (this as Server).BackupMode = true;
                     this.IP = backupServer.IP;
@@ -99,21 +122,14 @@ namespace ComputationalCluster.Nodes
                     (this as Server).Listen(this.Port, this.IP);
                 }
                 return;
+
+            } else {
+                this.reconnectTimer = new Timer();
+                this.reconnectTimer.Interval = 1000 * this.Timeout * 2;
+                this.reconnectTimer.Elapsed += this.TimeoutTimerCallback;
+                this.reconnectTimer.Start();
             }
-
-            this.RegisteredComponents.BackupServers.Enqueue(backupServer);
-
-            if (backupServer == null) {
-                Console.WriteLine("No more backup servers");
-                return;
-            }
-
-            this.IP = backupServer.IP;
-            this.Port = backupServer.Port;
-            this.ReconnectMode = false;
-            //this.TimeoutTimer.Start();
-            if(message != null)
-                CMSocket.Instance.SendMessage(this.Port, this.IP, message, this);
+            
         }
 
 
@@ -237,6 +253,8 @@ namespace ComputationalCluster.Nodes
         {
             List<Node> backupServers = new List<Node>();
             foreach (NoOperationBackupCommunicationServers backups in noOperation.Items) {
+                if (backups.BackupCommunicationServer == null)
+                    return;
                 foreach (NoOperationBackupCommunicationServersBackupCommunicationServer backup in backups.BackupCommunicationServer) {
                     Node server = new Server();
                     server.IP = System.Net.IPAddress.Parse(backup.address);

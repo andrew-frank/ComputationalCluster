@@ -55,6 +55,7 @@ namespace ComputationalCluster.Nodes
 
         public void UpdateBackupServers(List<Node> backupservers)
         {
+            return;
             _backupServers.Clear();
             foreach (Node n in backupservers)
                 _backupServers.Enqueue(n);
