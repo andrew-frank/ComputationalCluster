@@ -71,7 +71,7 @@ namespace ComputationalCluster.Nodes
                         case 1:                           
                             Console.WriteLine("Specify name of the problem:\n>");
                             String fileName = Console.ReadLine();
-                            String problem = File.ReadAllText(fileName + ".vrp");
+                            String problem = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + fileName + ".vrp");
                             List<String> singleProblemList = new List<string>();
                             singleProblemList.Add(problem);
                             Console.WriteLine("Sending example problem");
