@@ -49,7 +49,6 @@ namespace ComputationalCluster.Computational
         {
             _problemType= "DVRP";
 
-
             double shortestPath = 0;
             var watch = Stopwatch.StartNew();
             if (watch.IsRunning)
@@ -64,7 +63,7 @@ namespace ComputationalCluster.Computational
             watch.Stop();
             var elapsedMs = watch.ElapsedMilliseconds;
             _howLong = (ulong)elapsedMs;
-            Console.WriteLine("Time = " + watch.Elapsed);
+            Console.WriteLine("Finished!\a\nTime = " + watch.Elapsed);
             
             return shortestPath;
         }

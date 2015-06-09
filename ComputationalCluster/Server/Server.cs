@@ -70,7 +70,7 @@ namespace ComputationalCluster.Nodes
             Console.WriteLine("Server Started, Specify Parameters");
             String[] Data = new String[3];
 
-            Console.Write("Debug? [y/n] \n>");
+            Console.Write("Debug? [y/n] \n\a>");
             string debug = Console.ReadLine();
             //string debug = "y";
             if (debug == "y") {
@@ -204,6 +204,9 @@ namespace ComputationalCluster.Nodes
             string type = register.Type;
             Node newNode;
             ulong ID = RegisteredNodes.NextNodeID;
+            if (this.BackupMode)
+                Console.WriteLine("backup");
+
             switch (Utilities.NodeTypeForName(type)) {
                 case NodeType.TaskManager:
                     newNode = new TaskManager();
@@ -224,6 +227,8 @@ namespace ComputationalCluster.Nodes
                 case NodeType.Server:
                     newNode = new Server();
                     newNode.ID = ID;
+                    if (senderAddr != null)
+                        newNode.IP = senderAddr;
                     BackupServerQueue bsq = new BackupServerQueue {
                         backupServerId = ID,
                         messages = new Queue<string>()
@@ -232,6 +237,7 @@ namespace ComputationalCluster.Nodes
                         newNode.IP = senderAddr;
                     newNode.NodeType = Nodes.NodeType.Server;
                     this.RegisteredComponents.RegisterBackupServer(newNode);
+                    this.backupServerQueues.Add(bsq);
                     break;
                 case NodeType.Client: //not needed!
                     break;
@@ -246,6 +252,8 @@ namespace ComputationalCluster.Nodes
             List<RegisterResponseBackupCommunicationServersBackupCommunicationServer> backupServers = new List<RegisterResponseBackupCommunicationServersBackupCommunicationServer>();
             foreach (Node comp in this.RegisteredComponents.BackupServers) {
                 RegisterResponseBackupCommunicationServersBackupCommunicationServer backup = new RegisterResponseBackupCommunicationServersBackupCommunicationServer();
+                if (comp.IP == null)
+                    break ;
                 backup.address = comp.IP.ToString();
                 if (comp.Port > 0) {
                     backup.port = comp.Port;
@@ -266,10 +274,10 @@ namespace ComputationalCluster.Nodes
             Node node = this.RegisteredComponents.NodeWithID(status.Id);
 
             NoOperation noOperationResponse = this.GenerateNoOperation();
-            if (node == null) {
-                Console.WriteLine("Did not find node with id: "+ status.Id + "\tSending NoOp");
+            if (!this.ensureNode(node)) {
                 return noOperationResponse.SerializeToXML();
             }
+
             switch (node.NodeType) {
                 case NodeType.TaskManager:
                     if (this.serverQueues.SolveRequests.Count > 0) {
@@ -308,6 +316,8 @@ namespace ComputationalCluster.Nodes
                         foreach (BackupServerQueue bsq in this.backupServerQueues) {
                             if (bsq.backupServerId == status.Id) {
                                 Console.WriteLine("Sending queued message to BackupCS");
+                                if (bsq.messages.Count <= 0)
+                                    break;
                                 return bsq.messages.Dequeue();
                             }
                         }
@@ -327,6 +337,13 @@ namespace ComputationalCluster.Nodes
             return noOperationResponse.SerializeToXML();
         }
 
+        bool ensureNode(Node node)
+        {
+            if (node == null)
+                return false;
+            return true;
+            //Console.WriteLine("Did not find node with id: "+ status.Id + "\tSending NoOp");
+        }
 
         protected override string ReceivedDivideProblem(DivideProblem divideProblem)
         {
@@ -431,12 +448,13 @@ namespace ComputationalCluster.Nodes
         {
             NoOperation noOperation = new NoOperation();
 
-
             List<NoOperationBackupCommunicationServers> servers = new List<NoOperationBackupCommunicationServers>();
             
             List<NoOperationBackupCommunicationServersBackupCommunicationServer> backups = new List<NoOperationBackupCommunicationServersBackupCommunicationServer>();
             foreach (Node comp in this.RegisteredComponents.BackupServers) {
                 NoOperationBackupCommunicationServersBackupCommunicationServer backup = new NoOperationBackupCommunicationServersBackupCommunicationServer();
+                if (comp.IP == null)
+                    break;
                 backup.address = comp.IP.ToString();
                 if (comp.Port > 0) {
                     backup.port = comp.Port;

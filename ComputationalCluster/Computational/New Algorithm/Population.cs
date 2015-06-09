@@ -11,7 +11,6 @@ namespace AL_FOR_DVRP
 		
 				
 		internal static void generate_initial_population()
-			
 		{
 			
 			int[] initial_population = new int[AlgorithmSolution.GASLocation.GetLength(0)-1];
