@@ -37,6 +37,8 @@ namespace ComputationalCluster.Nodes
         private List<NodeWorker> _workers = new List<NodeWorker>();
         public List<NodeWorker> Workers {get {return _workers; } }
 
+        private string globalProblem;
+
         #endregion
 
         #region Public
@@ -166,7 +168,12 @@ namespace ComputationalCluster.Nodes
             ///// Hey here is the problem to solve! (undivided, everything is in CommonData)
             string problem = Utilities.Base64Decode(solvePartialProblems.CommonData);
 
+            globalProblem = problem;
             //solvePartialProblems.Id;
+            NodeWorker worker = new NodeWorker(solvePartialProblems.Id);
+            worker.problemObject = ProblemLoader.loadnewExampleString(globalProblem);
+            worker.calculateAlgorithm();
+
             return null;
         }
 
