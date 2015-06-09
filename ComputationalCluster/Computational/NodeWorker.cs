@@ -1,5 +1,7 @@
-﻿using System;
+﻿using AL_FOR_DVRP;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,7 +35,36 @@ namespace ComputationalCluster.Computational
         public ulong TaskId { get { return _taskId; } }
         public string ProblemType { get { return _problemType; } }
 
+        public newExampleObject problemObject { get; set; }
+
         #endregion
+
+        public NodeWorker(ulong id)
+        {
+            this._taskId = id;
+        }
+
+
+        public double calculateAlgorithm()
+        {
+            _problemType= "DVRP";
+
+
+            double shortestPath = 0;
+            var watch = Stopwatch.StartNew();
+            
+            AlgorithmSolution.Find_Solution(problemObject.Location, problemObject.DeliverDemand, problemObject.ServiceBegin, 
+                problemObject.ServiceEnd, problemObject.ServiceDuration, problemObject.DistanceMatrix, 
+                problemObject.DriveTimeMatrix, problemObject.VehicleName, problemObject.VehicleCapacity);
+
+            watch.Stop();
+            var elapsedMs = watch.ElapsedMilliseconds;
+            _howLong = (ulong)elapsedMs;
+
+            return shortestPath;
+
+        }
+
 
 
         //thread stuff here
