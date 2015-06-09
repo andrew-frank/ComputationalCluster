@@ -173,7 +173,7 @@ namespace ComputationalCluster.Nodes
             NodeWorker worker = new NodeWorker(solvePartialProblems.Id);
             worker.problemObject = ProblemLoader.loadnewExampleString(globalProblem);
             worker.calculateAlgorithm();
-
+            Workers.Add(worker);
             return null;
         }
 
