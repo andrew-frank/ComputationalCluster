@@ -156,6 +156,7 @@ namespace ComputationalCluster.Nodes
                 return null;
 
             NoOperation noOp = this.GenerateNoOperation();
+            Console.WriteLine("Sending NoOp as an ans to Solutions");
             return noOp.SerializeToXML();
         }
 
@@ -183,6 +184,7 @@ namespace ComputationalCluster.Nodes
                 DivideProblem divideProblem = new DivideProblem();
                 divideProblem.Data = solveRequest.Data;
                 divideProblem.Id = solveRequest.Id;
+                Console.WriteLine("Sending DivideProblem as an ans to SolvePartiaProblems");
                 return solveRequest.SerializeToXML();
             }
 
@@ -192,6 +194,7 @@ namespace ComputationalCluster.Nodes
             //    return solutions.SerializeToXML();
             //}
 
+            Console.WriteLine("Sending NoOp as an ans to SolvePartialProblems");
             return this.GenerateNoOperation().SerializeToXML();
         }
 
@@ -251,10 +254,10 @@ namespace ComputationalCluster.Nodes
             }
 
             response.BackupCommunicationServers = backupServers.ToArray();
+            Console.WriteLine("Sending RegisterResponse");
             return response.SerializeToXML();
         }
 
-        //public static bool kupa = false;
 
         protected override string ReceivedStatus(Status status)
         {
@@ -272,6 +275,7 @@ namespace ComputationalCluster.Nodes
                         DivideProblem divideProblem = new DivideProblem();
                         divideProblem.Data = solveRequest.Data;
                         divideProblem.Id = solveRequest.Id;
+                        Console.WriteLine("Sending DivideProblem to TM");
                         return solveRequest.SerializeToXML();
                     }
                     //TM is not going to join the solutions
@@ -283,13 +287,16 @@ namespace ComputationalCluster.Nodes
                 case NodeType.ComputationalNode: //TODO: check!!
                     if (this.serverQueues.ProblemsToSolve.Count > 0) {
                         SolvePartialProblems partialProblems = this.serverQueues.ProblemsToSolve.Dequeue();
+                        Console.WriteLine("Sending PartialProblems to CN");
                         return partialProblems.SerializeToXML();
                     }
                     break;
                 case NodeType.Server: {
                         foreach (BackupServerQueue bsq in this.backupServerQueues) {
-                            if(bsq.backupServerId == status.Id)
+                            if (bsq.backupServerId == status.Id) {
+                                Console.WriteLine("Sending queued message to BackupCS");
                                 return bsq.messages.Dequeue();
+                            }
                         }
                     }
                     break;
@@ -303,6 +310,7 @@ namespace ComputationalCluster.Nodes
                 return noOperationResponse.SerializeToXML();
             }
 
+            Console.WriteLine("Sending NoOp");
             return noOperationResponse.SerializeToXML();
         }
 
@@ -315,8 +323,8 @@ namespace ComputationalCluster.Nodes
              */
             Debug.Assert(this.BackupMode == true, "ReceivedDivideProblem received to primary Server");
 
-            NoOperation noOperationResponse = this.GenerateNoOperation();
-            return noOperationResponse.SerializeToXML();
+            //NoOperation noOperationResponse = this.GenerateNoOperation();
+            return null; //noOperationResponse.SerializeToXML();
         }
 
         protected override string ReceivedSolutionRequest(SolutionRequest solutionRequest)
@@ -333,6 +341,7 @@ namespace ComputationalCluster.Nodes
                 }
             }
 
+            Console.WriteLine("Sending Solutions");
             return solution.SerializeToXML();
         }
 
@@ -348,6 +357,7 @@ namespace ComputationalCluster.Nodes
                 response.Id = TaskIDCounter++;
             response.IdSpecified = true;
 
+            Console.WriteLine("Sending SolveRequestResponse");
             return response.SerializeToXML();
         }
 

@@ -137,7 +137,7 @@ namespace ComputationalCluster.Shared.Utilities {
                     return YourClassObject;
 
                 } catch (System.InvalidOperationException e) {
-                    System.Diagnostics.Debug.WriteLine("***\nThis is normal. Error in XML parsing: Catching wrong type exception while searching for object. \n" + e.ToString());
+                    //System.Diagnostics.Debug.WriteLine("***\nThis is normal. Error in XML parsing: Catching wrong type exception while searching for object. \n" + e.ToString());
                 }
             }
 

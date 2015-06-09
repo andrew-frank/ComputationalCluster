@@ -67,7 +67,7 @@ namespace ComputationalCluster.Shared.Connection
                 client.Shutdown(SocketShutdown.Both);
                 client.Close();
             } catch (SocketException e) {
-                Console.WriteLine("StartClient Exception: " + e.Message + "\nAttempting to reconnect");
+                Console.WriteLine("StartClient Exception: " + e.ToString() + "\nAttempting to reconnect");
                 if (client != null) {
                     //Console.WriteLine("Weszłem");
                     //client.Shutdown(SocketShutdown.Both);

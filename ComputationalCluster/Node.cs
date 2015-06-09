@@ -124,6 +124,8 @@ namespace ComputationalCluster.Nodes
                 return;
 
             } else {
+                if (this.Timeout == 0)
+                    this.Timeout = 3;
                 this.reconnectTimer = new Timer();
                 this.reconnectTimer.Interval = 1000 * this.Timeout * 2;
                 this.reconnectTimer.Elapsed += this.TimeoutTimerCallback;

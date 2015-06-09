@@ -49,7 +49,7 @@ namespace ComputationalCluster.Nodes
             string debug = Console.ReadLine();
 
             if (debug == "n") {
-                this.Port = 0;
+                port = 0;
                 while (port == 0) {
                     Console.WriteLine(" Parameters Syntax: [-address [IPv4 address or IPv6 address or host name]] [-port[port number]]");
                     Console.Write("> ");
