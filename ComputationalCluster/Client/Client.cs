@@ -63,17 +63,38 @@ namespace ComputationalCluster.Nodes
             }
 
             while (true) {
-                Console.WriteLine("Possible actions:\n1.Send problem\n2.Check for solution\n>");
+                Console.WriteLine("Possible actions:\n1.Send problem\n2.Send multiple problems from folder\n3.Check for solution>");
                 string str = Console.ReadLine();
                 ulong number = 0;
                 if (ulong.TryParse(str, out number)) {
                     switch (number) {
-                        case 1:
+                        case 1:                           
                             Console.WriteLine("Specify name of the problem:\n>");
+                            String fileName = Console.ReadLine();
+                            String problem = File.ReadAllText(fileName + ".vrp");
+                            List<String> singleProblemList = new List<string>();
+                            singleProblemList.Add(problem);
                             Console.WriteLine("Sending example problem");
-                            this.SendExampleProblem();
+                            this.SendExampleProblem(singleProblemList);
                             break;
                         case 2:
+                            Console.WriteLine("Specify name of the folder with problems:\n>");                            
+                            String folderName = Console.ReadLine();
+                            //String folderPath = "C:/PW/VI SEMESTR/SE2/SE2_Project/ComputationalCluster/bin/Debug/" + folderName;
+                            String folderPath = AppDomain.CurrentDomain.BaseDirectory + folderName;
+                            try {
+                                String[] filePaths = Directory.GetFiles(@folderPath, "*.vrp");
+                                List<String> problems = new List<String>();
+                                foreach (String s in filePaths) {                                    
+                                    problems.Add(File.ReadAllText(s));
+                                }
+                                Console.WriteLine("Sending example problems");
+                                this.SendExampleProblem(problems);
+                            } catch (System.IO.DirectoryNotFoundException e) {
+                                Console.WriteLine("Folder not found\n");
+                            }                         
+                            break;
+                        case 3:
                             Console.WriteLine("Specify ID of the problem:\n>");
                             str = Console.ReadLine();
                             number = 0;
@@ -182,17 +203,19 @@ namespace ComputationalCluster.Nodes
         }
 
 
-        private void SendExampleProblem()
+        private void SendExampleProblem(List<String> problems)
         {
             SolveRequest solveRequest = new SolveRequest();
-             String problem = "VRPTEST io2_8a\r\nCOMMENT: \r\nNAME: io2_8a\r\nNUM_DEPOTS: 1\r\nNUM_CAPACITIES: 1\r\nNUM_VISITS: 8\r\nNUM_LOCATIONS: 9\r\nNUM_VEHICLES: 8\r\nCAPACITIES: 100\r\nDATA_SECTION\r\nDEPOTS\r\n  0\r\nDEMAND_SECTION\r\n  1 -29\n  2 -21\n  3 -28\n  4 -20\n  5 -8\n  6 -31\n  7 -13\n  8 -29\nLOCATION_COORD_SECTION\r\n  0 0 0\r\n  1 -39 97\n  2 34 -45\n  3 77 -20\n  4 -34 -99\n  5 75 -43\n  6 87 -66\n  7 -55 86\n  8 -93 -3\nDEPOT_LOCATION_SECTION\r\n  0 0\r\nVISIT_LOCATION_SECTION\r\n  1 1\n  2 2\n  3 3\n  4 4\n  5 5\n  6 6\n  7 7\n  8 8\nDURATION_SECTION\r\n  1 20\n  2 20\n  3 20\n  4 20\n  5 20\n  6 20\n  7 20\n  8 20\nDEPOT_TIME_WINDOW_SECTION\r\n  0 0 560\r\nCOMMENT: TIMESTEP: 7\r\nTIME_AVAIL_SECTION\r\n  1 276\n  2 451\n  3 171\n  4 365\n  5 479\n  6 546\n  7 376\n  8 289\nEOF";
-         //   String problem = File.ReadAllText("problem.vrp");
+            //String problem = "VRPTEST io2_8a\r\nCOMMENT: \r\nNAME: io2_8a\r\nNUM_DEPOTS: 1\r\nNUM_CAPACITIES: 1\r\nNUM_VISITS: 8\r\nNUM_LOCATIONS: 9\r\nNUM_VEHICLES: 8\r\nCAPACITIES: 100\r\nDATA_SECTION\r\nDEPOTS\r\n  0\r\nDEMAND_SECTION\r\n  1 -29\n  2 -21\n  3 -28\n  4 -20\n  5 -8\n  6 -31\n  7 -13\n  8 -29\nLOCATION_COORD_SECTION\r\n  0 0 0\r\n  1 -39 97\n  2 34 -45\n  3 77 -20\n  4 -34 -99\n  5 75 -43\n  6 87 -66\n  7 -55 86\n  8 -93 -3\nDEPOT_LOCATION_SECTION\r\n  0 0\r\nVISIT_LOCATION_SECTION\r\n  1 1\n  2 2\n  3 3\n  4 4\n  5 5\n  6 6\n  7 7\n  8 8\nDURATION_SECTION\r\n  1 20\n  2 20\n  3 20\n  4 20\n  5 20\n  6 20\n  7 20\n  8 20\nDEPOT_TIME_WINDOW_SECTION\r\n  0 0 560\r\nCOMMENT: TIMESTEP: 7\r\nTIME_AVAIL_SECTION\r\n  1 276\n  2 451\n  3 171\n  4 365\n  5 479\n  6 546\n  7 376\n  8 289\nEOF";
+            //String problem = File.ReadAllText("problem.vrp");
+            foreach (String singleProblem in problems) {
+                var base64 = singleProblem.Base64Encode();
+                solveRequest.Data = base64;
+                solveRequest.ProblemType = Utilities.ProblemNameForType(ProblemType.DVRP);
 
-            var base64 = problem.Base64Encode();
-            solveRequest.Data = base64;
-            solveRequest.ProblemType = Utilities.ProblemNameForType(ProblemType.DVRP);
-
-            this.SendSolveRequest(solveRequest);
+                this.SendSolveRequest(solveRequest);
+            }
+            
         }
 
 
