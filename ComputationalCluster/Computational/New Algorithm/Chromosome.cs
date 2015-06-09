@@ -914,7 +914,6 @@ namespace AL_FOR_DVRP
 			
 			for(i=0;i<route_population.GetLength(1);i++)
 			{
-				
 				store_best_route_population[TerminationCriteria.generation_completed,i] = route_population[maxIndex,i];
 				
 				

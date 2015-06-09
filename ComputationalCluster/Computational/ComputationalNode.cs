@@ -172,8 +172,12 @@ namespace ComputationalCluster.Nodes
             //solvePartialProblems.Id;
             NodeWorker worker = new NodeWorker(solvePartialProblems.Id);
             worker.problemObject = ProblemLoader.loadnewExampleString(globalProblem);
-            worker.calculateAlgorithm();
             Workers.Add(worker);
+            double sol = worker.calculateAlgorithm();
+            Solutions solutions = new Solutions();
+            solutions.Id = solvePartialProblems.Id;
+            solutions.CommonData = Utilities.Base64Encode(sol.ToString());
+            CMSocket.Instance.SendMessage(this.Port, this.IP, solutions.SerializeToXML(), this);
             return null;
         }
 

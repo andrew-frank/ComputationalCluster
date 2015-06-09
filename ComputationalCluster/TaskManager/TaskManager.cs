@@ -48,6 +48,7 @@ namespace ComputationalCluster.Nodes
         protected override Status CurrentStatus()
         {
             Status status = new Status();
+            status.Id = this.ID;
             return status;
         }
 
@@ -78,7 +79,7 @@ namespace ComputationalCluster.Nodes
              * of available threads. The same message is used to relay information for synchronizing info with Backup CS.
              */
 
-            Debug.Assert(false, "Unimplemented");
+            //Debug.Assert(false, "Unimplemented");
 
             //!!!!!!!!!!!!!!!!!!!
             ////we are not dividing yet - inserting everything into CommonData

@@ -155,6 +155,7 @@ namespace ComputationalCluster.Nodes
             if(this.BackupMode == true)
                 return null;
 
+            Console.WriteLine("\n****\nSolution delivered with id: \n****\n"+solution.Id);
             NoOperation noOp = this.GenerateNoOperation();
             Console.WriteLine("Sending NoOp as an ans to Solutions");
             return noOp.SerializeToXML();
@@ -185,7 +186,7 @@ namespace ComputationalCluster.Nodes
                 divideProblem.Data = solveRequest.Data;
                 divideProblem.Id = solveRequest.Id;
                 Console.WriteLine("Sending DivideProblem as an ans to SolvePartiaProblems");
-                return solveRequest.SerializeToXML();
+                return divideProblem.SerializeToXML();
             }
 
             //TM is not going to join the solutions
@@ -265,9 +266,10 @@ namespace ComputationalCluster.Nodes
             Node node = this.RegisteredComponents.NodeWithID(status.Id);
 
             NoOperation noOperationResponse = this.GenerateNoOperation();
-            if (node == null)
+            if (node == null) {
+                Console.WriteLine("Did not find node with id: "+ status.Id + "\tSending NoOp");
                 return noOperationResponse.SerializeToXML();
-
+            }
             switch (node.NodeType) {
                 case NodeType.TaskManager:
                     if (this.serverQueues.SolveRequests.Count > 0) {
@@ -276,7 +278,7 @@ namespace ComputationalCluster.Nodes
                         divideProblem.Data = solveRequest.Data;
                         divideProblem.Id = solveRequest.Id;
                         Console.WriteLine("Sending DivideProblem to TM");
-                        return solveRequest.SerializeToXML();
+                        return divideProblem.SerializeToXML();
                     }
                     //TM is not going to join the solutions
                     //if (this.serverQueues.Solutions.Count > 0) {
@@ -285,7 +287,14 @@ namespace ComputationalCluster.Nodes
                     //}
                     break;
                 case NodeType.ComputationalNode: //TODO: check!!
-                    if (this.serverQueues.ProblemsToSolve.Count > 0) {
+                    bool busy = false;
+                    if (status.Threads != null) {
+                        foreach (StatusThreadsThread stt in status.Threads) {
+                            if (stt.ProblemInstanceIdSpecified || stt.TaskIdSpecified)
+                                busy = true;
+                        }
+                    }
+                    if (this.serverQueues.ProblemsToSolve.Count > 0 && !busy) {
                         SolvePartialProblems partialProblems = this.serverQueues.ProblemsToSolve.Dequeue();
                         Console.WriteLine("Sending PartialProblems to CN");
                         return partialProblems.SerializeToXML();
@@ -348,9 +357,8 @@ namespace ComputationalCluster.Nodes
         protected override string ReceivedSolveRequest(SolveRequest solveRequest)
         {
             this.serverQueues.SolveRequests.Enqueue(solveRequest);
-
             SolveRequestResponse response = new SolveRequestResponse();
-            this.serverQueues.SolveRequests.Enqueue(solveRequest);
+
             if(solveRequest.IdSpecified)
                 response.Id = solveRequest.Id; //TaskIDCounter++;
             else
@@ -396,12 +404,16 @@ namespace ComputationalCluster.Nodes
             } else if (obj is NoOperation) {  //Sent in response to status messge
                 Debug.Assert(false, "NoOperation received to primary Server");
 
+            } else if(obj is Solutions) {
+                this.ReceivedSolutions((Solutions)obj);
             }
             // else if (obj is PartialProblem) {
             //    return this.ReceivedPartialProblem((PartialProblem)obj);
             //}
-
-            Debug.Assert(false, "Unrecognized request");
+            else {
+                Console.WriteLine("Unrecognized request:\n" + xml);
+                //this.serverQueues.Solutions.Enqueue(xml);
+            }
             return "Error";
         }
 

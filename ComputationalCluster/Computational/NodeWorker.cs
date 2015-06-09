@@ -52,6 +52,7 @@ namespace ComputationalCluster.Computational
 
             double shortestPath = 0;
             var watch = Stopwatch.StartNew();
+            this._problemInstanceId = this._taskId;
             
             AlgorithmSolution.Find_Solution(problemObject.Location, problemObject.DeliverDemand, problemObject.ServiceBegin, 
                 problemObject.ServiceEnd, problemObject.ServiceDuration, problemObject.DistanceMatrix, 
@@ -62,7 +63,6 @@ namespace ComputationalCluster.Computational
             _howLong = (ulong)elapsedMs;
 
             return shortestPath;
-
         }
 
 
