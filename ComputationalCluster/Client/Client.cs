@@ -9,7 +9,6 @@ using ComputationalCluster.Shared.Utilities;
 using ComputationalCluster.Shared.Messages.SolveRequestNamespace;
 using ComputationalCluster.Shared.Messages.DivideProblemNamespace;
 using ComputationalCluster.Shared.Messages.RegisterNamespace;
-using System.Threading;
 using ComputationalCluster.Shared.Messages.StatusNamespace;
 using ComputationalCluster.Shared.Connection;
 using System.Diagnostics;
@@ -21,6 +20,7 @@ using System.IO;
 using ComputationalCluster.Shared.Messages.SolvePartialProblemsNamespace;
 using ComputationalCluster.Shared.Messages.SolutionRequestNamespace;
 using ComputationalCluster.Shared.Messages.SolutionsNamespace;
+using System.Timers;
 
 namespace ComputationalCluster.Nodes
 {
@@ -195,25 +195,41 @@ namespace ComputationalCluster.Nodes
 
         #region Private
 
+        Queue<String> problems = new Queue<String>();
 
         private void CheckForSolution(ulong problemID)
         {
             //TODO:
             Console.WriteLine("Unimplemented");
         }
+        
+        System.Timers.Timer ProblemsTimer = null;
+
+        void ReconnectTimeoutTimerCallback(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            String singleProblem = this.problems.Dequeue();
+            var base64 = singleProblem.Base64Encode();
+            SolveRequest solveRequest = new SolveRequest();
+            solveRequest.Data = base64;
+            solveRequest.ProblemType = Utilities.ProblemNameForType(ProblemType.DVRP);
+            this.problems.Enqueue(singleProblem);
+            this.SendSolveRequest(solveRequest);
+        }
 
 
         private void SendExampleProblem(List<String> problems)
         {
-            SolveRequest solveRequest = new SolveRequest();
+            if (this.ProblemsTimer == null) {
+                this.ProblemsTimer = new Timer();
+                this.ProblemsTimer.Interval = 1000 * 2;
+                this.ProblemsTimer.Elapsed += this.ReconnectTimeoutTimerCallback;
+                this.ProblemsTimer.Start();
+            }
+            
             //String problem = "VRPTEST io2_8a\r\nCOMMENT: \r\nNAME: io2_8a\r\nNUM_DEPOTS: 1\r\nNUM_CAPACITIES: 1\r\nNUM_VISITS: 8\r\nNUM_LOCATIONS: 9\r\nNUM_VEHICLES: 8\r\nCAPACITIES: 100\r\nDATA_SECTION\r\nDEPOTS\r\n  0\r\nDEMAND_SECTION\r\n  1 -29\n  2 -21\n  3 -28\n  4 -20\n  5 -8\n  6 -31\n  7 -13\n  8 -29\nLOCATION_COORD_SECTION\r\n  0 0 0\r\n  1 -39 97\n  2 34 -45\n  3 77 -20\n  4 -34 -99\n  5 75 -43\n  6 87 -66\n  7 -55 86\n  8 -93 -3\nDEPOT_LOCATION_SECTION\r\n  0 0\r\nVISIT_LOCATION_SECTION\r\n  1 1\n  2 2\n  3 3\n  4 4\n  5 5\n  6 6\n  7 7\n  8 8\nDURATION_SECTION\r\n  1 20\n  2 20\n  3 20\n  4 20\n  5 20\n  6 20\n  7 20\n  8 20\nDEPOT_TIME_WINDOW_SECTION\r\n  0 0 560\r\nCOMMENT: TIMESTEP: 7\r\nTIME_AVAIL_SECTION\r\n  1 276\n  2 451\n  3 171\n  4 365\n  5 479\n  6 546\n  7 376\n  8 289\nEOF";
             //String problem = File.ReadAllText("problem.vrp");
             foreach (String singleProblem in problems) {
-                var base64 = singleProblem.Base64Encode();
-                solveRequest.Data = base64;
-                solveRequest.ProblemType = Utilities.ProblemNameForType(ProblemType.DVRP);
-
-                this.SendSolveRequest(solveRequest);
+                this.problems.Enqueue(singleProblem);
             }
             
         }

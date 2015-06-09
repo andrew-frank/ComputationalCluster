@@ -80,7 +80,7 @@ namespace ComputationalCluster.Nodes
                 this.Port = port;
                 this.LocalIP = localIPAddress;
                 this.IP = localIPAddress;
-                this.Timeout = 3;
+                this.Timeout = 35;
                 if (backup == "y") {
                     this.BackupMode = true;
                     this.RegisterComponent();
