@@ -15,7 +15,7 @@ namespace AL_FOR_DVRP
 		public static string[] GASVechicleName;
 		public static double [] GASVechicleCapacity;
 		
-		public static void Find_Solution(int [] Location, double [] DeliverDemand, int [] ServiceBegin, int [] ServiceEnd, int [] ServiceDuration, double [,] DistanceMatrix, double [,] DriveTimeMatrix,string [] VechicleName, double [] VechicleCapacity)
+		public static double Find_Solution(int [] Location, double [] DeliverDemand, int [] ServiceBegin, int [] ServiceEnd, int [] ServiceDuration, double [,] DistanceMatrix, double [,] DriveTimeMatrix,string [] VechicleName, double [] VechicleCapacity)
 		{
 			Console.WriteLine("\n" + "Please wait until a solution will be displyed on screen.");
 			
@@ -33,12 +33,12 @@ namespace AL_FOR_DVRP
 			
 			AlgorithmSolution AS = new AlgorithmSolution();
 			
-			AS.Execute_Algorithm();
+		return	AS.Execute_Algorithm();
 			
 			//Console.WriteLine("\n" + "Excel file has been successfully generated and saved at location: " + Directory.GetCurrentDirectory() + @"\OutputFile");
 		}
 		
-		internal void Execute_Algorithm()
+		internal double Execute_Algorithm()
 		{
 
 			Population.generate_initial_population();
@@ -60,7 +60,7 @@ namespace AL_FOR_DVRP
 	        	tc.Increment_Generation_Completed_Byone();
         	}
         	
-			c.GenerateOutputFile();
+			return c.GenerateOutputFile();
 			
 		}
 		
