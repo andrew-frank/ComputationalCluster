@@ -177,6 +177,7 @@ namespace ComputationalCluster.Nodes
             Solutions solutions = new Solutions();
             solutions.Id = solvePartialProblems.Id;
             solutions.CommonData = Utilities.Base64Encode(sol.ToString());
+            Console.WriteLine("How Long = " + this.Workers.First().HowLong);
             CMSocket.Instance.SendMessage(this.Port, this.IP, solutions.SerializeToXML(), this);
             return null;
         }

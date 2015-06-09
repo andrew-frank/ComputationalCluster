@@ -59,7 +59,6 @@ namespace ComputationalCluster.Nodes
                     parameters = parameters.Replace(" ", string.Empty);
                     //Shared.Connection.ConnectionHelpers.CheckInputSyntax(parameters, port, hostName);
                 }
-
             }
 
             while (true) {
@@ -205,14 +204,17 @@ namespace ComputationalCluster.Nodes
         
         System.Timers.Timer ProblemsTimer = null;
 
-        void ReconnectTimeoutTimerCallback(object sender, System.Timers.ElapsedEventArgs e)
+        void ProblemsTimerCallback(object sender, System.Timers.ElapsedEventArgs e)
         {
+            if (this.problems.Count <= 0)
+                return;
             String singleProblem = this.problems.Dequeue();
+            if (singleProblem == null)
+                return;
             var base64 = singleProblem.Base64Encode();
             SolveRequest solveRequest = new SolveRequest();
             solveRequest.Data = base64;
             solveRequest.ProblemType = Utilities.ProblemNameForType(ProblemType.DVRP);
-            this.problems.Enqueue(singleProblem);
             this.SendSolveRequest(solveRequest);
         }
 
@@ -222,7 +224,7 @@ namespace ComputationalCluster.Nodes
             if (this.ProblemsTimer == null) {
                 this.ProblemsTimer = new Timer();
                 this.ProblemsTimer.Interval = 1000 * 2;
-                this.ProblemsTimer.Elapsed += this.ReconnectTimeoutTimerCallback;
+                this.ProblemsTimer.Elapsed += this.ProblemsTimerCallback;
                 this.ProblemsTimer.Start();
             }
             

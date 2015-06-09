@@ -80,7 +80,7 @@ namespace ComputationalCluster.Nodes
                 this.Port = port;
                 this.LocalIP = localIPAddress;
                 this.IP = localIPAddress;
-                this.Timeout = 35;
+                this.Timeout = 5;
                 if (backup == "y") {
                     this.BackupMode = true;
                     this.RegisterComponent();
@@ -289,12 +289,16 @@ namespace ComputationalCluster.Nodes
                 case NodeType.ComputationalNode: //TODO: check!!
                     bool busy = false;
                     if (status.Threads != null) {
+                        Console.WriteLine("Threads field not null");
                         foreach (StatusThreadsThread stt in status.Threads) {
-                            if (stt.ProblemInstanceIdSpecified || stt.TaskIdSpecified)
+                            if (stt.ProblemInstanceIdSpecified || stt.TaskIdSpecified) {
                                 busy = true;
+                                Console.WriteLine("Busy = true");
+                            }
                         }
                     }
                     if (this.serverQueues.ProblemsToSolve.Count > 0 && !busy) {
+                        Console.WriteLine("Busy = true"); 
                         SolvePartialProblems partialProblems = this.serverQueues.ProblemsToSolve.Dequeue();
                         Console.WriteLine("Sending PartialProblems to CN");
                         return partialProblems.SerializeToXML();
