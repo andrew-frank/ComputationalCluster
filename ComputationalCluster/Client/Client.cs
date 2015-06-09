@@ -18,6 +18,9 @@ using ComputationalCluster.Shared.Messages.SolveRequestResponseNamespace;
 using ComputationalCluster.Client;
 using ComputationalCluster.Computational;
 using System.IO;
+using ComputationalCluster.Shared.Messages.SolvePartialProblemsNamespace;
+using ComputationalCluster.Shared.Messages.SolutionRequestNamespace;
+using ComputationalCluster.Shared.Messages.SolutionsNamespace;
 
 namespace ComputationalCluster.Nodes
 {
@@ -111,6 +114,60 @@ namespace ComputationalCluster.Nodes
         {
             throw new Exception("Client does not implement GenerateRegister()");
         }
+
+
+        #region Overrides
+
+
+        protected override string ReceivedSolutions(Solutions solution)
+        {
+            Console.WriteLine("\n" + solution.SerializeToXML());
+            return null;
+        }
+
+        protected override string ReceivedSolveRequestResponse(SolveRequestResponse solveRequestResponse)
+        {
+            Console.WriteLine("\n"+solveRequestResponse.SerializeToXML());
+            return null;
+        }
+
+        protected override string ReceivedRegister(Register register, IPAddress senderAddr)
+        {
+            Debug.Assert(false, "Should not be here");
+            return null;
+        }
+
+        protected override string ReceivedStatus(Status status)
+        {
+            Debug.Assert(false, "Should not be here");
+            return null;
+        }
+
+        protected override string ReceivedDivideProblem(DivideProblem divideProblem)
+        {
+            Debug.Assert(false, "Should not be here"); 
+            return null;
+        }
+
+        protected override string ReceivedSolutionRequest(SolutionRequest solutionRequest)
+        {
+            Debug.Assert(false, "Should not be here");
+            return null;
+        }
+
+        protected override string ReceivedSolvePartialProblems(SolvePartialProblems solvePartialProblems)
+        {
+            Debug.Assert(false, "Should not be here");
+            return null;
+        }
+
+        protected override string ReceivedSolveRequest(SolveRequest solveRequest)
+        {
+            Debug.Assert(false, "Should not be here");
+            return null;
+        }
+
+        #endregion
 
         #endregion
 

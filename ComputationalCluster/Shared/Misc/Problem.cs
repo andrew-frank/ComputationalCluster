@@ -5,8 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ComputationalCluster.Misc {
-    public class PartialProblem 
-    {
 
+    public enum ProblemType
+    {
+        DVRP = 0
     }
 }

@@ -1,7 +1,13 @@
 ﻿using ComputationalCluster.Shared.Connection;
+using ComputationalCluster.Shared.Messages.DivideProblemNamespace;
 using ComputationalCluster.Shared.Messages.NoOperationNamespace;
 using ComputationalCluster.Shared.Messages.RegisterNamespace;
 using ComputationalCluster.Shared.Messages.RegisterResponseNamespace;
+using ComputationalCluster.Shared.Messages.SolutionRequestNamespace;
+using ComputationalCluster.Shared.Messages.SolutionsNamespace;
+using ComputationalCluster.Shared.Messages.SolvePartialProblemsNamespace;
+using ComputationalCluster.Shared.Messages.SolveRequestNamespace;
+using ComputationalCluster.Shared.Messages.SolveRequestResponseNamespace;
 using ComputationalCluster.Shared.Messages.StatusNamespace;
 using ComputationalCluster.Shared.Utilities;
 using System;
@@ -111,12 +117,14 @@ namespace ComputationalCluster.Nodes
         }
 
 
+        //this method is only called from AsyncClient which sent something to the server
+        //and the string xml is the response. 
+        //node of type server can execute this method only if it is in BackupMode (so it acts as a normal node -
+        //i.e. sends Status etc.)
         public void ReceivedResponse(string xml)
         {
             Console.WriteLine("Node - received response:\n" + xml + "\n");
             Object obj = xml.DeserializeXML();
-            //Debug.Assert(obj is NoOperation, "Wrong server response");
-            //this.ReceivedNoOperation((NoOperation)obj);
 
             if (obj is RegisterResponse) {
                 RegisterResponse registerResponse = (RegisterResponse)obj;
@@ -125,27 +133,61 @@ namespace ComputationalCluster.Nodes
                 foreach (RegisterResponseBackupCommunicationServersBackupCommunicationServer comp in backupServers) {
                     Node backup = new Server();
                     backup.IP = IPAddress.Parse(comp.address);
-                    backup.Timeout = registerResponse.Timeout;
-                    backup.ID = registerResponse.Id;
-                    if (comp.portSpecified)
-                        backup.Port = comp.port;
-                    this.RegisteredComponents.RegisterBackupServer(backup);
+                    if(backup.IP != null) {
+                        backup.Timeout = registerResponse.Timeout;
+                        backup.ID = registerResponse.Id;
+                        if (comp.portSpecified)
+                            backup.Port = comp.port;
+                        this.RegisteredComponents.RegisterBackupServer(backup);
+                    }
                 }
 
                 this.ID = registerResponse.Id;
                 this.Timeout = registerResponse.Timeout;
                 this.StartTimeoutTimer();
 
-            } else {
+            } else if (obj is DivideProblem) {  //Message to task Manager
+                this.ReceivedDivideProblem((DivideProblem)obj);
 
+            } else if (obj is Register) {
+                this.ReceivedRegister((Register)obj, null);
+
+            } else if (obj is SolutionRequest) {
+                this.ReceivedSolutionRequest((SolutionRequest)obj);
+
+            } else if (obj is SolvePartialProblems) {
+                this.ReceivedSolvePartialProblems((SolvePartialProblems)obj);
+
+            } else if (obj is SolveRequest) {
+                this.ReceivedSolveRequest((SolveRequest)obj);
+
+            } else if (obj is Status) {
+                this.ReceivedStatus((Status)obj);
+
+            } else if (obj is NoOperation) {
+                this.ReceivedNoOperation((NoOperation)obj);
+
+            } else if(obj is SolveRequestResponse) {
+                this.ReceivedSolveRequestResponse((SolveRequestResponse)obj);
+
+            } else if(obj is Solutions) {
+                this.ReceivedSolutions((Solutions)obj);
             }
         }
-
 
         #endregion
 
 
         #region Overrides/Cluster
+
+        protected abstract string ReceivedSolveRequestResponse(SolveRequestResponse solveRequestResponse);
+        protected abstract string ReceivedSolveRequest(SolveRequest solveRequest);
+        protected abstract string ReceivedSolvePartialProblems(SolvePartialProblems solvePartialProblems);
+        protected abstract string ReceivedSolutions(Solutions solution);
+        protected abstract string ReceivedSolutionRequest(SolutionRequest solutionRequest);
+        protected abstract string ReceivedDivideProblem(DivideProblem divideProblem);
+        protected abstract string ReceivedStatus(Status status);
+        protected abstract string ReceivedRegister(Register register, IPAddress senderAddr);
 
         protected abstract Status CurrentStatus();
         protected abstract Register GenerateRegister();
@@ -222,7 +264,6 @@ namespace ComputationalCluster.Nodes
         }
 
         #endregion
-
     }
 
     public enum NodeType

@@ -1,5 +1,6 @@
 ﻿using ComputationalCluster.Misc;
 using ComputationalCluster.Shared.Messages.SolutionsNamespace;
+using ComputationalCluster.Shared.Messages.SolvePartialProblemsNamespace;
 using ComputationalCluster.Shared.Messages.SolveRequestNamespace;
 using System;
 using System.Collections.Generic;
@@ -14,8 +15,8 @@ namespace ComputationalCluster.Nodes
         public ServerQueues()
         {
             this.SolveRequests = new Queue<SolveRequest>();
-            this.PartialSolutions = new Queue<Solutions>();
-            this.ProblemsToSolve = new Queue<PartialProblem>();
+            this.Solutions = new Queue<Solutions>();
+            this.ProblemsToSolve = new Queue<SolvePartialProblems>();
             this.FinalSolutions = new Queue<Solutions>();
         }
 
@@ -27,9 +28,8 @@ namespace ComputationalCluster.Nodes
          * and solution data it also gives information about the time it took to compute the solution and whether 
          * computations were stopped due to timeout.
          */
-        public Queue<Solutions> PartialSolutions { get; set; }
-        public Queue<PartialProblem> ProblemsToSolve { get; set; }
+        public Queue<Solutions> Solutions { get; set; }
         public Queue<Solutions> FinalSolutions { get; set; }
-
+        public Queue<SolvePartialProblems> ProblemsToSolve { get; set; }
     }
 }

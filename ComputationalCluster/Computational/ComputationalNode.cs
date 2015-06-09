@@ -18,6 +18,10 @@ using ComputationalCluster.Shared.Messages.SolveRequestNamespace;
 using ComputationalCluster.Shared.Messages.SolveRequestResponseNamespace;
 using AL_FOR_DVRP;
 using System.IO;
+using ComputationalCluster.Shared.Messages.SolvePartialProblemsNamespace;
+using ComputationalCluster.Shared.Messages.SolutionRequestNamespace;
+using ComputationalCluster.Shared.Messages.DivideProblemNamespace;
+using ComputationalCluster.Shared.Messages.SolutionsNamespace;
 
 namespace ComputationalCluster.Nodes
 {
@@ -152,6 +156,67 @@ namespace ComputationalCluster.Nodes
 
             return register;
         }
+
+        #endregion
+
+
+
+        #region Overrides
+
+
+        protected override string ReceivedSolvePartialProblems(SolvePartialProblems solvePartialProblems)
+        {
+            ///// Hey here is the problem to solve! (undivided, everything is in CommonData)
+            string problem = Utilities.Base64Decode(solvePartialProblems.CommonData);
+
+            //solvePartialProblems.Id;
+            return null;
+        }
+
+
+        protected override string ReceivedSolutions(Solutions solution)
+        {
+            Debug.Assert(false, "Should not be here");
+            return null;
+        }
+
+        protected override string ReceivedSolveRequestResponse(SolveRequestResponse solveRequestResponse)
+        {
+            Debug.Assert(false, "Should not be here");
+            return null;
+        }
+
+
+        protected override string ReceivedRegister(Register register, IPAddress senderAddr)
+        {
+            Debug.Assert(false, "Should not be here");
+            return null;
+        }
+
+        protected override string ReceivedStatus(Status status)
+        {
+            Debug.Assert(false, "Should not be here");
+            return null;
+        }
+
+        protected override string ReceivedDivideProblem(DivideProblem divideProblem)
+        {
+            Debug.Assert(false, "Should not be here");
+            return null;
+        }
+
+        protected override string ReceivedSolutionRequest(SolutionRequest solutionRequest)
+        {
+            Debug.Assert(false, "Should not be here");
+            return null;
+        }
+
+        protected override string ReceivedSolveRequest(SolveRequest solveRequest)
+        {
+            Debug.Assert(false, "Should not be here");
+            return null;
+        }
+
 
         #endregion
 

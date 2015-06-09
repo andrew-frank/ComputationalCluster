@@ -9,6 +9,11 @@ using ComputationalCluster.Shared.Messages.SolveRequestNamespace;
 using ComputationalCluster.Shared.Messages.RegisterNamespace;
 using ComputationalCluster.Shared.Connection;
 using System.Diagnostics;
+using ComputationalCluster.Shared.Messages.SolvePartialProblemsNamespace;
+using ComputationalCluster.Shared.Messages.SolutionRequestNamespace;
+using ComputationalCluster.Shared.Messages.DivideProblemNamespace;
+using ComputationalCluster.Shared.Messages.SolveRequestResponseNamespace;
+using ComputationalCluster.Shared.Messages.SolutionsNamespace;
 
 
 
@@ -61,5 +66,81 @@ namespace ComputationalCluster.Nodes
 
             return register;
         }
+
+
+        #region Overrides
+
+
+        protected override string ReceivedDivideProblem(DivideProblem divideProblem)
+        {
+            /* Divide Problem is sent to TM to start the action of dividing the problem instance to smaller tasks. 
+             * TM is provided with information about the computational power of the cluster in terms of total number 
+             * of available threads. The same message is used to relay information for synchronizing info with Backup CS.
+             */
+
+            Debug.Assert(false, "Unimplemented");
+
+            //!!!!!!!!!!!!!!!!!!!
+            ////we are not dividing yet - inserting everything into CommonData
+            ////the same should be done in the ComputationalNode
+            SolvePartialProblems solvePartialProblems = new SolvePartialProblems();
+            solvePartialProblems.CommonData = divideProblem.Data;
+
+            solvePartialProblems.Id = divideProblem.Id;
+            solvePartialProblems.SolvingTimeoutSpecified = false;
+            if(divideProblem.ProblemType != null)
+                solvePartialProblems.ProblemType = divideProblem.ProblemType;
+
+            CMSocket.Instance.SendMessage(this.Port, this.IP, solvePartialProblems.SerializeToXML(), this);
+
+            return null;
+        }
+
+        protected override string ReceivedSolveRequest(SolveRequest solveRequest)
+        {
+            Debug.Assert(false, "Should not be here");
+            return null;
+        }
+
+        protected override string ReceivedSolvePartialProblems(SolvePartialProblems solvePartialProblems)
+        {
+            Debug.Assert(false, "Should not be here");
+            return null;
+        }
+
+        protected override string ReceivedSolutions(Solutions solution)
+        {
+            Debug.Assert(false, "Should not be here");
+            return null;
+        }
+
+        protected override string ReceivedSolveRequestResponse(SolveRequestResponse solveRequestResponse)
+        {
+            Debug.Assert(false, "Should not be here");
+            return null;
+        }
+
+
+        protected override string ReceivedRegister(Register register, IPAddress senderAddr)
+        {
+            Debug.Assert(false, "Should not be here");
+            return null;
+        }
+
+        protected override string ReceivedStatus(Status status)
+        {
+            Debug.Assert(false, "Should not be here");
+            return null;
+        }
+
+
+        protected override string ReceivedSolutionRequest(SolutionRequest solutionRequest)
+        {
+            Debug.Assert(false, "Should not be here");
+            return null;
+        }
+
+
+        #endregion
     }
 }

@@ -149,7 +149,53 @@ namespace ComputationalCluster.Nodes
         #region Private/Communication handling
 
 
-        private string ReceivedRegister(Register register, IPAddress senderAddr)
+        protected override string ReceivedSolutions(Solutions solution)
+        {
+            this.serverQueues.Solutions.Enqueue(solution);
+            if(this.BackupMode == true)
+                return null;
+
+            NoOperation noOp = this.GenerateNoOperation();
+            return noOp.SerializeToXML();
+        }
+
+        protected override string ReceivedSolveRequestResponse(SolveRequestResponse solveRequestResponse)
+        {
+            Debug.Assert(false, "Should not be here");
+            return null;
+        }
+
+        
+        protected override string ReceivedSolvePartialProblems(SolvePartialProblems solvePartialProblems)
+        {
+            /* Partial problems message is sent by the TM after dividing the problem into smaller partial problems. 
+             * The data in it consists of two parts – common for all partial problems and specific for the given task. 
+             * The same Partial Problems schema is used for the messages sent to be computed by the CN and to relay 
+             * information for synchronizing info with Backup CS.
+             */
+
+            this.serverQueues.ProblemsToSolve.Enqueue(solvePartialProblems);
+            if (this.BackupMode == true)
+                return null;
+
+            if (this.serverQueues.SolveRequests.Count > 0) {
+                SolveRequest solveRequest = this.serverQueues.SolveRequests.Dequeue();
+                DivideProblem divideProblem = new DivideProblem();
+                divideProblem.Data = solveRequest.Data;
+                divideProblem.Id = solveRequest.Id;
+                return solveRequest.SerializeToXML();
+            }
+
+            //TM is not going to join the solutions
+            //if (this.serverQueues.Solutions.Count > 0) {
+            //    Solutions solutions = this.serverQueues.Solutions.Dequeue();
+            //    return solutions.SerializeToXML();
+            //}
+
+            return this.GenerateNoOperation().SerializeToXML();
+        }
+
+        protected override string ReceivedRegister(Register register, IPAddress senderAddr)
         {
             string type = register.Type;
             Node newNode;
@@ -158,14 +204,16 @@ namespace ComputationalCluster.Nodes
                 case NodeType.TaskManager:
                     newNode = new TaskManager();
                     newNode.ID = ID;
-                    newNode.IP = senderAddr;
+                    if(senderAddr != null)
+                        newNode.IP = senderAddr;
                     newNode.NodeType = Nodes.NodeType.TaskManager;
                     this.RegisteredComponents.RegisterTaskManager(newNode);
                     break;
                 case NodeType.ComputationalNode:
                     newNode = new ComputationalNode();
                     newNode.ID = ID;
-                    newNode.IP = senderAddr;
+                    if (senderAddr != null)
+                        newNode.IP = senderAddr;
                     newNode.NodeType = Nodes.NodeType.ComputationalNode;
                     this.RegisteredComponents.RegisterComputationalNode(newNode);
                     break;
@@ -176,16 +224,12 @@ namespace ComputationalCluster.Nodes
                         backupServerId = ID,
                         messages = new Queue<string>()
                     };
-                    newNode.IP = senderAddr;
+                    if (senderAddr != null)
+                        newNode.IP = senderAddr;
                     newNode.NodeType = Nodes.NodeType.Server;
                     this.RegisteredComponents.RegisterBackupServer(newNode);
                     break;
                 case NodeType.Client: //not needed!
-                    //newNode = new ComputationalClient();
-                    //newNode.ID = ID;
-                    //newNode.IP = senderAddr;
-                    //newNode.NodeType = Nodes.NodeType.Client;
-                    //this.RegisteredComponents.RegisterClient(newNode);
                     break;
                 default:
                     break;
@@ -212,12 +256,12 @@ namespace ComputationalCluster.Nodes
 
         //public static bool kupa = false;
 
-        private string ReceivedStatus(Status status)
+        protected override string ReceivedStatus(Status status)
         {
             Debug.Assert(this.serverQueues != null, "null server queue");
             Node node = this.RegisteredComponents.NodeWithID(status.Id);
 
-            NoOperation noOperationResponse = new NoOperation();
+            NoOperation noOperationResponse = this.GenerateNoOperation();
             if (node == null)
                 return noOperationResponse.SerializeToXML();
 
@@ -225,16 +269,20 @@ namespace ComputationalCluster.Nodes
                 case NodeType.TaskManager:
                     if (this.serverQueues.SolveRequests.Count > 0) {
                         SolveRequest solveRequest = this.serverQueues.SolveRequests.Dequeue();
+                        DivideProblem divideProblem = new DivideProblem();
+                        divideProblem.Data = solveRequest.Data;
+                        divideProblem.Id = solveRequest.Id;
                         return solveRequest.SerializeToXML();
                     }
-                    if (this.serverQueues.PartialSolutions.Count > 0) {
-                        Solutions solutions = this.serverQueues.PartialSolutions.Dequeue();
-                        return solutions.SerializeToXML();
-                    }
+                    //TM is not going to join the solutions
+                    //if (this.serverQueues.Solutions.Count > 0) {
+                    //    Solutions solutions = this.serverQueues.Solutions.Dequeue();
+                    //    return solutions.SerializeToXML();
+                    //}
                     break;
                 case NodeType.ComputationalNode: //TODO: check!!
                     if (this.serverQueues.ProblemsToSolve.Count > 0) {
-                        PartialProblem partialProblems = this.serverQueues.ProblemsToSolve.Dequeue();
+                        SolvePartialProblems partialProblems = this.serverQueues.ProblemsToSolve.Dequeue();
                         return partialProblems.SerializeToXML();
                     }
                     break;
@@ -252,13 +300,14 @@ namespace ComputationalCluster.Nodes
             Debug.Assert(node != null, "Received unregistered node status");
             if (node == null) {
                 Console.WriteLine("Received unregistered node status");
-                return (new NoOperation()).SerializeToXML();
+                return noOperationResponse.SerializeToXML();
             }
 
             return noOperationResponse.SerializeToXML();
         }
 
-        private string ReceivedDivideProblem(DivideProblem divideProblem)
+
+        protected override string ReceivedDivideProblem(DivideProblem divideProblem)
         {
             /* Divide Problem is sent to TM to start the action of dividing the problem instance to smaller tasks. 
              * TM is provided with information about the computational power of the cluster in terms of total number 
@@ -266,11 +315,11 @@ namespace ComputationalCluster.Nodes
              */
             Debug.Assert(this.BackupMode == true, "ReceivedDivideProblem received to primary Server");
 
-            NoOperation noOperationResponse = new NoOperation();
+            NoOperation noOperationResponse = this.GenerateNoOperation();
             return noOperationResponse.SerializeToXML();
         }
 
-        private string ReceivedSolutionRequest(SolutionRequest solutionRequest)
+        protected override string ReceivedSolutionRequest(SolutionRequest solutionRequest)
         {
             /* Solution Request message is sent from the CC in order to check whether the cluster has successfully 
              * computed the solution. It allows CC to be shut down and disconnected from server during computations.
@@ -287,35 +336,16 @@ namespace ComputationalCluster.Nodes
             return solution.SerializeToXML();
         }
 
-        private string ReceivedSolvePartialProblems(SolvePartialProblems solvePartialProblems)
-        {
-            /* Partial problems message is sent by the TM after dividing the problem into smaller partial problems. 
-             * The data in it consists of two parts – common for all partial problems and specific for the given task. 
-             * The same Partial Problems schema is used for the messages sent to be computed by the CN and to relay 
-             * information for synchronizing info with Backup CS.
-             */
-
-            NoOperationBackupCommunicationServers servers = new NoOperationBackupCommunicationServers();
-            List<NoOperationBackupCommunicationServersBackupCommunicationServer> backups = new List<NoOperationBackupCommunicationServersBackupCommunicationServer>();
-            foreach (Node comp in this.RegisteredComponents.BackupServers) {
-                NoOperationBackupCommunicationServersBackupCommunicationServer backup = new NoOperationBackupCommunicationServersBackupCommunicationServer();
-                backup.address = comp.IP.ToString();
-                if (comp.Port > 0) {
-                    backup.port = comp.Port;
-                    backup.portSpecified = true;
-                }
-                backups.Add(backup);
-            }
-            servers.BackupCommunicationServer = backups.ToArray();
-            return (new NoOperation()).SerializeToXML();
-        }
-
-        private string ReceivedSolveRequest(SolveRequest solveRequest)
+        protected override string ReceivedSolveRequest(SolveRequest solveRequest)
         {
             this.serverQueues.SolveRequests.Enqueue(solveRequest);
 
             SolveRequestResponse response = new SolveRequestResponse();
-            response.Id = TaskIDCounter++;
+            this.serverQueues.SolveRequests.Enqueue(solveRequest);
+            if(solveRequest.IdSpecified)
+                response.Id = solveRequest.Id; //TaskIDCounter++;
+            else
+                response.Id = TaskIDCounter++;
             response.IdSpecified = true;
 
             return response.SerializeToXML();
@@ -355,7 +385,11 @@ namespace ComputationalCluster.Nodes
 
             } else if (obj is NoOperation) {  //Sent in response to status messge
                 Debug.Assert(false, "NoOperation received to primary Server");
+
             }
+            // else if (obj is PartialProblem) {
+            //    return this.ReceivedPartialProblem((PartialProblem)obj);
+            //}
 
             Debug.Assert(false, "Unrecognized request");
             return "Error";
@@ -365,10 +399,33 @@ namespace ComputationalCluster.Nodes
         #endregion
 
 
-        
-        
-
         #region Connection/Private
+
+        private NoOperation GenerateNoOperation()
+        {
+            NoOperation noOperation = new NoOperation();
+
+
+            List<NoOperationBackupCommunicationServers> servers = new List<NoOperationBackupCommunicationServers>();
+            
+            List<NoOperationBackupCommunicationServersBackupCommunicationServer> backups = new List<NoOperationBackupCommunicationServersBackupCommunicationServer>();
+            foreach (Node comp in this.RegisteredComponents.BackupServers) {
+                NoOperationBackupCommunicationServersBackupCommunicationServer backup = new NoOperationBackupCommunicationServersBackupCommunicationServer();
+                backup.address = comp.IP.ToString();
+                if (comp.Port > 0) {
+                    backup.port = comp.Port;
+                    backup.portSpecified = true;
+                }
+                backups.Add(backup);
+            }
+
+            NoOperationBackupCommunicationServers s = new NoOperationBackupCommunicationServers();
+            s.BackupCommunicationServer = backups.ToArray();
+            servers.Add(s);
+
+            noOperation.Items = servers.ToArray();
+            return noOperation;
+        }
 
 
         public void Listen(Int32 port, IPAddress localAddr)
