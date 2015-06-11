@@ -152,8 +152,8 @@ namespace ComputationalCluster.Nodes
         protected override string ReceivedSolutions(Solutions solution)
         {
             this.serverQueues.Solutions.Enqueue(solution);
-            if(this.BackupMode == true)
-                return null;
+            //if(this.BackupMode == true)
+            //    return null;
 
             Console.WriteLine("\n****\nSolution delivered with id: \n****\n"+solution.Id);
             NoOperation noOp = this.GenerateNoOperation();
@@ -177,8 +177,8 @@ namespace ComputationalCluster.Nodes
              */
 
             this.serverQueues.ProblemsToSolve.Enqueue(solvePartialProblems);
-            if (this.BackupMode == true)
-                return null;
+            //if (this.BackupMode == true)
+            //    return null;
 
             if (this.serverQueues.SolveRequests.Count > 0) {
                 SolveRequest solveRequest = this.serverQueues.SolveRequests.Dequeue();
