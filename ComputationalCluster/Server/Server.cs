@@ -23,7 +23,7 @@ using ComputationalCluster.Misc;
 
 namespace ComputationalCluster.Nodes
 {
-    public struct BackupServerQueue
+    public class BackupServerQueue
     {
         public ulong backupServerId;
         public Queue<string> messages;
@@ -204,18 +204,30 @@ namespace ComputationalCluster.Nodes
             string type = register.Type;
             Node newNode;
             ulong ID = RegisteredNodes.NextNodeID;
+            if (this.BackupMode) {
+                Console.WriteLine("**\nBackupMode received register:\n" + register.SerializeToXML() + "\n**");
+            }
+
+            if (register.IdSpecified == false) {
+                register.IdSpecified = true;
+                register.Id = ID;
+            }
+
+            foreach (BackupServerQueue bsq in this.backupServerQueues)
+                bsq.messages.Enqueue(register.SerializeToXML());
+
             switch (Utilities.NodeTypeForName(type)) {
                 case NodeType.TaskManager:
                     newNode = new TaskManager();
-                    newNode.ID = ID;
                     if(senderAddr != null)
                         newNode.IP = senderAddr;
                     newNode.NodeType = Nodes.NodeType.TaskManager;
+                    newNode.ID = register.Id;
                     this.RegisteredComponents.RegisterTaskManager(newNode);
                     break;
                 case NodeType.ComputationalNode:
                     newNode = new ComputationalNode();
-                    newNode.ID = ID;
+                    newNode.ID = register.Id;
                     if (senderAddr != null)
                         newNode.IP = senderAddr;
                     newNode.NodeType = Nodes.NodeType.ComputationalNode;
@@ -223,7 +235,7 @@ namespace ComputationalCluster.Nodes
                     break;
                 case NodeType.Server:
                     newNode = new Server();
-                    newNode.ID = ID;
+                    newNode.ID = register.Id;
                     BackupServerQueue bsq = new BackupServerQueue {
                         backupServerId = ID,
                         messages = new Queue<string>()
@@ -231,6 +243,7 @@ namespace ComputationalCluster.Nodes
                     if (senderAddr != null)
                         newNode.IP = senderAddr;
                     newNode.NodeType = Nodes.NodeType.Server;
+                    this.backupServerQueues.Add(bsq);
                     this.RegisteredComponents.RegisterBackupServer(newNode);
                     break;
                 case NodeType.Client: //not needed!
@@ -255,7 +268,8 @@ namespace ComputationalCluster.Nodes
             }
 
             response.BackupCommunicationServers = backupServers.ToArray();
-            Console.WriteLine("Sending RegisterResponse");
+            if(!this.BackupMode)
+                Console.WriteLine("Sending RegisterResponse");
             return response.SerializeToXML();
         }
 
@@ -303,8 +317,11 @@ namespace ComputationalCluster.Nodes
                 case NodeType.Server: {
                         foreach (BackupServerQueue bsq in this.backupServerQueues) {
                             if (bsq.backupServerId == status.Id) {
-                                Console.WriteLine("Sending queued message to BackupCS");
-                                return bsq.messages.Dequeue();
+                                if (bsq.messages.Count <= 0)
+                                    break;
+                                string queuedXml = bsq.messages.Dequeue();
+                                Console.WriteLine("Sending queued message to BackupCS\n"+queuedXml+"\n--");
+                                return queuedXml;
                             }
                         }
                     }
@@ -319,7 +336,8 @@ namespace ComputationalCluster.Nodes
                 return noOperationResponse.SerializeToXML();
             }
 
-            Console.WriteLine("Sending NoOp");
+            if (!this.BackupMode)
+                Console.WriteLine("Sending NoOp");
             return noOperationResponse.SerializeToXML();
         }
 
@@ -350,7 +368,8 @@ namespace ComputationalCluster.Nodes
                 }
             }
 
-            Console.WriteLine("Sending Solutions");
+            if (!this.BackupMode)
+                Console.WriteLine("Sending Solutions");
             return solution.SerializeToXML();
         }
 
@@ -365,7 +384,8 @@ namespace ComputationalCluster.Nodes
                 response.Id = TaskIDCounter++;
             response.IdSpecified = true;
 
-            Console.WriteLine("Sending SolveRequestResponse");
+            if (!this.BackupMode)
+                Console.WriteLine("Sending SolveRequestResponse");
             return response.SerializeToXML();
         }
 
@@ -377,8 +397,11 @@ namespace ComputationalCluster.Nodes
         public string ReceivedMessage(string xml, IPAddress senderAddr)
         {
             Object obj = xml.DeserializeXML();
-            foreach(BackupServerQueue bsq in this.backupServerQueues)
-                bsq.messages.Enqueue(xml);
+
+            if (!(obj is Register) && !(obj is Status)) {
+                foreach (BackupServerQueue bsq in this.backupServerQueues)
+                    bsq.messages.Enqueue(xml);
+            }
 
             if (obj is DivideProblem) {  //Message to task Manager
                 return this.ReceivedDivideProblem((DivideProblem)obj);
