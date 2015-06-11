@@ -4,14 +4,13 @@ namespace AL_FOR_DVRP
 {
 	internal class Population
 	{
-		internal static int population_size = 32000;  
+		internal static int population_size = 64000;  
 		
 		internal static int[,] population = new int[population_size,AlgorithmSolution.GASLocation.GetLength(0)-1];
 		internal static int[,] new_population = new int[population_size,AlgorithmSolution.GASLocation.GetLength(0)-1];
 		
 				
 		internal static void generate_initial_population()
-			
 		{
 			
 			int[] initial_population = new int[AlgorithmSolution.GASLocation.GetLength(0)-1];

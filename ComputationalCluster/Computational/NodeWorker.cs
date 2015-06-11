@@ -49,9 +49,11 @@ namespace ComputationalCluster.Computational
         {
             _problemType= "DVRP";
 
-
             double shortestPath = 0;
             var watch = Stopwatch.StartNew();
+            if (watch.IsRunning)
+                Console.WriteLine("Stopwatch running");
+            else Console.WriteLine("Stopwatch NOT RUNNING");
             this._problemInstanceId = this._taskId;
             
             AlgorithmSolution.Find_Solution(problemObject.Location, problemObject.DeliverDemand, problemObject.ServiceBegin, 
@@ -61,7 +63,8 @@ namespace ComputationalCluster.Computational
             watch.Stop();
             var elapsedMs = watch.ElapsedMilliseconds;
             _howLong = (ulong)elapsedMs;
-
+            Console.WriteLine("Finished!\a\nTime = " + watch.Elapsed);
+            
             return shortestPath;
         }
 
