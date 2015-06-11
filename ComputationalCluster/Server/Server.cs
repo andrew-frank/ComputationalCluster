@@ -313,7 +313,8 @@ namespace ComputationalCluster.Nodes
                         foreach (BackupServerQueue bsq in this.backupServerQueues) {
                             if (bsq.backupServerId == status.Id) {
                                 Console.WriteLine("Sending queued message to BackupCS");
-                                return bsq.messages.Dequeue();
+                                if(bsq.messages.Count > 0)
+                                    return bsq.messages.Dequeue();
                             }
                         }
                     }
